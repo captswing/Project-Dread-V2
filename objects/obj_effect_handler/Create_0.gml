@@ -1,0 +1,157 @@
+/// @description Variable Initialization
+
+#region	SINGLETON CHECK
+
+if (global.effectID != noone){
+	if (global.effectID.object_index == object_index){
+		instance_destroy(self);
+		return;
+	}
+	instance_destroy(global.effectID);
+}
+global.effectID = id;
+
+#endregion
+
+#region EDIT INHERITED VARIABLES
+
+image_speed = 0;
+image_index = 0;
+visible = true;
+
+#endregion
+
+#region UNIQUE VARIABLE INITIALIZATION
+
+// Variables that store the resulting surface after all effects have been processed; with two auxillary
+// surfaces that act as buffers to store the application surface whenever multiple passes are used in 
+// a shader's effect.
+resultSurface = -1;
+auxSurfaceA = -1;
+auxSurfaceB = -1;
+
+// These three variables store the texture ID for the result and auxillary surfaces that cna easily be
+// passed to the currently active shader.
+resultTexture = -1;
+auxTextureA = -1;
+auxTextureB = -1;
+
+// Variables for Lighting Shader ///////////////////////////////////////////////////
+
+// This variable holds a reference to the shader's unique asset index value.
+lightShader = shd_lighting;
+// Get the uniform locations; storing them in local variables
+sColor =			shader_get_uniform(lightShader, "color");
+sBrightness =		shader_get_uniform(lightShader, "brightness");
+sContrast =			shader_get_uniform(lightShader, "contrast");
+sSaturation =		shader_get_uniform(lightShader, "saturation");
+sLightTexture =		shader_get_sampler_index(lightShader, "lightTexture");
+
+// A flag that toggles the lighting system on and off.
+lightingEnabled = true;
+
+// The variables that effect the global light's overall color, brightness, contrast, and saturation.
+lightColor =		[0, 0, 0];
+lightBrightness =  -0.55;
+lightContrast =		0.28;
+lightSaturation =	0.43;
+
+// Keeps track of how many lights are currently being drawn by the lighting system
+lightsDrawn = 0;
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variable for the Bloom Shaders //////////////////////////////////////////////////
+
+// This variable holds a reference to the shader's unique asset index value.
+bloomShaderLuminence = shd_bloom_luminence;
+// Get the uniform locations; storing them in local variables
+sBloomThreshold =	shader_get_uniform(bloomShaderLuminence, "bloomThreshold");
+sBloomRange =		shader_get_uniform(bloomShaderLuminence, "bloomRange");
+
+// This variable holds a reference to the shader's unique asset index value.
+bloomShaderBlend = shd_bloom_blend;
+// Get the uniform locations; storing them in local variables
+sBloomIntensity =	shader_get_uniform(bloomShaderBlend, "bloomIntensity");
+sBloomDarken =		shader_get_uniform(bloomShaderBlend, "bloomDarken");
+sBloomSaturation =	shader_get_uniform(bloomShaderBlend, "bloomSaturation");
+sBloomTexture =		shader_get_sampler_index(bloomShaderBlend, "bloomTexture");
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variables for the Blur Shader ///////////////////////////////////////////////////
+
+// This variable holds a reference to the shader's unique asset index value.
+blurShader = shd_blur;
+// Get the uniform locations; storing them in local variables
+sBlurSteps =		shader_get_uniform(blurShader, "blurSteps");
+sTexelSize =		shader_get_uniform(blurShader, "texelSize");
+sSigma =			shader_get_uniform(blurShader, "sigma");
+sBlurVector =		shader_get_uniform(blurShader, "blurVector");
+
+// A flag that toggles the blur effect on and off.
+blurEnabled = false;
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variables for the Chromatic Aberration Shader ///////////////////////////////////
+
+// This variable holds a reference to the shader's unique asset index value.
+abrerrationShader = shd_chromatic_aberration;
+// Get the uniform locations; storing them in local variables
+sAberration =		shader_get_uniform(abrerrationShader, "aberration");
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variables for the Heat Haze Shader //////////////////////////////////////////////
+
+// This variable holds a reference to the shader's unique asset index value.
+heatHazeShader = shd_heat_haze;
+// Get the uniform locations; storing them in local variables
+sHazeTime =			shader_get_uniform(heatHazeShader, "time");
+sHazeSize =			shader_get_uniform(heatHazeShader, "size");
+sHazeStrength =		shader_get_uniform(heatHazeShader, "strength");
+sHazeTexture =		shader_get_sampler_index(heatHazeShader, "hazeTexture");
+
+// A flag that enables the heat haze effect
+isHazeEnabled = false;
+
+// A variable that holds the texture ID for the heat haze sprite used in this shader.
+// The variable below that one tracks the time used to move the shader's effect around.
+hazeTexture =		sprite_get_texture(spr_heat_haze, 0);
+time = 0;
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variables for the Film Grain Shader /////////////////////////////////////////////
+
+// This variable holds a reference to the shader's unique asset index value.
+filmGrainShader = shd_film_grain;
+// Get the uniform locations; storing them in local variables
+sGrainOffset =		shader_get_uniform(filmGrainShader, "offset");
+sGrainStrength =	shader_get_uniform(filmGrainShader, "strength");
+sGrainSize =		shader_get_uniform(filmGrainShader, "size");
+sGrainTexture =		shader_get_sampler_index(filmGrainShader, "grainTexture");
+
+// A variable that stores the width and height for the noise texture, which is used
+// to calculate the offset for the current frame. And another variable that stores
+// the texture ID for the film grain.
+filmGrainWidth =	sprite_get_width(spr_film_grain);
+filmGrainTexture =	sprite_get_texture(spr_film_grain, 0);
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variables for the Scanline Shader ///////////////////////////////////////////////
+
+// This variable holds a reference to the shader's unique asset index value.
+scanlineShader = shd_scanlines;
+// Get the uniform locations; storing them in local variables
+sViewHeight =		shader_get_uniform(scanlineShader, "viewHeight");
+sStrength =			shader_get_uniform(scanlineShader, "strength");
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Disable the automatic drawing of the application surface
+application_surface_draw_enable(false);
+
+#endregion/

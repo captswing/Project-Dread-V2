@@ -1,0 +1,1 @@
+light_create_circle(800, 480, 0.9, c_white, true);
