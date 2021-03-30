@@ -2,9 +2,8 @@
 
 #region EDITING INHERITED VARIABLES
 
-image_speed = 0;
-image_index = 0;
-visible = false;
+// Initializes the parent object's variables
+event_inherited();
 
 #endregion
 
@@ -12,6 +11,9 @@ visible = false;
 
 // This flag enables/disables the entity's ability to be drawn by the depth sorter.
 drawSprite = true;
+
+// This values calculates where the overlap of this sprite and another will occur relative to the y-positions.
+zOffset = 0;
 
 // This flag enables/disables the outline shader's effect on an object. However, if the setting is enabled
 // outright; all outlined objects will be enabled as well. Likewise for when disabled.

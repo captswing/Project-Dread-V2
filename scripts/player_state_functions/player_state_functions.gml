@@ -11,14 +11,19 @@ function player_state_default(){
 		} else{ // Turning the flashlight back into the dim ambient light
 			update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);
 		}
+		// Finally, update collectability based on light sources
+		with(par_interactable) {checkForLights = true;}
 	}
 	
 	// Interacting with certain objects in the world
 	if (keyInteract){
-		var _offset = [4 * (keyRight - keyLeft), (12 * (keyDown - keyUp)) - 2];
-		with(instance_nearest(x + _offset[X], y + _offset[Y], par_interactable)){
-			if (canInteract && interactScript != NO_SCRIPT){
-				script_execute(interactScript);
+		var _offset = [x + lengthdir_x(8, direction), y + lengthdir_y(8, direction) - 4];
+		with(instance_nearest(_offset[X], _offset[Y], par_interactable)){
+			// Ignores interaction if the object cannot be currently seen by the player. If it can be seen,
+			// the interaction point will be checked against the maximum interaction distance. If the value
+			// is lower than the max distance, an interaction will occur.
+			if (canInteract && point_distance(interactCenter[X], interactCenter[Y], _offset[X], _offset[Y]) <= interactRadius){
+				if (interactScript != NO_SCRIPT) {script_execute(interactScript);}
 			}
 		}
 	}
@@ -110,7 +115,8 @@ function player_state_weapon_reload(){
 		reloadTimer = 0; // Reset the reload timer and local frame
 		player_reload_weapon(global.invItem[weaponSlot][1]);
 		// Finally, revert the player back to their previous state
-		set_cur_state(lastState);
+		if (keyReadyWeapon) {set_cur_state(player_state_weapon_ready);}
+		else {set_cur_state(player_state_default);}
 		set_sprite(spr_claire_unarmed_stand, 4);
 		return; // Exit out of the state early
 	}
@@ -128,7 +134,7 @@ function player_state_weapon_recoil(){
 	fireRateTimer += global.deltaTime;
 	if (fireRateTimer >= _fireRate){
 		fireRateTimer = 0; // Reset the fire rate timer and local frame
-		set_cur_state(lastState);
+		set_cur_state(player_state_weapon_ready);
 		set_sprite(spr_claire_unarmed_stand, 4);
 		return; // Exit out of the state early
 	}

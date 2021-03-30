@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "obj_item",
-    "path": "folders/Scripts/Objects/Entities/Static/Interactables/obj_item.yy",
+    "name": "General",
+    "path": "folders/Scripts/Objects/Entities/Static/Interactables/General.yy",
   },
   "resourceVersion": "1.0",
-  "name": "item_helper_functions",
+  "name": "obj_item_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

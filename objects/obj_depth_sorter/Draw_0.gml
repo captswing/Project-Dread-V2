@@ -8,12 +8,12 @@ var _totalObjectsDrawn = 0;
 var _index = 0;
 with(par_dynamic_entity){ // Gather all dynamic entities and place them in the grid
 	global.worldObjects[# 0, _index] = id;
-	global.worldObjects[# 1, _index] = y;
+	global.worldObjects[# 1, _index] = y + zOffset;
 	_index++;
 }
 with(par_static_entity){ // Gather all static entities and place them in the grid
 	global.worldObjects[# 0, _index] = id;
-	global.worldObjects[# 1, _index] = y;
+	global.worldObjects[# 1, _index] = y + zOffset;
 	_index++;
 }
 // Sorts in descending order; lower Y-position objects are drawn first

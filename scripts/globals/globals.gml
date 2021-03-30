@@ -2,6 +2,7 @@
 
 //file_fast_crypt_ultra_zlib("item_data.json", "item_data.json", true, "5v8x/A?D(G+KbPeShVmYq3t6w9z$B&E)H@McQfTjWnZr4u7x!A%D*G-JaNdRgUkX");
 //file_fast_crypt_ultra_zlib("world_item_data.json", "world_item_data.json", true, "fTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@");
+//file_fast_crypt_ultra_zlib("dialogue_data.json", "dialogue_data.json", true, "@NcRfUjWnZr47x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C&F");
 
 // Loads in the game's item data from the json data file. It includes everything involving an item and what 
 // it is able to do -- within reason. From the item's description, to its icon on the inventory screen. From
@@ -21,6 +22,9 @@ global.itemData = encrypted_json_load("item_data", "5v8x/A?D(G+KbPeShVmYq3t6w9z$
 global.worldItemData = encrypted_json_load("world_item_data", "fTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@");
 // TODO -- Move this to when the "New Game" is selected, since loading from a save file will use the world item data map from that file's data
 
+// 
+global.dialogueData = encrypted_json_load("dialogue_data", "@NcRfUjWnZr47x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C&F");
+
 // A map that stores all the texture data for the game's available fonts. The key is the number given to the 
 // font given by GML itself, which is a constant given by referencing the font resource itself.
 global.fontTextures = ds_map_create();
@@ -35,6 +39,7 @@ global.controllerID = noone;		// For obj_controller
 global.effectID = noone;			// For obj_shader_handler
 global.sorterID = noone;			// For obj_depth_sorter
 global.playerID = noone;			// For obj_player
+global.textboxID = noone;			// For obj_textbox_handler
 
 // Holds the game's current state. This state determines the functionality of certain objects.
 global.gameState = GameState.InGame;

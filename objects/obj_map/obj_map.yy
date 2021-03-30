@@ -27,8 +27,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Interactables",
-    "path": "folders/Objects/Entities/Static/Interactables.yy",
+    "name": "General",
+    "path": "folders/Objects/Entities/Static/Interactables/General.yy",
   },
   "resourceVersion": "1.0",
   "name": "obj_map",

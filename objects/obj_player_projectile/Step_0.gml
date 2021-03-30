@@ -6,5 +6,5 @@ if (curState == NO_SCRIPT){
 	return;
 }
 
-// Call the parent step event code, which handles state code
-event_inherited();
+// Call the current state script
+script_execute(curState);

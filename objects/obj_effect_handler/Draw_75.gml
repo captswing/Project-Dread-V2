@@ -5,7 +5,7 @@
 //		2	--		Scanlines
 
 if (global.settings[Settings.FilmGrain]){
-	film_grain_effect(filmGrainWidth, 0.09, 4);
+	film_grain_effect(filmGrainWidth, 0.08, 4);
 }
 
 if (global.settings[Settings.Scanlines]){

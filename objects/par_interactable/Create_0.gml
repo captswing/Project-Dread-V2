@@ -14,11 +14,19 @@ drawOutline = true;
 
 #region UNIQUE VARIABLE INITIALIZATION
 
-// 
+// Handles the whole interaction-side of things for the object. The first variable is a flag that allows the
+// player to actually interact with the object or not. If it's in the darkness -- and the player doesn't have
+// their flashlight on -- they can't interact, and vice verse. The second variable stores the position for the 
+// center point of the interaction radius, since the origin of the sprite won't always be in the center. Next, 
+// the third variable is the distance from the object the player needs to be in order to interact with it. 
+// Finally, the script stores the function that handles what happens when an interaction occurs.
 canInteract = false;
+interactCenter = [x, y];
+interactRadius = 8;
 interactScript = NO_SCRIPT;
 
-// 
+// This flag causes a check for the nearest true light source to occur for the interactable. After that, it's
+// set to false and whatever it calculated with determine if the object can be interacted with by the player.
 checkForLights = true;
 
 #endregion

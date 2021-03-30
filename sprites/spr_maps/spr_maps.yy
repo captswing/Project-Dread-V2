@@ -68,8 +68,8 @@
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"79f808aa-35d7-4571-8816-879022c22167","tags":[],"resourceType":"GMImageLayer",},
   ],
   "parent": {
-    "name": "Interactables",
-    "path": "folders/Sprites/Entities/Static/Interactables.yy",
+    "name": "General",
+    "path": "folders/Sprites/Entities/Static/Interactables/General.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_maps",

@@ -130,7 +130,7 @@ lightColor = c_white;
 global.invSize = 6;
 
 inventory_add(FLASHLIGHT, 1, 0);
-inventory_add(INF_NAPALM_LAUNCHER, 1, 0);
+inventory_add(INF_HANDGUN, 1, 0);
 
 inventory_item_options_function(0, EQUIP_ITEM);
 inventory_item_options_function(1, EQUIP_ITEM);

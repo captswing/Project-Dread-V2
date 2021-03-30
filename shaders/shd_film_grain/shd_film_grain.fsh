@@ -14,5 +14,5 @@ void main(){
 	vec2 texelOffset = normalize(offset);
 	vec3 offsetColor = texture2D(grainTexture, fract((v_vTexcoord + texelOffset) * size)).rgb;
 	// Send the calculated color off for rendering
-    gl_FragColor = v_vColour * vec4(offsetColor, strength);
+	gl_FragColor = v_vColour * vec4(offsetColor, strength);
 }

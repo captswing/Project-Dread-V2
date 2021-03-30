@@ -5,12 +5,14 @@
 var _startFrame = sprFrames * round(direction / sprDirections);
 
 // Animate the entity based on their current sprite's speed in frames per second
-localFrame += sprSpeed * global.deltaTime;
-if (localFrame >= sprFrames){ // Reset the image index and trigger the animation end flag
-	localFrame = 0;
-	animationEnd = true;
-} else{ // Resets the animation end flag
-	animationEnd = false;
+if (curState != NO_SCRIPT){
+	localFrame += sprSpeed * global.deltaTime;
+	if (localFrame >= sprFrames){ // Reset the image index and trigger the animation end flag
+		localFrame = 0;
+		animationEnd = true;
+	} else{ // Resets the animation end flag
+		animationEnd = false;
+	}
 }
 
 // Finally, draw the sprite to the screen using the calculated image index

@@ -224,9 +224,9 @@ function player_use_weapon(_useAmmo){
 	} else if (bulletSpd > 0){ // Using a projectile weapon (Basically, only the grenade launccher's ammo)
 		var _direction, _object, _weaponData;
 		_direction = direction + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
-		_object = instance_create_depth(x + lengthdir_x(6, direction), y + lengthdir_y(6, direction) + 4, ENTITY_DEPTH, obj_player_projectile);
+		_object = instance_create_depth(x + lengthdir_x(6, direction), y + lengthdir_y(10, direction), ENTITY_DEPTH, obj_player_projectile);
 		_weaponData = [damage + damageMod, range + rangeMod, bulletSpd];
-		// Pull all the necessary data in from the weapon to the projectile, which basically means 
+		// Pull all the necessary data in from the weapon to the projectile, which basically means
 		// the range and damage of the bullet.
 		with(_object){
 			// Pull in the weapon's damage and movement speed (Relative to its direction)

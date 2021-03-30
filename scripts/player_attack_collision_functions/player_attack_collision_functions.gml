@@ -15,9 +15,11 @@ function player_attack_hitscan_collision(_startX, _startY, _endX, _endY, _zOffse
 	for (var i = 0; i < _length; i++){
 		var _objIndex = _collisions[| i].object_index;
 		switch(object_get_parent(_objIndex)){
-			case par_collider:
-				show_debug_message("COLLISION");
-				i = _length; // Exits the loop
+			case par_collider: // Colliding with a wall or a tall enough object
+				if (_collisions[| i].colliderHeight == -1 || colliderHeight > zOffset){
+					show_debug_message("COLLISION");
+					i = _length; // Exits the loop
+				}
 				break;
 		}
 	}

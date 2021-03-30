@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "obj_light",
-    "path": "folders/Scripts/Objects/Global/Effects/obj_light.yy",
+    "name": "Effects",
+    "path": "folders/Scripts/Objects/Global/Effects.yy",
   },
   "resourceVersion": "1.0",
-  "name": "light_functions",
+  "name": "obj_light_functions",
   "tags": [],
   "resourceType": "GMScript",
 }
