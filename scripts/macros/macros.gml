@@ -29,9 +29,6 @@
 // Animation constants
 #macro	ANIMATION_FPS				60
 
-// Inventory constants
-#macro	MAX_INV_SIZE				24
-
 // The standard values for sanity modification
 #macro	SANITY_MOD_UNSAFE		   -1
 #macro	SANITY_MOD_SAFE				1
@@ -102,6 +99,15 @@
 #macro	RANGE_MOD					"Range Mod"
 #macro	FIRE_RATE_MOD				"FRate Mod"
 #macro	RELOAD_RATE_MOD				"RRate Mod"
+
+// Consumable data map values
+#macro	HITPOINT_GAIN				"HP Gain"
+#macro	SANITY_GAIN					"Sanity Gain"
+#macro	CURE_POISON					"Cure Poison"
+#macro	CURE_BLEEDING				"Cure Bleeding"
+#macro	POISON_IMMUNITY				"Poison Immunity"
+#macro	BLEED_IMMUNITY				"Bleed Immunity"
+#macro	DAMAGE_RESIST				"Damage Resist"
 
 // World item data map values
 #macro	NAME						"Name"

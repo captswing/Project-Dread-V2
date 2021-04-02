@@ -2,7 +2,6 @@
 
 //file_fast_crypt_ultra_zlib("item_data.json", "item_data.json", true, "5v8x/A?D(G+KbPeShVmYq3t6w9z$B&E)H@McQfTjWnZr4u7x!A%D*G-JaNdRgUkX");
 //file_fast_crypt_ultra_zlib("world_item_data.json", "world_item_data.json", true, "fTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@");
-//file_fast_crypt_ultra_zlib("dialogue_data.json", "dialogue_data.json", true, "@NcRfUjWnZr47x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C&F");
 
 // Loads in the game's item data from the json data file. It includes everything involving an item and what 
 // it is able to do -- within reason. From the item's description, to its icon on the inventory screen. From
@@ -21,9 +20,6 @@ global.itemData = encrypted_json_load("item_data", "5v8x/A?D(G+KbPeShVmYq3t6w9z$
 //
 global.worldItemData = encrypted_json_load("world_item_data", "fTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@");
 // TODO -- Move this to when the "New Game" is selected, since loading from a save file will use the world item data map from that file's data
-
-// 
-global.dialogueData = encrypted_json_load("dialogue_data", "@NcRfUjWnZr47x!A%D*G-KaPdSgVkYp2s5v8y/B?E(H+MbQeThWmZq4t6w9z$C&F");
 
 // A map that stores all the texture data for the game's available fonts. The key is the number given to the 
 // font given by GML itself, which is a constant given by referencing the font resource itself.
@@ -90,7 +86,7 @@ global.playtimeString = "00:00:00";
 global.curSong = -1;
 global.loopLength = -1;
 
-// The two main variables for handling the player's currently held items. The first variable (inventorySize) stores
+// The three main variables for handling the player's currently held items. The first variable (inventorySize) stores
 // the current accessible space within the item inventory. This variable can be increased by finding inventory upgrades
 // throughout available throughout the game. The final total space is different for almost all difficulty levels.
 //
@@ -101,13 +97,16 @@ global.loopLength = -1;
 //				Nightmare		--		6  slots			12 slots	(3 Upgrades)
 //				One Life Mode	--		6  slots			10 slots	(2 Upgrades)
 //
+// Meanwhile, the second variable holds that maximum size that was shown above; relative to the player's
+// selected difficulty setting. Finally, the third variable is an array that contains the data for each
+// item in the inventory.
 global.invSize = 0;
-for (var i = 0; i < MAX_INV_SIZE; i++){
-	global.invItem[i][0] = NO_ITEM;	// The item's key within the item data map
-	global.invItem[i][1] = 0;		// Total number of items currently in the slot
-	global.invItem[i][2] = 0;		// The item's durability (Nightmare and One Life Mode only)
-	global.invItem[i][3] = false;	// A flag storing if the item is equipped to the player or not
-}
+global.maxInvSize = 0;
+global.invItem = 0;
+
+// FOR TESTING
+inventory_initialize(Difficulty.Standard);
+// FOR TESTING
 
 // The main variable for keeping track of the player's currently found notes and important documents. The size of this
 // section of the inventory isn't limited, and a theoretical infinite amount of notes/memos/documents can be stored

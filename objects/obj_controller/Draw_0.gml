@@ -8,6 +8,8 @@ if (!showDebugInfo){
 	return;
 }
 
+draw_set_alpha(1);
+
 // Dynamic entity collision areas
 with(par_dynamic_entity){
 	switch(object_index){
@@ -27,4 +29,3 @@ with(par_static_entity){
 		draw_circle_color(interactCenter[X] - 1, interactCenter[Y] - 1, interactRadius, c_lime, c_green, false);
 	}
 }
-draw_set_alpha(1);

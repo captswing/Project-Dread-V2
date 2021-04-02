@@ -24,6 +24,20 @@ function collect_item(){
 	global.worldItemData[? keyIndex][? QUANTITY] = _num;
 }
 
+/// @description A unique case where the player picks up the "Item Pouch" which increases the inventory's
+/// size by 2 spaces -- to a maximum relative to the current difficulty settings, which ranges between 24
+/// and 10 available inventory slots.
+function collect_inventory_expansion(){
+	// Increase the current slot size by 2 if the maximum size has yet to be reached
+	if (global.invSize < global.maxInvSize){
+		create_textbox("Item pouch acquired! Maximum inventory space has been increased!", Actor.None);
+		global.invSize += 2;
+	}
+	// Finally, delete the "Item Pouch" from the world item data, as it's been successfully collected
+	ds_map_delete(global.worldItemData, keyIndex);
+	instance_destroy(self);
+}
+
 /// @description Creates an item on the floor at a given location. However, since this item didn't come from
 /// the world_item_data.json file, it has to have additional data within the map to tell the game where to
 /// spawn this object and in what room. This allows items to be persistent much like Resident Evil: Zero.

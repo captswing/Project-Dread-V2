@@ -4,6 +4,8 @@ if (!showDebugInfo){
 	return;
 }
 
+draw_set_alpha(1);
+
 shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);
 outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);

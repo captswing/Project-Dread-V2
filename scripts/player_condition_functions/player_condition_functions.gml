@@ -44,6 +44,15 @@ function set_sanity(_newValue, _resetTimer){
 	sanityTimer = _resetTimer ? 0 : sanityTimer;
 }
 
+/// @description
+/// @param modifier
+/// @param resetTimer
+function update_sanity(_modifier, _resetTimer){
+	curSanity = clamp(curSanity + _modifier, 0, maxSanity);
+	// Resets the sanity check timer if the function calls for it
+	sanityTimer = _resetTimer ? 0 : sanityTimer;
+}
+
 /// @description Updates the player's current maximum sanity value with a specified modifier. This means that
 /// the player's sanity can range from more then 0 to 100 or less than that range. It all depends on certain
 /// effects/conditions that are effecting the player at the moment.

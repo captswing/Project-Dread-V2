@@ -26,7 +26,7 @@ function set_hitpoints(_newValue){
 /// @param newValue
 /// @param restoreHealth
 function set_max_hitpoints(_newValue, _restoreHealth){
-	maxHitpoints = min(1, _newValue); // Prevent the maximum health from going below 1
+	maxHitpoints = max(1, _newValue); // Prevent the maximum health from going below 1
 	if (_restoreHealth || hitpoints > maxHitpoints){
 		hitpoints = maxHitpoints;
 	}
