@@ -5,11 +5,6 @@
 /// @param sPixelWidth
 /// @param sPixelHeight
 function outline_set_font(_font, _textureID, _sPixelWidth, _sPixelHeight){
-	// If the font hasn't changed, don't bother resetting texel sizes since they didn't change either.
-	if (draw_get_font() == _font){
-		return;
-	}
-	// Swap the data over to the new font, update the texel size for the shader to use.
 	draw_set_font(_font);
 	shader_set_uniform_f(_sPixelWidth, texture_get_texel_width(_textureID));
 	shader_set_uniform_f(_sPixelHeight, texture_get_texel_height(_textureID));
@@ -37,6 +32,9 @@ function draw_rect_outline(_xPos, _yPos, _width, _height, _innerCol, _outerCol, 
 	} else{ // Inner rectangle is opaque, draw a single rectangle to represent the outline
 		draw_sprite_ext(spr_rectangle, 0, _xPos, _yPos, _width, _height, 0, _outerCol, _outerAlpha);
 	}
-	// Drawing inner rectangle, which is 2 pixels smaller than the outline's size
-	draw_sprite_ext(spr_rectangle, 0, _xPos + 1, _yPos + 1, _width - 2, _height - 2, 0, _innerCol, _innerAlpha);
+	
+	// Don't bother drawing the inner rectangle if the alpha is set to 0
+	if (_innerAlpha > 0){ // Drawing inner rectangle, which is 2 pixels smaller than the outline's size
+		draw_sprite_ext(spr_rectangle, 0, _xPos + 1, _yPos + 1, _width - 2, _height - 2, 0, _innerCol, _innerAlpha);
+	}
 }

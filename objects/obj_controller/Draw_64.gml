@@ -21,8 +21,6 @@ if (showItems){ // Showing the player's current inventory
 	}
 }
 
-draw_text(WINDOW_WIDTH - 5, WINDOW_HEIGHT - 20, string(global.playerID.sprSpeed) + "\n" + string(global.playerID.localFrame));
-
 var _baseSanityMod = global.isRoomSafe ? SANITY_MOD_SAFE : SANITY_MOD_UNSAFE;
 
 shader_set_uniform_f_array(sOutlineColor, [0.5, 0, 0]);

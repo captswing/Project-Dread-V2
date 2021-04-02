@@ -49,6 +49,15 @@ keyItems = false;
 keyNotes = false;
 keyMaps = false;
 
+// These variables correspond with a sprite/animation for the player during the task specified within the
+// variables name. This allows for easy hot-swapping of sprites based on current equipped weapon and things
+// like that without much code needed for updating the player's current sprite to meet those demands.
+standSprite = spr_claire_unarmed_stand;
+walkSprite = spr_claire_unarmed_walk;
+aimingSprite = -1;
+reloadSprite = -1;
+recoilSprite = -1;
+
 // Variables that allow movement to actually work. The first one stores the direction of the movement based
 // on what combination of right/left and up/down keys have been pressed. Meanwhile, the second variable stores
 // how fast the player will move relative to the calculated input direction. It basically provides accurate

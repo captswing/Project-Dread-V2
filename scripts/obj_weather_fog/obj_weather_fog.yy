@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "obj_effect_handler",
-    "path": "folders/Scripts/Objects/Global/obj_effect_handler.yy",
+    "name": "Effects",
+    "path": "folders/Objects/Global/Effects.yy",
   },
   "resourceVersion": "1.0",
-  "name": "shader_functions",
+  "name": "obj_weather_fog",
   "tags": [],
   "resourceType": "GMScript",
 }

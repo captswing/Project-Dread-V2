@@ -100,11 +100,8 @@ frameTimer = 0;
 
 #endregion
 
-weatherEffect = noone;
-weatherID = -1;
-
-weatherAlpha = 0;
-weatherAlphaSpd = 0.01;
+// FOR TESTING WEATHER
+weather = noone;
 
 // FOR TESTING
 show_debug_overlay(true);

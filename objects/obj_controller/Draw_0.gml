@@ -1,10 +1,7 @@
 /// @description Weather Effects/Debug Stuff
 
 // Display the current weather effect if one is active
-if (weatherEffect != noone){
-	var _alpha = weatherAlpha;
-	with(weatherEffect) {Draw(_alpha);}
-}
+with(weather) {weather_draw();}
 
 // Drawing collision boxes for entities
 if (!showDebugInfo){

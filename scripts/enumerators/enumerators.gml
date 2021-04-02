@@ -101,6 +101,12 @@ enum Settings{
 	Length,
 }
 
+// An enumerator for the actor IDs associated with each character
+enum Actor{
+	None,		// No valid actor index
+	Claire		// The main protagonist
+}
+
 // An enumerator that holds the indexes for the various weather effects that can be toggled in-game
 enum Weather{
 	Clear,

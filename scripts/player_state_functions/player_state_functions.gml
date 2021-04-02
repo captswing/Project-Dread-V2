@@ -66,11 +66,11 @@ function player_state_default(){
 	
 	// Setting the correct sprite for the entity; reflecting what the player is doing at that moment
 	if (inputMagnitude != 0){  // The player is moving; update the direction based on input
-		set_sprite(spr_claire_unarmed_walk, 4);
+		set_sprite(walkSprite, 4);
 		// TODO -- Add change to running sprite here
 		direction = inputDirection;
 	} else{ // The player is standing still; don't update direction based on input
-		set_sprite(spr_claire_unarmed_stand, 4);
+		set_sprite(standSprite, 4);
 	}
 }
 
@@ -99,7 +99,7 @@ function player_state_weapon_ready(){
 	
 	// Setting the sprite for the entity -- relative to direction that they are facing.
 	if (inputMagnitude != 0) {direction = inputDirection;}
-	set_sprite(spr_claire_unarmed_stand, 4); // TODO -- SWAP WITH WEAPON'S READY SPRITE
+	set_sprite(standSprite, 4); // TODO -- SWAP WITH WEAPON'S READY SPRITE
 }
 
 /// @description The state that the player is in whenever they are reloading their current weapon OR are
@@ -112,34 +112,41 @@ function player_state_weapon_reload(){
 	// Counting up the timer for the reload to actually occur
 	reloadTimer += global.deltaTime;
 	if (reloadTimer >= _reloadRate){
-		reloadTimer = 0; // Reset the reload timer and local frame
+		reloadTimer = 0; // Reset the reload timer
 		player_reload_weapon(global.invItem[weaponSlot][1]);
 		// Finally, revert the player back to their previous state
 		if (keyReadyWeapon) {set_cur_state(player_state_weapon_ready);}
 		else {set_cur_state(player_state_default);}
-		set_sprite(spr_claire_unarmed_stand, 4);
 		return; // Exit out of the state early
 	}
 	
 	// Overwrite the sprite's index with a index relative to the remaining reload time
-	if (set_sprite(spr_claire_unarmed_walk, 4)) {sprSpeed = 0;}
+	if (set_sprite(walkSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_reloadRate - reloadTimer) / _reloadRate)) * sprFrames, sprFrames - 1);
 }
 
-/// @description
+/// @description The state the player is in during their weapon recoiling state, which occurs as the complete
+/// attack animation for any melee weapon, and just the recoil animation of any firearms. The speed of the
+/// animation is determined by the speed of the weapon's firerate, where 60 = one second of real-time.
 function player_state_weapon_recoil(){
 	var _fireRate = fireRate - fireRateMod;
 	
 	// Counting up the timer for the recoil to finish
 	fireRateTimer += global.deltaTime;
 	if (fireRateTimer >= _fireRate){
-		fireRateTimer = 0; // Reset the fire rate timer and local frame
+		fireRateTimer = 0; // Reset the fire rate timer
 		set_cur_state(player_state_weapon_ready);
-		set_sprite(spr_claire_unarmed_stand, 4);
 		return; // Exit out of the state early
 	}
 	
 	// Overwrite the sprite's index with a index relative to the remaining recoil time
-	if (set_sprite(spr_claire_unarmed_walk, 4)) {sprSpeed = 0;}
+	if (set_sprite(walkSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_fireRate - fireRateTimer) / _fireRate)) * sprFrames, sprFrames - 1);
+}
+
+/// @description A state that completely locks the player in place; preventing any input. To prevent any odd 
+/// effects, exiting this state should always lead back to the previous state the player was in. Otherwise, 
+/// adverse effects involving reloading and recoiling from using a weapon might not work correctly.
+function player_state_locked(){
+	set_sprite(standSprite, 4);
 }

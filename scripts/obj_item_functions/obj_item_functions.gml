@@ -3,12 +3,24 @@
 /// the remainder of that item for the player's save data.
 function collect_item(){
 	var _num = inventory_add(global.worldItemData[? keyIndex][? NAME], global.worldItemData[? keyIndex][? QUANTITY], global.worldItemData[? keyIndex][? DURABILITY]);
-	if (_num <= 0){ // Remove the data from the item list map
+	// Pop up a textbox letting the player know what item they've collected; if they've even collected one
+	if (_num == global.worldItemData[? keyIndex][? QUANTITY]){ // No inventory space
+		create_textbox("Your inventory is full...", Actor.None);
+	} else{ // Inventory space, display what was picked up
+		var _itemData = global.itemData[? ITEM_LIST][? global.worldItemData[? keyIndex][? NAME]];
+		if (_itemData[? MAX_STACK] == 1 || (string_count(WEAPON, _itemData[? ITEM_TYPE]) == 1)){ // The item isn't stackable or is a weapon, don't show the quantity
+			create_textbox("Picked up " + global.worldItemData[? keyIndex][? NAME] + ".", Actor.None);
+		} else{ // The item can be stacked, show the player the quantity of what they picked up
+			create_textbox("Picked up " + string(global.worldItemData[? keyIndex][? QUANTITY] - _num) + " " + global.worldItemData[? keyIndex][? NAME] + ".", Actor.None);
+		}
+	}
+	// Remove the data from the item list map if the entire quantity was picked up
+	if (_num <= 0){
 		ds_map_delete(global.worldItemData, keyIndex);
 		instance_destroy(self);
 		return;
 	}
-	// Update the quantity of items remaining
+	// Update the quantity of items remaining if some is still left over
 	global.worldItemData[? keyIndex][? QUANTITY] = _num;
 }
 

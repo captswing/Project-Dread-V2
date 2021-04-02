@@ -192,26 +192,3 @@
 #macro	CALMING_AMULET				"Calming Amulet"
 #macro	SPARE_PARTS					"Spare Parts"
 #macro	SPARE_PARTS_PLUS			"Spare Parts+"
-
-// Overall dialogue data map values
-#macro	DIALOGUE_DATA				"Dialogue Data"
-#macro	ACTOR_DATA					"Actor Data"
-
-// Dialogue map values
-#macro	END_DIALOGUE				"END"
-#macro	NEXT_ID						"Next ID"
-#macro	ACTOR						"Actor"
-#macro	DIALOGUE					"Dialogue"
-
-// Actor map values
-#macro	LAST_NAME					"Last Name"
-#macro	NAME_COLOR					"Name Color"
-#macro	BACK_COLOR					"Back Color"
-#macro	PORTRAIT_ID					"Portrait ID"
-
-// Dialogue ID map values
-#macro	TEST_DIALOGUE				"0"
-
-// Actor name map values
-#macro	NO_ACTOR					"NoActor"
-#macro	CLAIRE						"Claire"

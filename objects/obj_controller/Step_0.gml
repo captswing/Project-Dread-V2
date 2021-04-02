@@ -4,11 +4,7 @@
 update_background_music();
 
 // Updating the currently active weather effect
-update_weather_effect();
-// FOR TESTING
-if (keyboard_check_pressed(vk_space)){
-	set_weather_effect(Weather.Mist);
-}
+with(weather) {weather_update();}
 
 // Accurately tracking the current in-game playtime whenever the timer is activated
 // The value 35999999 is equal to 99:59:59 when converted, which is the maximum possible

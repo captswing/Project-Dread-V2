@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "obj_controller",
-    "path": "folders/Scripts/Objects/Global/obj_controller.yy",
+    "name": "Textbox",
+    "path": "folders/Scripts/Objects/GUI/Textbox.yy",
   },
   "resourceVersion": "1.0",
-  "name": "weather_functions",
+  "name": "textbox_helper_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

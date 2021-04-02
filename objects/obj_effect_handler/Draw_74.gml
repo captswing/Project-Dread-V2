@@ -1,5 +1,8 @@
 /// @description Draw World-Space Effects
 
+// Set the alpha level to 1 always
+draw_set_alpha(1);
+
 // The result shader is used on multiple occasions to store the effect of a previous shader in order to 
 // correctly apply it to another shader. Also gets texture ID for any shaders that need to use it
 if (!surface_exists(resultSurface)){
@@ -7,15 +10,15 @@ if (!surface_exists(resultSurface)){
 	resultTexture = surface_get_texture(resultSurface);
 }
 
-// The first auxillary surface that is used to store any effects that are being processed by a shader. Also
-// gets the textureID for the same purpose.
+// The first auxillary surface that is used to store any effects that are being processed by a shader. 
+// Also gets the textureID for the same purpose.
 if (!surface_exists(auxSurfaceA)){
 	auxSurfaceA = surface_create(WINDOW_WIDTH, WINDOW_HEIGHT);
 	auxTextureA = surface_get_texture(auxSurfaceA);
 }
 
-// The second auxillary surface that is used to store any effects that are being processed by a shader. Also
-// gets the texture ID for the same purpose.
+// The second auxillary surface that is used to store any effects that are being processed by a shader. 
+// Also gets the texture ID for the same purpose.
 if (!surface_exists(auxSurfaceB)){
 	auxSurfaceB = surface_create(WINDOW_WIDTH, WINDOW_HEIGHT);
 	auxTextureB = surface_get_texture(auxSurfaceB);

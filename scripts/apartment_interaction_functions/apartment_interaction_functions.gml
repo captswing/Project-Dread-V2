@@ -1,5 +1,5 @@
-/// @description
+/// @description Some flavor text for when the player is poking around; interacting with things in any
+/// apartment setting.
 function interact_apartment_general(){
-	// TODO -- Switch this to opening a textbox and showing the same text
-	show_debug_message("Nothing Special.");
+	create_textbox("Nothing special.", Actor.None);
 }
