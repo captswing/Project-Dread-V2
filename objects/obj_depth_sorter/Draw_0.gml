@@ -23,6 +23,7 @@ ds_grid_sort(global.worldObjects, 1, true);
 shader_set(outlineShader);
 // Set the outline color here since it won't change for specific objects
 shader_set_uniform_f_array(sOutlineColor, [1, 1, 1]);
+shader_set_uniform_i(sDrawOutline, false); // Always set to false by default
 
 
 // Store the uniform locations within local variables for quick access
@@ -33,21 +34,23 @@ _drawOutline = sDrawOutline;
 _spriteTexture = -1;
 
 // Loop through each object in the list and draw them
-var _halfWidth, _halfHeight;
-_halfWidth = WINDOW_WIDTH / 2;
-_halfHeight = WINDOW_HEIGHT / 2;
+var _screenX, _screenY, _screenW, _screenH;
+_screenX = get_camera_x();
+_screenY = get_camera_y();
+_screenW = _screenX + WINDOW_WIDTH;
+_screenH = _screenY + WINDOW_HEIGHT;
 for (var i = 0; i < _index; i++){
 	with(global.worldObjects[# 0, i]){
-		if (!drawSprite || x < (global.controllerID.x - _halfWidth) - sprite_width || x > (global.controllerID.x + _halfWidth) + sprite_width || y < (global.controllerID.y - _halfHeight) - sprite_height || y > (global.controllerID.y + _halfHeight) + sprite_height){
+		if (!drawSprite || x <= _screenX - sprite_width || x >= _screenW + sprite_width || y <= _screenY - sprite_height || y >= _screenH + sprite_height){
 			continue;	// The object isn't currently on screen or isn't supposed to be drawn
 		}
-		// Set the shader's uniforms if and get textureID only if required -- except for setting drawOutline, which is mandatory for each object drawn
-		if (drawOutline && global.settings[Settings.ItemHighlighting]){
+		// Set the shader's uniforms if and getting textureID only if required by the toggled accessibility setting
+		if (global.settings[Settings.ItemHighlighting]){
 			_spriteTexture = sprite_get_texture(sprite_index, image_index);
 			shader_set_uniform_f(_sPixelWidth, texture_get_texel_width(_spriteTexture));
 			shader_set_uniform_f(_sPixelHeight, texture_get_texel_height(_spriteTexture));
+			shader_set_uniform_i(_drawOutline, drawOutline && global.settings[Settings.ItemHighlighting]);
 		}
-		shader_set_uniform_i(_drawOutline, drawOutline && global.settings[Settings.ItemHighlighting]);
 		// Draw the object by calling its draw event
 		event_perform(ev_draw, 0);
 		_totalObjectsDrawn++;
