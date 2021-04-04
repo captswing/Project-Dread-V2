@@ -1,5 +1,8 @@
 /// @description Draw the Currently Active Textbox
 
+// Set the alpha for the entire textbox
+draw_set_alpha(alpha);
+
 // Get a reference to the struct stored within the list for the current actor. Also, find out if the
 // namespace section of the textbox needs to be displayed for the speaker's name.
 var _data, _showName;
@@ -7,27 +10,41 @@ _data = actorData[? textboxData[| 0][1]];
 _showName = (_data.firstName != "NoActor");
 
 // Drawing the textbox's background and the currently visible text right after that
-draw_sprite_stretched_ext(_data.textboxSprite, 0, x + 5, y, WINDOW_WIDTH - 10, 55, _data.textboxColor, alpha);
+draw_sprite_stretched_ext(_data.textboxSprite, 0, x + 5, y, WINDOW_WIDTH - 10, 52, _data.textboxColor, alpha);
 // Optionally, display the namespace when required to display the speaker's name
-if (_showName) {draw_sprite_stretched_ext(_data.namespaceSprite, 0, x + 18, y - 11, namespaceWidth, 13, _data.textboxColor, alpha);}
+if (_showName) {draw_sprite_stretched_ext(_data.namespaceSprite, 0, x + 18, y - 11, 70, 13, _data.textboxColor, alpha);}
+
+// Show an indicator that the text is fully visible and the player can move on
+if (nextCharacter >= finalCharacter){
+	draw_sprite(spr_textbox_indicator, 0, x + WINDOW_WIDTH - 20, y + 42 + floor(indicatorOffset));
+}
 
 // Set the shader for drawing outlines around the visible text
 shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);
 
-// Set the font, alpha, and color of the text; outline included
-draw_set_alpha(alpha);
+// Set the font, and color of the text; outline included
 draw_set_color(c_white);
 shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
 outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
 
-// Drawing the actor's name and portrait to the screen if an actor is associated with the current textbox
+// Drawing the actor's name and portrait to the screen if an actor is associated with the current textbox;
+// also offsetting the text that is drawn by 50 pixels to make room for the portrait sprite. Otherwise, the
+// text is drawn at its normal coordinates; giving it the full textbox to work with.
 if (_showName){
+	// Displays the actor's name within the namespace field
 	draw_text(x + 25, y - 7, _data.firstName);
-	// TODO -- Add portrait images here
+	// Only display the portrait if it isn't set to -1, which means no portrait sprite exists
+	if (_data.portraitSprite != -1){
+		draw_text(x + 72, y + 10, visibleText);
+		shader_reset(); // Prevent the outline shader from activating on the portrait sprite
+		// After resetting the shader, draw the portrait sprite to the screen
+		draw_sprite(_data.portraitSprite, textboxData[| 0][2], x + 20, y + 3);
+	}
+} else{
+	draw_text(x + 20, y + 10, visibleText);
+	shader_reset();
 }
 
-// Draw the current visible textbox contents to the screen
-draw_text(x + 20, y + 10, visibleText);
-
-shader_reset();
+// Finally, reset the alpha level to prevent any weird opacity issues
+draw_set_alpha(1);

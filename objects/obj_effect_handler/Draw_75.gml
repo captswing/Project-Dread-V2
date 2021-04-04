@@ -1,16 +1,16 @@
 /// @description Draw Screen-Space Effects
 
-// Set the alpha level to 1 always
-draw_set_alpha(1);
-
 // The screen-space post processing effects are ordered as follows:
-//		1	--		Film Grain/Noise
-//		2	--		Scanlines
-
-if (global.settings[Settings.FilmGrain]){
-	film_grain_effect(filmGrainWidth, 0.08, 3.8);
-}
+//		1	--		Scanlines
+//		2	--		Film Grain
 
 if (global.settings[Settings.Scanlines]){
-	scanline_effect(WINDOW_HEIGHT, 0.1);
+	scanline_effect(0.1);
+}
+
+if (global.settings[Settings.FilmGrain]){
+	var _xOffset, _yOffset;
+	_xOffset = irandom_range(0, noiseWidth);
+	_yOffset = irandom_range(0, noiseHeight);
+	draw_sprite_tiled_ext(spr_film_grain, 0, _xOffset, _yOffset, 1, 1, c_white, noiseStrength);
 }

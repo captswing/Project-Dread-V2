@@ -104,6 +104,13 @@ frameTimer = 0;
 weather = noone;
 
 // FOR TESTING
+inventory_add(HANDGUN, 100, 60);
+inventory_add(PUMP_SHOTGUN, 100, 60);
+inventory_add(HAND_CANNON, 100, 60);
+inventory_add(HANDGUN_AMMO, 90, 0);
+inventory_remove(HANDGUN_AMMO, 37);
+
+
 show_debug_overlay(true);
 showDebugInfo = false;
 showItems = false;

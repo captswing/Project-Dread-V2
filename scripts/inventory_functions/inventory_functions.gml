@@ -53,7 +53,8 @@ function inventory_add(_name, _quantity, _durability){
 	// for an empty slot that it can be added to (Ex. weapons can't be stacked despite having a maxQuantity
 	// greater than one).
 	for (var i = 0; i < global.invSize; i++){
-		if (!_isWeapon && _maxQuantity > 1 && global.invItem[i][0] == _name && global.invItem[i][1] < _maxQuantity){
+		if (!_isWeapon && _maxQuantity > 1 && global.invItem[i][1] < _maxQuantity && (global.invItem[i][0] == _name || global.invItem[i][0] == NO_ITEM)){
+			global.invItem[i][0] = _name;
 			if (global.invItem[i][1] + _quantity <= _maxQuantity){ // Enough room in current slot; add entire quantity to said slot
 				global.invItem[i][1] += _quantity;
 				return 0; // The item and its entire quantity was added to the inventory; return 0
@@ -64,7 +65,11 @@ function inventory_add(_name, _quantity, _durability){
 		} else if (global.invItem[i][0] == NO_ITEM){ // The item isn't stackable or is a weapon; add it to an empty slot and move along
 			global.invItem[i][0] = _name;
 			global.invItem[i][1] = min(_quantity, _maxQuantity);
-			global.invItem[i][2] = _durability;
+			// Only bother editing the durability value of the item if it's a weapon
+			if (_isWeapon){
+				var _maxDurability = global.itemData[? WEAPON_DATA][? _name][? DURABILITY];
+				global.invItem[i][2] = min(_durability, _maxDurability);
+			}
 			return 0; // The item was added to the inventory successfully; return 0
 		}
 	}
@@ -87,7 +92,7 @@ function inventory_remove(_name, _quantity){
 	// Loop through the entire inventory looking for the item specified in order to remove it. The quantity
 	// is returned after looping through the whole inventory if the amount needed for deletion cannot be
 	// satisfied by the current contents in the inventory.
-	for (var i = 0; i < global.invSize; i++){
+	for (var i = global.invSize - 1; i >= 0; i--){
 		// The item in the slot matches the name the inventory is looking for; try to remove it
 		if (global.invItem[i][0] == _name){
 			if (_maxQuantity == 1 || _isWeapon){ // Treat weapons as a single item instead of multiple

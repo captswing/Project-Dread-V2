@@ -1,19 +1,11 @@
 /// @description Display General Debug Info
 
-if (!showDebugInfo){
-	return;
-}
-
-draw_set_alpha(1);
-
 shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);
-outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
 
-draw_set_halign(fa_left);
-shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
 draw_set_color(c_white);
-draw_text(5, 5, "In-Game Playtime:\nDelta Time:\nRoom Size:\nInstances:\nDynamic Entities:\nStatic Entities:\nEntities Drawn:\nLights Drawn:\n\n-- Camera Data --\nPosition:\nFollowing:\n\n-- Player Data --\nCurrent State:\nLast State:\nPosition:\nMax Speed:\nHitpoints:\nCurrent Sanity:\nSanity Modifier:");
+shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
+outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
 
 draw_set_halign(fa_right);
 if (showItems){ // Showing the player's current inventory
@@ -22,6 +14,13 @@ if (showItems){ // Showing the player's current inventory
 		draw_text(WINDOW_WIDTH - 5, 15 + (i * 10), global.invItem[i][0] + " x" + string(global.invItem[i][1]));
 	}
 }
+draw_set_halign(fa_left);
+
+if (!showDebugInfo){
+	return;
+}
+
+draw_text(5, 5, "In-Game Playtime:\nDelta Time:\nRoom Size:\nInstances:\nDynamic Entities:\nStatic Entities:\nEntities Drawn:\nLights Drawn:\n\n-- Camera Data --\nPosition:\nFollowing:\n\n-- Player Data --\nCurrent State:\nLast State:\nPosition:\nMax Speed:\nHitpoints:\nCurrent Sanity:\nSanity Modifier:");
 
 var _baseSanityMod = global.isRoomSafe ? SANITY_MOD_SAFE : SANITY_MOD_UNSAFE;
 

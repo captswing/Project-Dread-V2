@@ -1,12 +1,38 @@
+/// @description Adds textbox data to the end of the ds_list of said data. The text MUST be formatted during
+/// or before passing it into this function because no formatting occurs within the function.
+/// @param text
+/// @param actor
+/// @param imageIndex
+function add_textbox_data(_text, _actor, _imageIndex){
+	ds_list_add(textboxData, [_text, _actor, _imageIndex]);
+	if (ds_list_size(textboxData) == 1) {finalCharacter = string_length(textboxData[| 0][0]);}
+}
+
 /// @description Removes the textbox data from the 0th position of the list. If no more textbox data exists
 /// in the data list, the textbox handler object will be deleted. Also resets the typewriter effect variables.
 function open_next_textbox(){
 	ds_list_delete(textboxData, 0);
 	// No more data remains in the struct list; delete the entire object
-	if (ds_list_size(textboxData) == 0) {instance_destroy(self);}
+	if (ds_list_size(textboxData) == 0){
+		instance_destroy(self);
+		return;
+	}
 	// If more textboxes still remain in the list, reset variables for the next textbox
+	finalCharacter = string_length(textboxData[| 0][0]);
 	nextCharacter = 0;
 	visibleText = "";
+}
+
+/// @description Attempts to add an actor's data to the map of actors for the current textboxes. However, if
+/// the actor's data already exists within the map, no actor data will be searched for or added and this
+/// function will essentially do nothing.
+/// @param actor
+function add_actor_data(_actor){
+	var _existingActor = ds_map_find_value(actorData, _actor);
+	if (is_undefined(_existingActor)){ // Only add new data to the map if is a new actor struct
+		var _newActor = get_actor_data(_actor);
+		ds_map_add(actorData, _actor, _newActor);
+	}
 }
 
 /// @description Fetches the struct containing data about the actor based on the index provided. The struct
@@ -20,8 +46,9 @@ function get_actor_data(_actor){
 	// The variables that can exist within the _data struct include:
 	//
 	//			textboxSprite		--		sprite_index
-	//			namespaceSprite		--		sprite_index
 	//			textboxColor		--		color
+	//			namespaceSprite		--		sprite_index
+	//			namespaceWidth		--		number
 	//			portraitSprite		--		sprite_index
 	//			firstName			--		string
 	//			lastName			--		string
@@ -32,9 +59,10 @@ function get_actor_data(_actor){
 		case Actor.Claire: // The main character's actor data
 			_data = {
 				textboxSprite : spr_textbox0,
-				namespaceSprite : spr_textbox0_namespace,
 				textboxColor : make_color_rgb(110, 0, 204),
-				portraitSprite : -1,
+				namespaceSprite : spr_textbox0_namespace,
+				//namespaceWidth : 35,
+				portraitSprite : spr_claire_portraits,
 				firstName : "Claire",
 				lastName : "Foster"
 			}

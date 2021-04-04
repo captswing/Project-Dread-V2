@@ -1,29 +1,41 @@
-/// @description Creates a textbox and the textbox object that handles the data contained within the textbox
-/// content -- the text itself and the actor/character associated with the textbox, which determines a few
-/// elements of the textbox itself. If textboxes are queued up within obj_textbox already, this function will
-/// simply add the data to the list of textbox data found within the handler object.
+/// @description Creates a simple textbox with no actor or actor portrait, just some text. The color of the
+/// textbox is determined from a barebones actor, however, which is named NoActor. All textboxes created by
+/// this command will share that actor.
+/// @param text
+function create_textbox(_text){
+	// Simply calls the full-fledged textbox creation function, but with the actor and image index hardcoded
+	create_textbox_actor_portrait(_text, Actor.None, -1);
+}
+
+/// @description Creates a textbox with text and an actor associated with it, but the actor does not use
+/// a portrait, so it is disabled for the textbox. This is useful for named characters that aren't integral
+/// to the game's plot, but are named nonetheless.
 /// @param text
 /// @param actor
-function create_textbox(_text, _actor){
-	// If no textbox object currently exists within the single variable, create said textbox.
-	if (!instance_exists(global.textboxID)) {instance_create_depth(0, WINDOW_HEIGHT + 10, GLOBAL_DEPTH, obj_textbox);}
-	// Add the textbox information to the list of data in the textbox object. Also, add the textbox's
-	// associated actor to the map if they aren't currently in the map.
+function create_textbox_actor(_text, _actor){
+	// Simply calls the full-fledged textbox creation function, but with the image index as a hardcoded value
+	create_textbox_actor_portrait(_text, _actor, -1);
+}
+
+/// @description Creates a fully-utilized textbox with text, an actor, and the portrait's image index provided.
+/// The image index allows different faces to be shown on individual textboxes; allowing for greater expression
+/// of the characters during cutscenes. This function is mostly reserved for the major characters in the game.
+/// @param text
+/// @param actor
+/// @param imageIndex
+function create_textbox_actor_portrait(_text, _actor, _imageIndex){
+	// If the single textbox variable doesn't have an ID associated with in, create the textbox handler object
+	if (global.textboxID == noone){
+		instance_create_depth(0, WINDOW_HEIGHT + 10, GLOBAL_DEPTH, obj_textbox);
+	}
+	// Jump into the textbox handler and add the data to its textbox list and actor map
 	with(global.textboxID){
-		var _data = get_actor_data(_actor);
-		ds_list_add(textboxData, [string_split_lines(_text, 280, font_gui_small), _data.firstName]);
-		if (!is_undefined(ds_map_find_value(actorData, _data.firstName))){
-			delete _data; // Remove the duplicate struct from memory
-			_data = noone;
+		if (_imageIndex >= 0){ // Only offset the text if a value imageIndex value was passed in
+			add_textbox_data(string_split_lines(_text, WINDOW_WIDTH - 92, font_gui_small), _actor, _imageIndex);
+		} else{ // If no valid imageindex was provided, offset the text as normal (40 pixels)
+			add_textbox_data(string_split_lines(_text, WINDOW_WIDTH - 40, font_gui_small), _actor, _imageIndex);
 		}
-		// If the struct wasn't a duplicate, add the data to the actor map. Optionally, calculate the
-		// width of the namespace if the actor's name shows up there.
-		if (_data != noone){
-			ds_map_add(actorData, _data.firstName, _data);
-			if (_data.firstName != "NoActor"){
-				draw_set_font(font_gui_small); // Change the active drawing font for accurate calculation
-				namespaceWidth = string_width(_data.firstName) + 14;
-			}
-		}
+		// Finally, attempt to add the actor's date to the actor map
+		add_actor_data(_actor);
 	}
 }

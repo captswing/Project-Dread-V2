@@ -123,24 +123,6 @@ time = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-// Variables for the Film Grain Shader /////////////////////////////////////////////
-
-// This variable holds a reference to the shader's unique asset index value.
-filmGrainShader = shd_film_grain;
-// Get the uniform locations; storing them in local variables
-sGrainOffset =		shader_get_uniform(filmGrainShader, "offset");
-sGrainStrength =	shader_get_uniform(filmGrainShader, "strength");
-sGrainSize =		shader_get_uniform(filmGrainShader, "size");
-sGrainTexture =		shader_get_sampler_index(filmGrainShader, "grainTexture");
-
-// A variable that stores the width and height for the noise texture, which is used
-// to calculate the offset for the current frame. And another variable that stores
-// the texture ID for the film grain.
-filmGrainWidth =	sprite_get_width(spr_film_grain);
-filmGrainTexture =	sprite_get_texture(spr_film_grain, 0);
-
-////////////////////////////////////////////////////////////////////////////////////
-
 // Variables for the Scanline Shader ///////////////////////////////////////////////
 
 // This variable holds a reference to the shader's unique asset index value.
@@ -148,6 +130,20 @@ scanlineShader = shd_scanlines;
 // Get the uniform locations; storing them in local variables
 sViewHeight =		shader_get_uniform(scanlineShader, "viewHeight");
 sStrength =			shader_get_uniform(scanlineShader, "strength");
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variables for the Film Grain Effect /////////////////////////////////////////////
+
+// Store the width and height of the film grain sprite in two variables. Prevents having
+// to constantly fetch these values every single frame; despite the fact that none of the
+// dimensions will ever change during runtime.
+noiseWidth = sprite_get_width(spr_film_grain);
+noiseHeight = sprite_get_height(spr_film_grain);
+
+// Also, store the intensity of the noise effect in another variable for easily potential
+// adjustments to it later down the line.
+noiseStrength = 0.15;
 
 ////////////////////////////////////////////////////////////////////////////////////
 

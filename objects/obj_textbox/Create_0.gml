@@ -38,15 +38,17 @@ sDrawOutline = shader_get_uniform(outlineShader, "drawOutline");
 
 //
 isClosing = false;
-yTarget = WINDOW_HEIGHT - 60;
+yTarget = WINDOW_HEIGHT - 57;
 alpha = 0;
 
 // 
 visibleText = "";
 nextCharacter = 0;
+finalCharacter = 0;
 
 //
-namespaceWidth = 0;
+indicatorOffset = 0;
+indicatorSpeed = 0.06;
 
 // A list of indefinite length that store data about a given piece of dialogue within the queue. (The 0th 
 // index is the only visible textbox at any given time) Basically, it stores the speaker's name and the text

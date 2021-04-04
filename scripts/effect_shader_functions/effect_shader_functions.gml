@@ -173,8 +173,8 @@ function blur_effect(_blurSteps, _sigma) {
 	// Begin drawing using the blur shader's 2-pass system
 	shader_set(blurShader);
 	// Set all the uniforms to their corresponding values
-	shader_set_uniform_f(sBlurSteps, _blurSteps);
 	shader_set_uniform_f(sTexelSize, 1 / WINDOW_WIDTH, 1 / WINDOW_HEIGHT);
+	shader_set_uniform_f(sBlurSteps, _blurSteps);
 	shader_set_uniform_f(sSigma, _sigma);
 
 	// The first pass: horizontal blurring
@@ -192,35 +192,14 @@ function blur_effect(_blurSteps, _sigma) {
 	shader_reset();
 }
 
-/// @description Code for the grain filter effect that is applied onto the GUI layer, which affects all GUI
-/// elements as well as the world. A 64x64 noise texture is used to determine the color of the pixel relative
-/// to this frame's calculated offset -- simulating film grain.
-/// @param spriteWidth
-/// @param strength
-/// @param size
-function film_grain_effect(_spriteWidth, _strength, _size){
-	shader_set(filmGrainShader);
-	// Set the uniforms to their corresponding values.
-	shader_set_uniform_f(sGrainOffset, irandom_range(0, _spriteWidth), irandom_range(0, _spriteWidth));
-	shader_set_uniform_f(sGrainStrength, _strength);
-	shader_set_uniform_f(sGrainSize, _size);
-	texture_set_stage(sGrainTexture, filmGrainTexture);
-
-	// Draw the surface to the screen; applying the shader's effect to it
-	draw_surface(resultSurface, 0, 0);
-
-	shader_reset();
-}
-
 /// @description Holds the code that handles the scanline shader on the GUI surface. It's a very simple shader 
 /// that applies a black line to each even pixel relative to the height. The strength of the effect determines
 /// how pronounced the scanlines are.
-/// @param viewHeight
 /// @param strength
-function scanline_effect(_viewHeight, _strength){
+function scanline_effect(_strength){
 	shader_set(scanlineShader);
 	// Set the uniforms to their corresponding values.
-	shader_set_uniform_f(sViewHeight, _viewHeight);
+	shader_set_uniform_f(sViewHeight, WINDOW_HEIGHT);
 	shader_set_uniform_f(sStrength, _strength);
 
 	// Draw the surface to the screen; applying the shader's effect to it

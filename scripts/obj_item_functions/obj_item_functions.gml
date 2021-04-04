@@ -5,13 +5,15 @@ function collect_item(){
 	var _num = inventory_add(global.worldItemData[? keyIndex][? NAME], global.worldItemData[? keyIndex][? QUANTITY], global.worldItemData[? keyIndex][? DURABILITY]);
 	// Pop up a textbox letting the player know what item they've collected; if they've even collected one
 	if (_num == global.worldItemData[? keyIndex][? QUANTITY]){ // No inventory space
-		create_textbox("Your inventory is full...", Actor.None);
-	} else{ // Inventory space, display what was picked up
+		create_textbox("Your inventory is full...");
+	} else if (_num > 0){ // The inventory has space, but not enough for the full quantity
+		create_textbox("Picked up only " + string(global.worldItemData[? keyIndex][? QUANTITY] - _num) + " of the " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + global.worldItemData[? keyIndex][? NAME] + ". The inventory is full and cannot fit the rest, so it was left alone.");
+	} else{ // Inventory has space for the whole quantity, display what was picked up
 		var _itemData = global.itemData[? ITEM_LIST][? global.worldItemData[? keyIndex][? NAME]];
 		if (_itemData[? MAX_STACK] == 1 || (string_count(WEAPON, _itemData[? ITEM_TYPE]) == 1)){ // The item isn't stackable or is a weapon, don't show the quantity
-			create_textbox("Picked up " + global.worldItemData[? keyIndex][? NAME] + ".", Actor.None);
+			create_textbox("Picked up " + global.worldItemData[? keyIndex][? NAME] + ".");
 		} else{ // The item can be stacked, show the player the quantity of what they picked up
-			create_textbox("Picked up " + string(global.worldItemData[? keyIndex][? QUANTITY] - _num) + " " + global.worldItemData[? keyIndex][? NAME] + ".", Actor.None);
+			create_textbox("Picked up " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + global.worldItemData[? keyIndex][? NAME] + ".");
 		}
 	}
 	// Remove the data from the item list map if the entire quantity was picked up
@@ -30,7 +32,7 @@ function collect_item(){
 function collect_inventory_expansion(){
 	// Increase the current slot size by 2 if the maximum size has yet to be reached
 	if (global.invSize < global.maxInvSize){
-		create_textbox("Item pouch acquired! Maximum inventory space has been increased!", Actor.None);
+		create_textbox("Item pouch acquired! Maximum inventory space has been increased!", Actor.None, -1);
 		global.invSize += 2;
 	}
 	// Finally, delete the "Item Pouch" from the world item data, as it's been successfully collected

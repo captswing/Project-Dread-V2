@@ -23,6 +23,9 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 			// The position of the fog in world-space
 			xPos : random(fogWidth * _scale),
 			yPos : random(fogHeight * _scale),
+			// The fractional variables that prevent any sub-pixel movement
+			xPosFraction : 0,
+			yPosFraction : 0,
 			// The horizontal and vertical velocities
 			xSpeed : random_range(-_maxSpeed, _maxSpeed),
 			ySpeed : random_range(-_maxSpeed, _maxSpeed),
@@ -47,7 +50,7 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 	lerpProgress = 0;
 	lerpSpeed = 50;
 	
-	// Updates the positions of each layer in the fog effect
+	/// @description Updates the positions of each layer in the fog effect
 	function weather_update(){
 		// Fading in/fading out the fog depending on if the weather is starting or ending
 		lerpProgress += ((1 - lerpProgress) / lerpSpeed) * global.deltaTime;
@@ -62,46 +65,41 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 		for (var i = 0; i < numLayers; i++){
 			with(fogLayer[| i]){
 				// Handling horizontal movement; wrapping the value between its width and 0
-				xPos += xSpeed * global.deltaTime;
-				if (xPos < 0) {xPos = xSize;}
-				else if (xPos > xSize) {xPos = 0;}
-				
+				xPos += (xSpeed * global.deltaTime) + xPosFraction;
+				xPosFraction = xPos - (floor(abs(xPos)) * sign(xPos));
+				xPos -= xPosFraction;
+			
+				if (xPos < 0) {xPos += xSize;}
+				else if (xPos > xSize) {xPos -= xSize;}
+			
 				// Handling vertical movement; wrapping the value between its height and 0
-				yPos += ySpeed * global.deltaTime;
+				yPos += (ySpeed * global.deltaTime) + yPosFraction;
+				yPosFraction = yPos - (floor(abs(yPos)) * sign(yPos));
+				yPos -= yPosFraction;
+			
 				if (yPos < 0) {yPos = ySize;}
 				else if (yPos > ySize) {yPos = 0;}
 			}
 		}
 	}
 	
-	// Draws each of the layers onto the screen in order from first to last
+	/// @description Draws each of the layers onto the screen in order from first to last
 	function weather_draw(){
 		// Don't bother drawing if the image isn't visible
 		if (alpha <= 0) {return;}
 		// Loop through and draw all active layers with integer position values, to stop any sub-pixel drawing
-		var _alpha, _xOffset, _yOffset;
-		_alpha = alpha;
-		gpu_set_tex_filter(true); // Make sure linear interpolation is enabled
+		var _alpha = alpha;
 		for (var i = 0; i < numLayers; i++){
 			with(fogLayer[| i]){
 				// Ignore any fog layers that have a scale of 0 or an alpha of 0
 				if (alpha == 0 || xSize == 0 || ySize == 0) {continue;}
-				// Calculate the offset position of the camera to make the fog look like it exists within the world 
-				// space instead of screen space, which would make it look like its attached to the screen itself.
-				_xOffset = floor(get_camera_x() / xSize) * xSize;
-				_yOffset = floor(get_camera_y() / ySize) * ySize;
 				// Tile the fog sprite to cover the entirety of the visible screen for each layer
-				for (var xx = -xSize; xx < WINDOW_WIDTH + xSize; xx += xSize){
-					for (var yy = -ySize; yy < WINDOW_HEIGHT + ySize; yy += ySize){
-						draw_sprite_ext(spr_mist_effect, 0, xPos + _xOffset + xx, yPos + _yOffset + yy, scale, scale, 0, c_white, _alpha * alpha);
-					}
-				}
+				draw_sprite_tiled_ext(spr_mist_effect, 0, xPos, yPos, scale, scale, c_white, _alpha * alpha);
 			}
 		}
-		gpu_set_tex_filter(false);
 	}
 	
-	// Cleans up the data structure containing the data for each of the fog layers
+	/// @description Cleans up the data structure containing the data for each of the fog layers
 	function weather_destroy(){
 		var _data = noone;
 		for(var i = 0; i < numLayers; i++){

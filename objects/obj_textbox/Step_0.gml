@@ -16,6 +16,7 @@ y += ((yTarget - y) / 5) * global.deltaTime;
 if (!isClosing){ // Fades the textbox into visiblity
 	alpha += 0.1 * global.deltaTime;
 	if (alpha > 1) {alpha = 1;}
+	else {keyAdvance = false;} // Don't allow input until the textbox is fully visible
 } else{ // Fades the textbox out
 	alpha -= 0.1 * global.deltaTime;
 	if (alpha < 0){ // Switching from the currently visible textbox to the next one
@@ -34,9 +35,8 @@ if (!isClosing){ // Fades the textbox into visiblity
 
 // Advancing the text/skipping the typewriter effect
 if (keyAdvance){
-	var _length = string_length(textboxData[| 0][0]);
-	if (nextCharacter > 3 && nextCharacter < _length){ // Display the entire string at once, skipping the animation
-		nextCharacter = _length;
+	if (nextCharacter > 4 && nextCharacter < finalCharacter){ // Display the entire string at once, skipping the animation
+		nextCharacter = finalCharacter;
 	} else{ // Starts the "closing" transition to move onto the next textbox if the actor is different
 		if (ds_list_size(textboxData) > 1 && textboxData[| 0][1] == textboxData[| 1][1]){
 			open_next_textbox();
@@ -47,8 +47,14 @@ if (keyAdvance){
 	}
 }
 
+// Makes the "text fully visible" indicator move up and down
+indicatorOffset += indicatorSpeed * global.deltaTime;
+if (indicatorOffset >= 2) {indicatorOffset = 0;}
+
 // Updating the currently visible portion of the text based on current set text speed
-nextCharacter += global.settings[Settings.TextSpeed] * global.deltaTime;
-visibleText = string_copy(textboxData[| 0][0], 1, nextCharacter);
+if (nextCharacter <= finalCharacter){
+	nextCharacter += global.settings[Settings.TextSpeed] * global.deltaTime;
+	visibleText = string_copy(textboxData[| 0][0], 1, nextCharacter);
+}
 
 #endregion

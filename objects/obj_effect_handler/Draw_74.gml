@@ -1,8 +1,5 @@
 /// @description Draw World-Space Effects
 
-// Set the alpha level to 1 always
-draw_set_alpha(1);
-
 // The result shader is used on multiple occasions to store the effect of a previous shader in order to 
 // correctly apply it to another shader. Also gets texture ID for any shaders that need to use it
 if (!surface_exists(resultSurface)){
