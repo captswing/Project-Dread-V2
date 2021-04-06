@@ -14,6 +14,7 @@ if (showItems){ // Showing the player's current inventory
 		draw_text(WINDOW_WIDTH - 5, 15 + (i * 10), global.invItem[i][0] + " x" + string(global.invItem[i][1]));
 	}
 }
+draw_text(WINDOW_WIDTH - 5, 160, string(global.playerID.direction));
 draw_set_halign(fa_left);
 
 if (!showDebugInfo){

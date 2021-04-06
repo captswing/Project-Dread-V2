@@ -57,7 +57,8 @@ textboxData = ds_list_create();
 // The data for the textbox data is stored as follows:
 //
 //			0	--	actual dialogue
-//			1	--	speaker's name
+//			1	--	actor's ID value
+//			2	--	portrait image index
 //
 
 // A map of data relating to the actors that have textboxes associated with them. It contains data about the
@@ -74,8 +75,11 @@ actorData = ds_map_create();
 
 #endregion
 
-#region FREEZING CERTAIN ENTITIES
+#region 
 
-with(global.playerID) {set_cur_state(player_state_locked);}
+if (!instance_exists(obj_cutscene)){
+	with(global.playerID) {set_sprite(standSprite, 4);}
+	global.gameState = GameState.InMenu;
+}
 
 #endregion

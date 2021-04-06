@@ -4,7 +4,7 @@
 /// @param text
 function create_textbox(_text){
 	// Simply calls the full-fledged textbox creation function, but with the actor and image index hardcoded
-	create_textbox_actor_portrait(_text, Actor.None, -1);
+	create_textbox_actor_portrait("> " + _text, Actor.None, -1);
 }
 
 /// @description Creates a textbox with text and an actor associated with it, but the actor does not use

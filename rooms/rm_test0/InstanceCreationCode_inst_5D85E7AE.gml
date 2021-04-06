@@ -1,0 +1,16 @@
+ds_queue_enqueue(sceneData,
+	[cutscene_wait, 2],
+	[cutscene_move_entity, 250, 250, global.playerID],
+	[cutscene_wait, 0.5],
+	[cutscene_init_textbox],
+	[create_textbox_actor_portrait, "This is a test of the cutscene system!", Actor.Claire, 6],
+	[create_textbox_actor_portrait, "Hopefully this all works as it should work!", Actor.Claire, 1],
+	[cutscene_end_textbox],
+	[cutscene_wait, 0.5],
+	[cutscene_move_entity, 120, 100, global.playerID],
+	[cutscene_wait, 0.5],
+	[cutscene_init_textbox],
+	[create_textbox, "There's a lot of blood on that table..."],
+	[cutscene_end_textbox],
+	[cutscene_wait, 2]
+);

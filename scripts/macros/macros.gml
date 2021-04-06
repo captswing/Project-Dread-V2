@@ -198,3 +198,7 @@
 #macro	CALMING_AMULET				"Calming Amulet"
 #macro	SPARE_PARTS					"Spare Parts"
 #macro	SPARE_PARTS_PLUS			"Spare Parts+"
+#macro	WEAK_ANTIDOTE				"Weak Antidote"
+#macro	STRONG_ANTIDOTE				"Strong Antidote"
+#macro	ANTI_PSYCHOSIS_PILLS		"Anti-Psychosis Pills"
+#macro	CASSETTE_TAPE				"Cassette Tape"

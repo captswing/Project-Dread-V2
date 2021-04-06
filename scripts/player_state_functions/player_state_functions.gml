@@ -89,8 +89,7 @@ function player_state_weapon_ready(){
 	if (keyUseWeapon){
 		var _useAmmo = (global.itemData[? ITEM_LIST][? global.invItem[weaponSlot][0]][? ITEM_TYPE] != WEAPON_INF);
 		if (!_useAmmo || global.invItem[weaponSlot][1] > 0){ // Ammo still remains in the magazine OR the weapon doesn't consume ammo
-			set_cur_state(player_state_weapon_recoil);
-			player_use_weapon(_useAmmo);
+			if (player_use_weapon(_useAmmo)) {set_cur_state(player_state_weapon_recoil);}
 		} else if (inventory_count(ammoTypes[| curAmmoType]) > 0) { // The current weapon is out of ammunition; attempt to reload it
 			set_cur_state(player_state_weapon_reload);
 		}
@@ -142,11 +141,4 @@ function player_state_weapon_recoil(){
 	// Overwrite the sprite's index with a index relative to the remaining recoil time
 	if (set_sprite(walkSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_fireRate - fireRateTimer) / _fireRate)) * sprFrames, sprFrames - 1);
-}
-
-/// @description A state that completely locks the player in place; preventing any input. To prevent any odd 
-/// effects, exiting this state should always lead back to the previous state the player was in. Otherwise, 
-/// adverse effects involving reloading and recoiling from using a weapon might not work correctly.
-function player_state_locked(){
-	set_sprite(standSprite, 4);
 }

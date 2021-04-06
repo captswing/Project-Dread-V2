@@ -114,8 +114,28 @@ inventory_initialize(Difficulty.Standard);
 // information found within the note.
 global.invNote = ds_list_create();
 
-// Two variables that keep track of the game's current combat/gameplay difficulty and puzzle difficulty. If
-// either are still set to NotSelected when the game starts up, they will be changed to their respective 
-// standard difficulty levels. The values stored in these variables are saved in a per-savefile basis.
-global.gameplayDiff = Difficulty.NotSelected;
-global.puzzleDiff = PuzzleDifficulty.NotSelected;
+// A struct containing data about the overall difficulty of the game. From things like puzzle/exploration
+// difficulty, to modifiers that effect the player and enemies in the game, to things like weapon degredation,
+// limited saves, and a toggle for one life mode.
+global.gameplay = {
+	// Stores the overall difficulty setting, which is what is saved to the file instead of all the
+	// struct's data. Upon reloading, this value will be used to fetch the correct difficulty settings.
+	gameplayDifficulty : Difficulty.NotSelected,
+	// Determines the overall difficulty of the riddles, puzzles, and general exploration.
+	puzzleDifficulty : PuzzleDifficulty.NotSelected,
+	// Gameplay variables that effect the player character. They include optional health regeneration, a
+	// toggle to prevent sanity loss, another to start them with a weak infinite ammo pistol, and a modifier
+	// for their overall damage output.
+	playerHealthRegen : false,
+	playerLosesSanity : false,
+	playerStartingPistol : false,
+	playerDamageMod : 1.0,
+	// Gameplay variables that effect all enemies in the game. This includes just a damage modifier for
+	// now, but could potentially include a hitpoint multiplier and others in the future.
+	enemyDamageMod : 1.0,
+	// Gameplay variables that effect things all a global scale; like enabling durability on all weapons,
+	// or limited save files using cassette tapes, and even a toggle to disable reloading/respawning.
+	weaponDurability : false,
+	limitedSaves : false,
+	oneLifeMode : false,
+}

@@ -209,6 +209,14 @@ function player_swap_current_ammo(_prevAmmoType){
 /// been exceeded, or a melee hitbox that is destroyed after the animation reaches a certain point.
 /// @param useAmmo
 function player_use_weapon(_useAmmo){
+	// Handling weapon durability if it is toggled for the selected difficulty setting
+	if (global.gameplay.weaponDurability){
+		if (global.invItem[weaponSlot][2] == 0){
+			return false; // The weapon is broken and cannot be used anymore
+		}
+		// If there is still some weapon durability left, subtract one from the total
+		global.invItem[weaponSlot][2]--;
+	}
 	// Each of the three weapon possibilities: hitscan, projectile, and melee. They each cause a different 
 	// thing to occur when the respective weapon is used.
 	if (startFrame == endFrame && bulletSpd == 0){ // Using a hitscan weapon (All ranged attacks excluding grenade launcher)
@@ -221,7 +229,9 @@ function player_use_weapon(_useAmmo){
 			// Next, take the information and handle the collisions found by the hitscan
 			player_attack_hitscan_collision(x, y, _endX, _endY, 8);
 		}
-	} else if (bulletSpd > 0){ // Using a projectile weapon (Basically, only the grenade launccher's ammo)
+	} else if (startFrame < endFrame && startFrame >= 0){ // Using a melee weapon (All melee weapons including the chainsaw)
+		// TODO -- Add melee hitbox stuff here
+	} else if (bulletSpd > 0){ // Using a projectile weapon (Basically, only the grenade launcher's ammo)
 		var _direction, _object, _weaponData;
 		_direction = direction + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
 		_object = instance_create_depth(x + lengthdir_x(6, direction), y + lengthdir_y(10, direction), ENTITY_DEPTH, obj_player_projectile);
@@ -241,13 +251,11 @@ function player_use_weapon(_useAmmo){
 			set_cur_state(player_attack_state_projectile);
 			image_angle = _direction;
 		}
-	} else{ // Using a melee weapon (Has valid contact frames)
-		var _object, _weaponData;
-		// TODO -- Create the melee hitbox here
 	}
-	
 	// Finally, subtract one from the weapon's current magazine amount if it consumes ammo
 	if (_useAmmo) {global.invItem[weaponSlot][1]--;}
+	// Return that the weapon was successfully used by the player
+	return true;
 }
 
 /// @description Reloads the player's currently equipped weapon. It does so by calculating the space for

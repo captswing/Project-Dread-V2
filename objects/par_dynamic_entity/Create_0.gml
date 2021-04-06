@@ -86,8 +86,16 @@ sprDirections = 0;
 sprFrames = 0;
 sprSpeed = 0;
 
-// An optional flag that allows for a complete bypass of drawing an entity.
+// The two default sprite variables that all entities have. It's like this way because of how cutscenes work,
+// specifically the function that moves an entity to a given position during a scene, which uses the walking
+// and standing sprites.
+standSprite = -1;
+walkSprite = -1;
+
+// Two flags for drawing an entity's sprite. The first flag allows for a complete bypass of drawing an entity
+// and the second allows for toggling the sprite animation on and off independent of any states.
 drawSprite = true;
+animateSprite = true;
 
 // Variables that keep track of the entity's ambient light source. The first variable store the ID for the
 // light that is attached to the current entity, and the vector below that keeps track of the position that

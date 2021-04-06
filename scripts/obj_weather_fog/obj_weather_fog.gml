@@ -77,8 +77,8 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 				yPosFraction = yPos - (floor(abs(yPos)) * sign(yPos));
 				yPos -= yPosFraction;
 			
-				if (yPos < 0) {yPos = ySize;}
-				else if (yPos > ySize) {yPos = 0;}
+				if (yPos < 0) {yPos += ySize;}
+				else if (yPos > ySize) {yPos -= ySize;}
 			}
 		}
 	}

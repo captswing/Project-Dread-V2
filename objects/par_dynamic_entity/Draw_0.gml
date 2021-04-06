@@ -5,7 +5,7 @@
 var _startFrame = sprFrames * round(direction / sprDirections);
 
 // Animate the entity based on their current sprite's speed in frames per second
-if (curState != NO_SCRIPT){
+if (animateSprite){
 	localFrame += sprSpeed * global.deltaTime;
 	if (localFrame >= sprFrames){ // Reset the image index and trigger the animation end flag
 		localFrame = 0;

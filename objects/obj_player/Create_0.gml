@@ -26,6 +26,9 @@ entity_create_light(0, -8, 15, 15, 0.1, c_ltgray, false);
 // Assign the player's starting amount of hitpoints, which can be upgraded over time
 maxHitpoints = 20;
 hitpoints = maxHitpoints;
+// Initialize the inherited sprite variables with claire's default sprites
+standSprite = spr_claire_unarmed_stand;
+walkSprite = spr_claire_unarmed_walk;
 
 #endregion
 
@@ -52,8 +55,6 @@ keyMaps = false;
 // These variables correspond with a sprite/animation for the player during the task specified within the
 // variables name. This allows for easy hot-swapping of sprites based on current equipped weapon and things
 // like that without much code needed for updating the player's current sprite to meet those demands.
-standSprite = spr_claire_unarmed_stand;
-walkSprite = spr_claire_unarmed_walk;
 aimingSprite = -1;
 reloadSprite = -1;
 recoilSprite = -1;

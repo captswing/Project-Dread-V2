@@ -1,12 +1,13 @@
 /// @description Cleaning Actor Data From Memory and Textbox Data; Restoring Entity States
 
-#region REMOVING INSTANCE DATA/RESTORING ENTITY STATES
+#region REMOVING INSTANCE DATA/RESTORING GAME STATE
 
 // First, remove the reference to the instance id of this textbox
 global.textboxID = noone;
 
-// Free the entities from their locked states
-with(global.playerID) {set_cur_state(lastState);}
+if (!instance_exists(obj_cutscene)){
+	global.gameState = GameState.InGame;
+}
 
 #endregion
 
@@ -17,7 +18,7 @@ with(global.playerID) {set_cur_state(lastState);}
 var _actor, _lastIndex;
 _actor = ds_map_find_first(actorData);
 _lastIndex = ds_map_find_last(actorData);
-while(_actor != _lastIndex){ // Loop through all the actor data and delete it
+while(_actor != _lastIndex){ // Loop through all the actor data and delete each one
 	delete actorData[? _actor];
 	_actor = ds_map_find_next(actorData, _actor);
 }

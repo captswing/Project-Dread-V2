@@ -24,12 +24,12 @@
   "gridX": 0,
   "gridY": 0,
   "frames": [
-    {"compositeImage":{"FrameId":{"name":"91b5b7c6-216a-422d-b4a8-801e65f29de6","path":"sprites/spr_wall/spr_wall.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
-        {"FrameId":{"name":"91b5b7c6-216a-422d-b4a8-801e65f29de6","path":"sprites/spr_wall/spr_wall.yy",},"LayerId":{"name":"f5937c93-ac30-4a32-834e-4889e32d5ec0","path":"sprites/spr_wall/spr_wall.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
-      ],"parent":{"name":"spr_wall","path":"sprites/spr_wall/spr_wall.yy",},"resourceVersion":"1.0","name":"91b5b7c6-216a-422d-b4a8-801e65f29de6","tags":[],"resourceType":"GMSpriteFrame",},
+    {"compositeImage":{"FrameId":{"name":"0ec00300-4606-4679-977e-8cc6211fd3cb","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},"LayerId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
+        {"FrameId":{"name":"0ec00300-4606-4679-977e-8cc6211fd3cb","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},"LayerId":{"name":"9b1fd745-c9f8-43f3-a499-de60c72ee702","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},
+      ],"parent":{"name":"spr_cutscene_trigger","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},"resourceVersion":"1.0","name":"0ec00300-4606-4679-977e-8cc6211fd3cb","tags":[],"resourceType":"GMSpriteFrame",},
   ],
   "sequence": {
-    "spriteId": {"name":"spr_wall","path":"sprites/spr_wall/spr_wall.yy",},
+    "spriteId": {"name":"spr_cutscene_trigger","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},
     "timeUnits": 1,
     "playback": 1,
     "playbackSpeed": 30.0,
@@ -41,7 +41,7 @@
     "moments": {"Keyframes":[],"resourceVersion":"1.0","resourceType":"KeyframeStore<MomentsEventKeyframe>",},
     "tracks": [
       {"name":"frames","spriteId":null,"keyframes":{"Keyframes":[
-            {"id":"34c56a26-3176-4d98-85b4-a92c22ac8e2b","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"91b5b7c6-216a-422d-b4a8-801e65f29de6","path":"sprites/spr_wall/spr_wall.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
+            {"id":"4b365f71-516f-46e5-97e0-921cf9c9dac2","Key":0.0,"Length":1.0,"Stretch":false,"Disabled":false,"IsCreationKey":false,"Channels":{"0":{"Id":{"name":"0ec00300-4606-4679-977e-8cc6211fd3cb","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},"resourceVersion":"1.0","resourceType":"SpriteFrameKeyframe",},},"resourceVersion":"1.0","resourceType":"Keyframe<SpriteFrameKeyframe>",},
           ],"resourceVersion":"1.0","resourceType":"KeyframeStore<SpriteFrameKeyframe>",},"trackColour":0,"inheritsTrackColour":true,"builtinName":0,"traits":0,"interpolation":1,"tracks":[],"events":[],"modifiers":[],"isCreationTrack":false,"resourceVersion":"1.0","tags":[],"resourceType":"GMSpriteFramesTrack",},
     ],
     "visibleRange": null,
@@ -58,21 +58,22 @@
     "yorigin": 0,
     "eventToFunction": {},
     "eventStubScript": null,
-    "parent": {"name":"spr_wall","path":"sprites/spr_wall/spr_wall.yy",},
+    "parent": {"name":"spr_cutscene_trigger","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},
     "resourceVersion": "1.3",
-    "name": "spr_wall",
+    "name": "spr_cutscene_trigger",
     "tags": [],
     "resourceType": "GMSequence",
   },
   "layers": [
-    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"f5937c93-ac30-4a32-834e-4889e32d5ec0","tags":[],"resourceType":"GMImageLayer",},
+    {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"9b1fd745-c9f8-43f3-a499-de60c72ee702","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
-    "name": "Colliders",
-    "path": "folders/Sprites/Colliders.yy",
+    "name": "Cutscenes",
+    "path": "folders/Sprites/Cutscenes.yy",
   },
   "resourceVersion": "1.0",
-  "name": "spr_wall",
+  "name": "spr_cutscene_trigger",
   "tags": [],
   "resourceType": "GMSprite",
 }
