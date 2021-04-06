@@ -1,8 +1,13 @@
 /// @description Creates the camera object that allows the game to be viewed through its relative window port. 
 /// Otherwise, the game would just be a black, empty square and that's no fun.
+/// @param x
+/// @param y
 /// @param scale
-function create_camera(_scale){
+function create_camera(_x, _y, _scale){
 	if (cameraID == -1){ // Only attempt to create a camera if one doesn't currently exist
+		// Snap to the camera's set starting position
+		x = floor(_x);
+		y = floor(_y);
 		// Create the camera with a given viewport resolution; store the camera's ID in a variable
 		cameraID = camera_create();
 		camera_set_view_size(cameraID, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -27,25 +32,23 @@ function set_camera_window_size(_scale){
 }
 
 /// @description Sets the curObject variable to the ID for the object the camera will follow. Instead of 
-/// instantly locking on, however, the camera will instead set a flag that enabled the camera to smoothly 
+/// instantly locking on, however, the camera can optionally set a flag that enables the camera to smoothly 
 /// reach whatever position the followed object is at before resetting to default movement.
 /// @param objectID
-function set_camera_cur_object(_objectID){
-	with(global.controllerID){
-		set_camera_target_position(_objectID.x, _objectID.y);
-		curObject = _objectID;
-		newObjectSet = true;
+/// @param moveSpeed
+/// @param snapToTarget
+function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
+	if (id != global.controllerID || curObject == _objectID || !instance_exists(_objectID)){
+		return; // Stop non-camera object from executing the function. Also, prevent invalid IDs from being followed
 	}
-}
-
-/// @descriptionSets the target position for an unlocked camera to move to. This is useful during cutscenes 
-/// since the camera is unlocked during them.
-/// @param targetX
-/// @param targetY
-function set_camera_target_position(_targetX, _targetY){
-	with(global.controllerID){
-		targetPosition[X] = _targetX;
-		targetPosition[Y] = _targetY;
+	// Move into the controller object and set its target position or snap to target if required
+	curObject = _objectID;
+	if (!_snapToTarget){ // Smooth movement; set target position and temporarily unlock camera
+		newObjectSet = true; // Prevent curObject from being set to noone by the target position function
+		set_camera_target_position(_objectID.x, _objectID.y, _moveSpeed);
+	} else{ // Instantly lock the camera to the object's position
+		x = floor(_objectID.x);
+		y = floor(_objectID.y);
 	}
 }
 
@@ -55,13 +58,31 @@ function set_camera_target_position(_targetX, _targetY){
 /// @param strength
 /// @param length
 function set_camera_shake(_strength, _length){
-	with(global.controllerID){
-		if (shakeMagnitude < _strength){
-			shakeMagnitude = _strength;
-			shakeStrength = _strength;
-			shakeLength = _length;
-		}
+	if (id != global.controllerID){
+		return; // The object that called this function isn't the camera; don't execute
 	}
+	// Only overwrite the current camera shake if the intensity of the new shake is greater than the current.
+	if (shakeMagnitude < _strength){
+		shakeMagnitude = _strength;
+		shakeStrength = _strength;
+		shakeLength = _length;
+	}
+}
+
+/// @descriptionSets the target position for an unlocked camera to move to. If the camera isn't already
+/// unlocked it will be unlocked in order to move to the provided position. This is useful during cutscenes.
+/// @param targetX
+/// @param targetY
+/// @param moveSpeed
+function set_camera_target_position(_targetX, _targetY, _moveSpeed){
+	if (id != global.controllerID){
+		return; // The object that called this function isn't the camera; don't execute
+	}
+	// Remove any decimals from the target positions. Also prevent the move speed from being less than 0.
+	targetPosition = [floor(_targetX), floor(_targetY)];
+	moveSpeed = max(0.1, _moveSpeed);
+	// Always unlock the camera if not moving to followed object's position
+	if (!newObjectSet) {curObject = noone;}
 }
 
 /// @description Gets the top-left x-position of the screen in the current room's coordinates since the 
@@ -79,9 +100,6 @@ function get_camera_y(){
 /// @description Updates the position of the camera used the currently desired movement method, whether that be
 /// free and smooth movement while unlocked, or a locked-on movement with a deadzone in the center.
 function update_camera_position() {
-	// FOR CUTSCENES -- Returns true if the unlocked camera movement reached its desired position
-	var _positionReached = false;
-
 	// Calculating the bounds of the camera relative to the edges of the room
 	var _halfWidth, _halfHeight;
 	_halfWidth = WINDOW_WIDTH / 2;
@@ -89,13 +107,13 @@ function update_camera_position() {
 
 	if (!newObjectSet && curObject != noone){ // Camera movement when locked onto an object
 		var _newPosition = [0, 0];
-		with(curObject){
+		with(curObject){ // Get the object's current position; storing it in a vector
 			_newPosition[X] = x;
 			_newPosition[Y] = y;
 		}
 	
-		// Factors in the current offset of the camera shake to avoid any weird bugs with deadzone
-		// boundaries.
+		// Factors in the current offset of the camera shake to avoid any weird bugs 
+		// with deadzone boundaries.
 		var _deadZone = deadZoneRadius;
 	
 		// Horizontal camera movement
@@ -131,17 +149,15 @@ function update_camera_position() {
 			y += _amountToMove;
 		}
 	
-		// Check if the camera has reached its final position. Reset fraction variables and lock position if so
-		var _ignoreCheck = (x < _halfWidth || y < _halfHeight ||  x > _halfWidth + room_width || y > _halfHeight + room_height);
-		if (_ignoreCheck || point_distance(x, y, targetPosition[X], targetPosition[Y]) < moveSpeed){
+		// Check if the camera has reached its final position. Reset fraction variables and lock position if so.
+		if (point_distance(x, y, targetPosition[X], targetPosition[Y]) < moveSpeed){
 			x = targetPosition[X];
 			y = targetPosition[Y];
 			targetFraction = [0, 0];
-			// Reset the flag for moving to a newly followed object to return to default movement
+			// Reset the flag for moving to a newly followed object to return to default movement.
 			if (curObject != noone){
 				newObjectSet = false;
 			}
-			_positionReached = true;
 		}
 	
 		// When the camera is unlocked the shake's origin point will always be the center of the screen
@@ -149,18 +165,14 @@ function update_camera_position() {
 		shakeCenter[Y] = y;
 	}
 
-	// Finally, after moving the camera to its next position for the frame, offset its position relative to the
-	// current strength of the camera shake if one exists.
+	// Finally, after moving the camera to its next position for the frame, offset its position relative to 
+	// the current strength of the camera shake if one exists.
 	if (shakeMagnitude > 0){
-		x = shakeCenter[X] - random_range(-shakeMagnitude, shakeMagnitude);
-		y = shakeCenter[Y] - random_range(-shakeMagnitude, shakeMagnitude);
+		x = shakeCenter[X] - irandom_range(-shakeMagnitude, shakeMagnitude);
+		y = shakeCenter[Y] - irandom_range(-shakeMagnitude, shakeMagnitude);
 		shakeMagnitude -= (shakeStrength / shakeLength) * global.deltaTime;
 	}
 
 	// After moving the camera to a new postiion; update the view matrix
 	camera_set_view_mat(cameraID, matrix_build_lookat(x, y, -10, x, y, 0, 0, 1, 0));
-
-	// Returns either true or false to let the cutscene know that the camera has reached its necessary
-	// position, which will allow the cutscene to move onto the next instruction
-	return _positionReached;
 }

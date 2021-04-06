@@ -4,7 +4,7 @@
 
 // Initialize variables found in the parent's create event
 event_inherited();
-// Sets the z-offset of the projectile to 8 pixels above its true position
+// Sets the z-offset of the projectile to 12 pixels above its true position
 zOffset = 12;
 
 #endregion

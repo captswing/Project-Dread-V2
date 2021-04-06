@@ -24,6 +24,7 @@ function player_state_default(){
 			// is lower than the max distance, an interaction will occur.
 			if (canInteract && point_distance(interactCenter[X], interactCenter[Y], _offset[X], _offset[Y]) <= interactRadius){
 				if (interactScript != NO_SCRIPT) {script_execute(interactScript);}
+				return; // Exit out of the script early
 			}
 		}
 	}

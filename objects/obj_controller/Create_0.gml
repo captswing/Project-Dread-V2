@@ -66,8 +66,9 @@ shakeMagnitude = 0;
 // A flag that is set to true to move the camera to the newly set object's position without snapping.
 newObjectSet = false;
 
-// After initializing all camera variables, create the camera with default aspect ratio/scale.
-create_camera(global.settings[Settings.ResolutionScale]);
+// After initializing all camera variables, create the camera with default aspect ratio/scale. Also,
+// set its starting position in the center of the title screen room.
+create_camera(160, 90, global.settings[Settings.ResolutionScale]);
 
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -102,14 +103,6 @@ frameTimer = 0;
 
 // FOR TESTING WEATHER
 weather = noone;
-
-// FOR TESTING
-inventory_add(HANDGUN, 100, 60);
-inventory_add(PUMP_SHOTGUN, 100, 60);
-inventory_add(HAND_CANNON, 100, 60);
-inventory_add(HANDGUN_AMMO, 90, 0);
-inventory_remove(HANDGUN_AMMO, 37);
-
 
 show_debug_overlay(true);
 showDebugInfo = false;

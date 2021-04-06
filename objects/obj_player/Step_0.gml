@@ -1,23 +1,37 @@
 /// @description Gathering Input From User, Handle Current State and Other General Code
 
-// Prevent function of the player's step event if the game isn't in its in game state, there is no state 
-// set, or if the player had been destroyed on the previous frame.
-if (global.gameState != GameState.InGame || curState == NO_STATE || isDestroyed){
-	return;
+#region HANDLING CURRENT STATE/MOVEMENT/OPENING INVENTORY
+
+if (global.gameState == GameState.InGame && curState != NO_STATE){
+	// Gets input from the currently active control method (Keyboard/Gamepads supported)
+	if (!global.gamepadActive) {player_get_input_keyboard();}
+	else {player_get_input_gamepad();}
+
+	// Call the parent step event code, which handles the current state and health regen
+	event_inherited();
+	
+	// Handling collision with cutscene triggers, which begins the cutscene
+	var _trigger = instance_place(x, y, obj_cutscene_trigger);
+	if (_trigger != noone){ // If the trigger is storing a valid ID
+		instance_create_depth(0, 0, GLOBAL_DEPTH, obj_cutscene);
+		ds_queue_copy(global.cutsceneID.sceneData, _trigger.sceneData);
+		return; // Exit out of the step event early
+	}
+	
+	// Opening the player's item section of the inventory
+	if (keyItems){
+		global.controllerID.showItems = !global.controllerID.showItems;
+	}
 }
-
-#region HANDLING CURRENT STATE/MOVEMENT
-
-// Gets input from the currently active control method (Keyboard/Gamepads supported)
-if (!global.gamepadActive) {player_get_input_keyboard();}
-else {player_get_input_gamepad();}
-
-// Call the parent step event code, which handles everything else
-event_inherited();
 
 #endregion
 
 #region HANDLING CONDITION/EFFECT TIMERS
+
+// If the entire game is in a cutscene or paused, don't allow timers to be incremented
+if (global.gameState >= GameState.Cutscene){
+	return;
+}
 
 // Handling the timer for the bleeding and poisoned statuses.
 conditionTimer += global.deltaTime;
@@ -41,9 +55,12 @@ if (conditionTimer >= maxConditionTimer){
 sanityTimer += global.deltaTime;
 if (sanityTimer >= maxSanityTimer){
 	sanityTimer -= maxSanityTimer;
-	// The "base" sanity modifier can be either 1 or -1 depending on if the room is safe or not
-	var _baseSanityMod = global.isRoomSafe ? SANITY_MOD_SAFE : SANITY_MOD_UNSAFE;
-	curSanity = clamp(curSanity + _baseSanityMod + sanityModifier, 0, maxSanity);
+	// Only deplete the sanity if it is toggled on in the gameplay difficulty settings
+	if (global.gameplay.playerLosesSanity){
+		// The "base" sanity modifier can be either 1 or -1 depending on if the room is safe or not
+		var _baseSanityMod = global.isRoomSafe ? SANITY_MOD_SAFE : SANITY_MOD_UNSAFE;
+		curSanity = clamp(curSanity + _baseSanityMod + sanityModifier, 0, maxSanity);
+	}
 }
 
 // Handling the timers for each of the temporary immunity timers. If the value for the current immunity
@@ -62,14 +79,6 @@ for (var i = 0; i < _length; i++){
 			_length--; // Removes one from length to compensate for the deleted array index
 		}
 	}
-}
-
-#endregion
-
-#region HANDLING MENU INPUTS FOR OPENING INVENTORY/PAUSE MENU
-
-if (keyItems){
-	global.controllerID.showItems = !global.controllerID.showItems;
 }
 
 #endregion

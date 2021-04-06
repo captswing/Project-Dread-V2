@@ -36,9 +36,12 @@ global.effectID = noone;			// For obj_shader_handler
 global.sorterID = noone;			// For obj_depth_sorter
 global.playerID = noone;			// For obj_player
 global.textboxID = noone;			// For obj_textbox_handler
+global.cutsceneID = noone;			// For obj_cutscene
 
-// Holds the game's current state. This state determines the functionality of certain objects.
+// Holds the game's current state. This state determines the functionality of certain objects. Also, the 
+// previous game state is held in memory in a second variable.
 global.gameState = GameState.InGame;
+global.prevGameState = GameState.NoState;
 
 // Two variables that allow for the use of a variable frame rate. The first tracks the difference in time between 
 // the frames relative to the target FPS, and the second determines the game's target FPS for one second of real 

@@ -1,4 +1,5 @@
-/// @description 
+/// @description Pauses the cutscene for a set duration in seconds. After that, the action ends and the 
+/// cutscene moves onto the next instruction for execution.
 /// @param seconds
 function cutscene_wait(_seconds){
 	timer += global.deltaTime;
@@ -88,4 +89,57 @@ function cutscene_move_entity(_destX, _destY, _objectID){
 	directionSet = _directionSet;
 	
 	if (_endAction) {cutscene_end_action();}
+}
+
+/// @description Moves the camera to the desired position at the desired movement speed. Optionally, the
+/// cutscene can pause until the camera's position has been reached or it can be bypassed and continue on
+/// with the next instruction.
+/// @param targetX
+/// @param targetY
+/// @param moveSpeed
+/// @param pauseForMovement
+function cutscene_move_camera_position(_targetX, _targetY, _moveSpeed, _pauseForMovement){
+	// If somehow the control object doesn't exist, skip this action
+	if (global.controllerID == noone){
+		cutscene_end_action();
+		return; // Exit before performing event actions
+	}
+	
+	// Sets the target position and checks if said position has been reached yet. Toggle the flag to end
+	// the cutscene action if the said target position has been reached.
+	var _positionReached = false;
+	with(global.controllerID){
+		set_camera_target_position(_targetX, _targetY, _moveSpeed);
+		_positionReached = (x == targetPosition[X] && y == targetPosition[Y]);
+	}
+	
+	// The target position has been reached, or the camera will move to where it needs to be while the 
+	// cutscene moves on with it next instruction.
+	if (!_pauseForMovement || _positionReached) {cutscene_end_action();}
+}
+
+/// @description Moves the camera to an object's position and locks it onto said object until another camera
+/// action is called in the cutscene. Much like the function above, the wait for movement can be bypassed
+/// and allow for multiple cutscene actions to occur simultaneously.
+/// @param objectID
+/// @param moveSpeed
+/// @param pauseForMovement
+function cutscene_move_camera_object(_objectID, _moveSpeed, _pauseForMovement){
+	// If somehow the control object doesn't exist, skip this action
+	if (global.controllerID == noone){
+		cutscene_end_action();
+		return; // Exit before performing event actions
+	}
+	
+	// Set the object the camera wil follow and wait for the position to be reached. The position is reached
+	// when the flag newObjectSet is false while the curObject variable stores a valid ID for an object.
+	var _positionReached = false;
+	with(global.controllerID){
+		set_camera_cur_object(_objectID, _moveSpeed, false);
+		_positionReached = (!newObjectSet && curObject != noone);
+	}
+	
+	// The entity has been reached and the camera has been locked onto them OR the movement wait was bypassed
+	// and the cutscene will continue on before the camera has hit its required position.
+	if (!_pauseForMovement || _positionReached) {cutscene_end_action();}
 }

@@ -2,8 +2,10 @@
 
 // Stores the state of the game on a global scale at the given moment.
 enum GameState{
+	NoState,
 	InGame,
 	InMenu,
+	Cutscene,
 	Paused,
 }
 

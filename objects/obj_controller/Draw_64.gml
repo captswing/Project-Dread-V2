@@ -8,13 +8,19 @@ shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
 outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
 
 draw_set_halign(fa_right);
+with(obj_cutscene){ // Display information about current cutscene
+	var _head, _size;
+	_head = ds_queue_head(sceneData);
+	_size = ds_queue_size(sceneData);
+	if (_size > 0) {draw_text(WINDOW_WIDTH - 5, WINDOW_HEIGHT - 20, "Queue Size: " + string(_size) + "\nCurrent Action: " + script_get_name(_head[0]));}
+}
+
 if (showItems){ // Showing the player's current inventory
 	draw_text(WINDOW_WIDTH - 5, 5, "-- Inventory Data --");
 	for(var i = 0; i < global.invSize; i++){
 		draw_text(WINDOW_WIDTH - 5, 15 + (i * 10), global.invItem[i][0] + " x" + string(global.invItem[i][1]));
 	}
 }
-draw_text(WINDOW_WIDTH - 5, 160, string(global.playerID.direction));
 draw_set_halign(fa_left);
 
 if (!showDebugInfo){

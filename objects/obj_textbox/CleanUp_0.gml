@@ -5,9 +5,8 @@
 // First, remove the reference to the instance id of this textbox
 global.textboxID = noone;
 
-if (!instance_exists(obj_cutscene)){
-	global.gameState = GameState.InGame;
-}
+// Restore the game state only if the priority flag allows it.
+set_game_state(GameState.InGame, (global.cutsceneID == noone));
 
 #endregion
 

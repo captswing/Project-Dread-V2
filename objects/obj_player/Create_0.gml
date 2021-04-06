@@ -91,19 +91,33 @@ conditionTimer = 0;
 dealPoisonDamage = false;
 curPoisonDamage = 0.01;
 
-// 
+// The three variables that handle the player's current sanity levels. It contains a maximum value, (can be
+// increased or decreased through different means) a current value, (which corresponds to hallucinations and
+// other negative effects when too low) and the modifier value, which is what adjusts the current value by
+// adding or subtracting its value to it.
 maxSanity = 100;
 curSanity = maxSanity;
 sanityModifier = 0;
 
-// 
+// The timer variables for the player's sanity. Every 10 seconds of in-game time, (60 = 1 second) the game
+// will add the player's sanity modifier to their current sanity level, which allows it to be increased or
+// decreased in very little code.
 maxSanityTimer = 600;
 sanityTimer = 0;
 
-// 
+// A list of arrays that contain data about effects that are currently being applied onto the player. They
+// can be either an indefinite effect, which is only removed through code that actually removes it from the
+// list, or it can be remove automatically over a set amount of time given to the effect.
+//
+//		effectTimers[i]	= [effectID, timeRemaining, endFunction]
+//
 effectTimers = ds_list_create();
 
-// 
+// All these variables are used to store the currently equipped weapon's stats. They include the slot it's
+// contained in, the number of bullets fired from the weapon, the base damage, range, accruacy, fire rate, 
+// and reload rate. Also, the speed of the bullet can be set, (which enables a physical projectile instead of
+// a hitscan check) or the starting/ending frames of animation for an attack can be set. (which is used for
+// the active frames of a melee attack)
 weaponSlot = -1;
 damage = 0;
 numBullets = 0;
@@ -115,22 +129,29 @@ bulletSpd = 0;
 startFrame = 0;
 endFrame = 0;
 
-// 
+// Five modifier values for their corresponding stats. They aren't multiplied onto the base values, but are
+// added or subtracted from the value depending on the modifier value. Each ammunition type for the current
+// weapon will modifier these values in some way.
 damageMod = 0;
 rangeMod = 0;
 accuracyMod = 0;
 fireRateMod = 0;
 reloadRateMod = 0;
 
-// 
+// Stores a list of names relating to the valid ammunition used by the currently equipped weapon. The ammo
+// can only be swapped from the 0th ammunition (which is the default ammo type) if said ammo exists in the
+// player's inventory.
 ammoTypes = ds_list_create();
 curAmmoType = 0;
 
-// 
+// Two timers that control how long the player is stuck within the reloading and recoiling state, respectively.
+// One second of real-time is equal to a value of 60 in these timers.
 fireRateTimer = 0;
 reloadTimer = 0;
 
-// 
+// These variables allow the player's ambient light source (which is small and dim by default) to be altered
+// in size by the player toggling their flashlight on or off. The stronger flashlight will make these values
+// much greater than the standard flashlight.
 isLightActive = false;
 lightSize = 0;
 lightStrength = 0;

@@ -75,11 +75,9 @@ actorData = ds_map_create();
 
 #endregion
 
-#region 
+#region ADJUST THE CURRENT GAME STATE AND PAUSE THE PLAYER
 
-if (!instance_exists(obj_cutscene)){
-	with(global.playerID) {set_sprite(standSprite, 4);}
-	global.gameState = GameState.InMenu;
-}
+set_game_state(GameState.InMenu, false);
+with(global.playerID) {set_sprite(standSprite, 4);}
 
 #endregion
