@@ -78,6 +78,6 @@ actorData = ds_map_create();
 #region ADJUST THE CURRENT GAME STATE AND PAUSE THE PLAYER
 
 set_game_state(GameState.InMenu, false);
-with(global.playerID) {set_sprite(standSprite, 4);}
+with(global.singletonID[? PLAYER]) {set_sprite(standSprite, 4);}
 
 #endregion

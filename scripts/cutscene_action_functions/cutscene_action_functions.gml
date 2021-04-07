@@ -100,7 +100,7 @@ function cutscene_move_entity(_destX, _destY, _objectID){
 /// @param pauseForMovement
 function cutscene_move_camera_position(_targetX, _targetY, _moveSpeed, _pauseForMovement){
 	// If somehow the control object doesn't exist, skip this action
-	if (global.controllerID == noone){
+	if (global.singletonID[? CONTROLLER] == noone){
 		cutscene_end_action();
 		return; // Exit before performing event actions
 	}
@@ -108,7 +108,7 @@ function cutscene_move_camera_position(_targetX, _targetY, _moveSpeed, _pauseFor
 	// Sets the target position and checks if said position has been reached yet. Toggle the flag to end
 	// the cutscene action if the said target position has been reached.
 	var _positionReached = false;
-	with(global.controllerID){
+	with(global.singletonID[? CONTROLLER]){
 		set_camera_target_position(_targetX, _targetY, _moveSpeed);
 		_positionReached = (x == targetPosition[X] && y == targetPosition[Y]);
 	}
@@ -126,7 +126,7 @@ function cutscene_move_camera_position(_targetX, _targetY, _moveSpeed, _pauseFor
 /// @param pauseForMovement
 function cutscene_move_camera_object(_objectID, _moveSpeed, _pauseForMovement){
 	// If somehow the control object doesn't exist, skip this action
-	if (global.controllerID == noone){
+	if (global.singletonID[? CONTROLLER] == noone){
 		cutscene_end_action();
 		return; // Exit before performing event actions
 	}
@@ -134,7 +134,7 @@ function cutscene_move_camera_object(_objectID, _moveSpeed, _pauseForMovement){
 	// Set the object the camera wil follow and wait for the position to be reached. The position is reached
 	// when the flag newObjectSet is false while the curObject variable stores a valid ID for an object.
 	var _positionReached = false;
-	with(global.controllerID){
+	with(global.singletonID[? CONTROLLER]){
 		set_camera_cur_object(_objectID, _moveSpeed, false);
 		_positionReached = (!newObjectSet && curObject != noone);
 	}

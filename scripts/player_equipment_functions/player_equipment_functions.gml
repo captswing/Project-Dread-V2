@@ -171,7 +171,11 @@ function player_swap_current_ammo(_prevAmmoType){
 			// because there isn't enough space, add the remainder to an item and place it in the world.
 			if (global.invItem[weaponSlot][1] > 0){
 				var _remainder = inventory_add(ammoTypes[| _prevAmmoType], global.invItem[weaponSlot][1], 0);
-				if (_remainder > 0) {create_item(global.playerID.x, global.playerID.y, ammoTypes[| _prevAmmoType], _remainder, 0);}
+				if (_remainder > 0){ // Attempt to create the object at the player's feet. Create in room's center if that isn't possible
+					var _player = global.singletonID[? PLAYER];
+					if (_player != noone) {create_item(_player.x, _player.y, ammoTypes[| _prevAmmoType], _remainder, 0);}
+					else {create_item(round(room_width / 2), round(room_height / 2), ammoTypes[| _prevAmmoType], _remainder, 0);}
+				}
 				// Also, remove all the ammunition from the weapon's current clip
 				global.invItem[weaponSlot][1] = 0;
 			}

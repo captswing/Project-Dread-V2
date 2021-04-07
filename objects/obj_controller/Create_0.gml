@@ -1,17 +1,7 @@
 /// @description Variable Initialization
 
-#region SINGLETON CHECK
-
-if (global.controllerID != noone){
-	if (global.controllerID.object_index == object_index){
-		instance_destroy(self);
-		return;
-	}
-	instance_destroy(global.controllerID);
-}
-global.controllerID = id;
-
-#endregion
+// Add the object as a singleton to prevent duplicates. If it fails, exit the create event early.
+if (!add_singleton_object()) {return;}
 
 #region EDITING INHERITED VARIABLES
 

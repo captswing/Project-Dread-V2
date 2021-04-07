@@ -3,7 +3,7 @@
 /// @param song
 /// @param loopLength
 function set_background_music(_song, _loopLength){
-	with(global.controllerID){
+	with(global.singletonID[? CONTROLLER]){
 		// Don't change the song if it isn't actually being changed
 		if (curSong != _song){
 			global.curSong = _song;

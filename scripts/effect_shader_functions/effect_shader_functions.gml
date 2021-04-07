@@ -26,8 +26,8 @@ function lighting_system(_lightColor, _brightness, _contrast, _saturation){
 
 	// Store the top-left coordinate of the camera for easy reuse
 	var _cameraX, _cameraY, _lightsDrawn;
-	_cameraX = global.controllerID.x - (WINDOW_WIDTH / 2);
-	_cameraY = global.controllerID.y - (WINDOW_HEIGHT / 2);
+	_cameraX = get_camera_x();
+	_cameraY = get_camera_y();
 	_lightsDrawn = 0;
 	with(obj_light){ // Display every visible light instance onto the light surface
 		if (x + size[X] < _cameraX || y + size[Y] < _cameraY || x - size[X] > _cameraX + WINDOW_WIDTH || y - size[Y] > _cameraY + WINDOW_HEIGHT){

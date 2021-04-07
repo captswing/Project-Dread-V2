@@ -1,17 +1,7 @@
 /// @description Unique Variable Initialization/Editing Inherited Variables
 
-#region SINGLETON CHECK
-
-if (global.playerID != noone){
-	if (global.playerID.object_index == object_index){
-		instance_destroy(self);
-		return;
-	}
-	instance_destroy(global.playerID);
-}
-global.playerID = id;
-
-#endregion
+// Add the object as a singleton to prevent duplicates. If it fails, exit the create event early.
+if (!add_singleton_object()) {return;}
 
 #region EDITING INHERITED VARIABLES
 

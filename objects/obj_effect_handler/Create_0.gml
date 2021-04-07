@@ -1,19 +1,9 @@
 /// @description Variable Initialization
 
-#region	SINGLETON CHECK
+// Add the object as a singleton to prevent duplicates. If it fails, exit the create event early.
+if (!add_singleton_object()) {return;}
 
-if (global.effectID != noone){
-	if (global.effectID.object_index == object_index){
-		instance_destroy(self);
-		return;
-	}
-	instance_destroy(global.effectID);
-}
-global.effectID = id;
-
-#endregion
-
-#region EDIT INHERITED VARIABLES
+#region EDITING INHERITED VARIABLES
 
 image_speed = 0;
 image_index = 0;

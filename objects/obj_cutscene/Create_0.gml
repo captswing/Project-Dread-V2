@@ -1,17 +1,7 @@
 /// @description Variable Initialization
 
-#region SINGLETON CHECK
-
-if (global.cutsceneID != noone){
-	if (global.cutsceneID.object_index == object_index){
-		instance_destroy(self);
-		return;
-	}
-	instance_destroy(global.cutsceneID);
-}
-global.cutsceneID = id;
-
-#endregion
+// Add the object as a singleton to prevent duplicates. If it fails, exit the create event early.
+if (!add_singleton_object()) {return;}
 
 #region EDITING INHERITED VARIABLES
 
@@ -43,6 +33,6 @@ directionSet = false;
 #region SETTING GAME STATE AND LOCKING PLAYER MOVEMENT
 
 set_game_state(GameState.Cutscene, true); // Always prioritize the cutscene's state
-with(global.playerID) {set_sprite(standSprite, 4);}
+with(global.singletonID[? PLAYER]) {set_sprite(standSprite, 4);}
 
 #endregion

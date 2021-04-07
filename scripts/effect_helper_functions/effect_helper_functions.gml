@@ -5,7 +5,7 @@
 /// @param contrast
 /// @param saturation
 function set_lighting(_color, _brightness, _contrast, _saturation) {
-	with(global.effectID){
+	with(global.singletonID[? EFFECT_HANDLER]){
 		lightColor = _color;
 		lightBrightness = _brightness;
 		lightContrast = _contrast;

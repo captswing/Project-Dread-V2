@@ -234,14 +234,14 @@ function inventory_item_options_function(_slot, _option){
 			if (_itemUsed) {inventory_remove(global.invItem[_slot][0], 1);}
 			break;
 		case EQUIP_ITEM: // Equips the item to the player character
-			with(global.playerID) {player_equip_item(_slot, _itemType);}
+			with(global.singletonID[? PLAYER]) {player_equip_item(_slot, _itemType);}
 			break;
 		case UNEQUIP_ITEM: // Unequips the item from the player character
-			with(global.playerID) {player_unequip_item(_slot, _itemType);}
+			with(global.singletonID[? PLAYER]) {player_unequip_item(_slot, _itemType);}
 			break;
 		case RELOAD_ITEM: // Reloads the player's currently equipped weapon if possible
 			if (_itemType != WEAPON_INF){
-				with(global.playerID){ // Jumps over to the player object to handle reloading
+				with(global.singletonID[? PLAYER]){ // Jumps over to the player object to handle reloading
 					if (weaponSlot == _slot && inventory_count(ammoTypes[| curAmmoType]) > 0){
 						player_reload_weapon(global.invItem[weaponSlot][1]);
 					}
@@ -255,7 +255,7 @@ function inventory_item_options_function(_slot, _option){
 			// TODO -- Add combination logic here
 			break;
 		case DROP_ITEM: // Dropping the item out of the player's inventory
-			with(global.playerID) {
+			with(global.singletonID[? PLAYER]){
 				// If the item was equipped by the player, unequip the item before removing the data
 				if (global.invItem[_slot][3]) {player_unequip_item(_slot, _itemType);}
 				inventory_remove_slot(_slot, true, x, y);
@@ -276,7 +276,7 @@ function inventory_item_use_consumable(_slot){
 	// Go through all the possible consumption effects and see which ones are triggered by the consumable.
 	// It can include hitpoint/sanity gain, poison/bleeding curing, temporary damage resistance, poison
 	// immunity or bleed immunity.
-	with(global.playerID){
+	with(global.singletonID[? PLAYER]){
 		// UNIQUE CASE -- Using the item "Revitalife" works different form other consumables. Instead of fitting
 		// into the seven different possible effects for the standard consumable, this item increases the current
 		// maximum health of the player -- to a maximum of 50.

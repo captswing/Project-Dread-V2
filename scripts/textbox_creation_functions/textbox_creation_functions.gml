@@ -25,11 +25,11 @@ function create_textbox_actor(_text, _actor){
 /// @param imageIndex
 function create_textbox_actor_portrait(_text, _actor, _imageIndex){
 	// If the single textbox variable doesn't have an ID associated with in, create the textbox handler object
-	if (global.textboxID == noone){
+	if (global.singletonID[? TEXTBOX] == noone){
 		instance_create_depth(0, WINDOW_HEIGHT + 10, GLOBAL_DEPTH, obj_textbox);
 	}
 	// Jump into the textbox handler and add the data to its textbox list and actor map
-	with(global.textboxID){
+	with(global.singletonID[? TEXTBOX]){
 		if (_imageIndex >= 0){ // Only offset the text if a value imageIndex value was passed in
 			add_textbox_data(string_split_lines(_text, WINDOW_WIDTH - 92, font_gui_small), _actor, _imageIndex);
 		} else{ // If no valid imageindex was provided, offset the text as normal (40 pixels)

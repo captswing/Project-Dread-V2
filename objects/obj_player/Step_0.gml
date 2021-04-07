@@ -14,13 +14,17 @@ if (global.gameState == GameState.InGame && curState != NO_STATE){
 	var _trigger = instance_place(x, y, obj_cutscene_trigger);
 	if (_trigger != noone){ // If the trigger is storing a valid ID
 		instance_create_depth(0, 0, GLOBAL_DEPTH, obj_cutscene);
-		ds_queue_copy(global.cutsceneID.sceneData, _trigger.sceneData);
+		with(_trigger){
+			ds_queue_copy(global.singletonID[? CUTSCENE].sceneData, sceneData);
+			set_event_flag(eventFlagIndex, true);
+		}
 		return; // Exit out of the step event early
 	}
 	
 	// Opening the player's item section of the inventory
 	if (keyItems){
-		global.controllerID.showItems = !global.controllerID.showItems;
+		var _controller = global.singletonID[? CONTROLLER];
+		with(_controller) {showItems = !showItems;}
 	}
 }
 

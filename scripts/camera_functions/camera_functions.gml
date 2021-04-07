@@ -38,7 +38,7 @@ function set_camera_window_size(_scale){
 /// @param moveSpeed
 /// @param snapToTarget
 function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
-	if (id != global.controllerID || curObject == _objectID || !instance_exists(_objectID)){
+	if (id != global.singletonID[? CONTROLLER] || curObject == _objectID || !instance_exists(_objectID)){
 		return; // Stop non-camera object from executing the function. Also, prevent invalid IDs from being followed
 	}
 	// Move into the controller object and set its target position or snap to target if required
@@ -58,7 +58,7 @@ function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
 /// @param strength
 /// @param length
 function set_camera_shake(_strength, _length){
-	if (id != global.controllerID){
+	if (id != global.singletonID[? CONTROLLER]){
 		return; // The object that called this function isn't the camera; don't execute
 	}
 	// Only overwrite the current camera shake if the intensity of the new shake is greater than the current.
@@ -75,7 +75,7 @@ function set_camera_shake(_strength, _length){
 /// @param targetY
 /// @param moveSpeed
 function set_camera_target_position(_targetX, _targetY, _moveSpeed){
-	if (id != global.controllerID){
+	if (id != global.singletonID[? CONTROLLER]){
 		return; // The object that called this function isn't the camera; don't execute
 	}
 	// Remove any decimals from the target positions. Also prevent the move speed from being less than 0.
@@ -88,13 +88,13 @@ function set_camera_target_position(_targetX, _targetY, _moveSpeed){
 /// @description Gets the top-left x-position of the screen in the current room's coordinates since the 
 /// actual camera's position is in the center of the screen.
 function get_camera_x(){
-	return global.controllerID.x - (WINDOW_WIDTH / 2);
+	return global.singletonID[? CONTROLLER].x - (WINDOW_WIDTH / 2);
 }
 
 /// @description Gets the top-left y-position of the screen in the current room's coordinates since the
 /// actual camera's position is in the center of the screen.
 function get_camera_y(){
-	return global.controllerID.y - (WINDOW_HEIGHT / 2);
+	return global.singletonID[? CONTROLLER].y - (WINDOW_HEIGHT / 2);
 }
 
 /// @description Updates the position of the camera used the currently desired movement method, whether that be

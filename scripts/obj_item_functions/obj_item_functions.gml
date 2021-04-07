@@ -32,7 +32,7 @@ function collect_item(){
 function collect_inventory_expansion(){
 	// Increase the current slot size by 2 if the maximum size has yet to be reached
 	if (global.invSize < global.maxInvSize){
-		create_textbox("Item pouch acquired! Maximum inventory space has been increased!", Actor.None, -1);
+		create_textbox("Item pouch acquired! Maximum inventory space has been increased!");
 		global.invSize += 2;
 	}
 	// Finally, delete the "Item Pouch" from the world item data, as it's been successfully collected

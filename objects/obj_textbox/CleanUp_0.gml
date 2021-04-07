@@ -1,12 +1,12 @@
-/// @description Cleaning Actor Data From Memory and Textbox Data; Restoring Entity States
+/// @description Cleaning Up Allocated Memory and Other Data
 
-#region REMOVING INSTANCE DATA/RESTORING GAME STATE
+#region REMOVING SINGLETON ID/RESTORING GAME STATE
 
-// First, remove the reference to the instance id of this textbox
-global.textboxID = noone;
+// Remove this id value from the textbox singleton; allowing another instance of obj_textbox to take its place
+remove_singleton_object();
 
 // Restore the game state only if the priority flag allows it.
-set_game_state(GameState.InGame, (global.cutsceneID == noone));
+set_game_state(GameState.InGame, (global.singletonID[? CUTSCENE] == noone));
 
 #endregion
 

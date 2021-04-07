@@ -41,6 +41,14 @@
 #macro	NO_ANIMATE					0
 #macro	FORWARD_ANIMATE				1
 
+// Singleton key indexes
+#macro	CONTROLLER					"Controller"
+#macro	EFFECT_HANDLER				"Effect Handler"
+#macro	DEPTH_SORTER				"Depth Sorter"
+#macro	PLAYER						"Player"
+#macro	TEXTBOX						"Textbox"
+#macro	CUTSCENE					"Cutscene"
+
 // Inventory item option values
 #macro	USE_ITEM					"Use"
 #macro	EQUIP_ITEM					"Equip"

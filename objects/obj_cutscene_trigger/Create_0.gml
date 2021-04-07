@@ -4,7 +4,7 @@
 
 image_index = 0;
 image_speed = 0;
-visible = false;
+visible = true;
 
 #endregion
 
@@ -15,6 +15,12 @@ visible = false;
 // deleted come any error or a successful execution.
 sceneData = ds_queue_create();
 
-// TODO -- Add stuff for one-time cutscenes that check for an index in a list for events or something...
+// Two variables that tie into the event flags that will be crucial for disabling/enabling certain cutscene
+// triggers, cutscene objects, and so on. The first variable points to a list that stores all of the requied 
+// flags that must be set in order for this event to be active in the room. This list can be empty if no flags
+// need to be set before this trigger's flag is set. Meanwhile, the setting variable stores the index into the
+// event flag list that its flag corresponds to.
+requiredFlags = ds_list_create();
+eventFlagIndex = -1;
 
 #endregion

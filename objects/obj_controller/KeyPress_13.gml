@@ -17,7 +17,9 @@
 	weather = new obj_weather_fog(3, 0.8, 0.5, 2.5, 0.5, 0.9);
 }*/
 
-create_textbox_actor_portrait("My Grandfather smoked his whole life. I was about 10 years old when my mother said to him, 'If you ever want to see your grandchildren graduate, you have to stop immediately.'.", Actor.Claire, 1);
+room_restart();
+
+/*create_textbox_actor_portrait("My Grandfather smoked his whole life. I was about 10 years old when my mother said to him, 'If you ever want to see your grandchildren graduate, you have to stop immediately.'.", Actor.Claire, 1);
 create_textbox_actor_portrait("Tears welled up in his eyes when he realized what exactly was at stake. He gave it up immediately. Three years later he died of lung cancer.", Actor.Claire, 2);
 create_textbox_actor_portrait("It was really sad and destroyed me. My mother said to me- 'Don't ever smoke. Please don't put your family through what your Grandfather put us through.' I agreed.", Actor.Claire, 0);
 create_textbox_actor_portrait("At 28, I have never touched a cigarette. I must say, I feel a very slight sense of regret for never having done it, because your post gave me cancer anyway.", Actor.Claire, 4);

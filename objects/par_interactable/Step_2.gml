@@ -11,7 +11,7 @@ checkForLights = false;
 
 // If the player's flashlight is on, there is no need to check if a light is nearby, as the
 // player's flashlight will be nearby when they pick up the item anyway.
-if (global.playerID != noone && global.playerID.isLightActive){
+if (global.singletonID[? PLAYER] != noone && global.singletonID[? PLAYER].isLightActive){
 	canInteract = true;
 	return;
 }

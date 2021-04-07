@@ -31,12 +31,21 @@ ds_map_add(global.fontTextures, font_gui_large,		font_get_texture(font_gui_large
 
 // Singleton variables that keep track of important instances; preventing them from being created multiple times
 // which would cause a myriad of issues, if the game even ran at all with multiple instances of these objects.
-global.controllerID = noone;		// For obj_controller
+/*global.controllerID = noone;		// For obj_controller
 global.effectID = noone;			// For obj_shader_handler
 global.sorterID = noone;			// For obj_depth_sorter
 global.playerID = noone;			// For obj_player
 global.textboxID = noone;			// For obj_textbox_handler
-global.cutsceneID = noone;			// For obj_cutscene
+global.cutsceneID = noone;*/		// For obj_cutscene
+
+global.singletonID = ds_map_create();
+// Add all the key value pairs and set their values to "noone" which is their default value.
+ds_map_add(global.singletonID, CONTROLLER,			noone);
+ds_map_add(global.singletonID, EFFECT_HANDLER,		noone);
+ds_map_add(global.singletonID, DEPTH_SORTER,		noone);
+ds_map_add(global.singletonID, PLAYER,				noone);
+ds_map_add(global.singletonID, TEXTBOX,				noone);
+ds_map_add(global.singletonID, CUTSCENE,			noone);
 
 // Holds the game's current state. This state determines the functionality of certain objects. Also, the 
 // previous game state is held in memory in a second variable.
@@ -116,6 +125,11 @@ inventory_initialize(Difficulty.Standard);
 // at one time. All it stores is a string value for the name of the note, which will allow easy reference to the 
 // information found within the note.
 global.invNote = ds_list_create();
+
+// The main variable for keeping track of the events that have been completed by the player. These are mostly
+// used for cutscenes, but can also be used to prevent/allows certain items, enemies, and other objects from 
+// spawning into a given room.
+global.eventFlags = array_create(5, false);
 
 // A struct containing data about the overall difficulty of the game. From things like puzzle/exploration
 // difficulty, to modifiers that effect the player and enemies in the game, to things like weapon degredation,
