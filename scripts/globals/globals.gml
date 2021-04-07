@@ -31,13 +31,6 @@ ds_map_add(global.fontTextures, font_gui_large,		font_get_texture(font_gui_large
 
 // Singleton variables that keep track of important instances; preventing them from being created multiple times
 // which would cause a myriad of issues, if the game even ran at all with multiple instances of these objects.
-/*global.controllerID = noone;		// For obj_controller
-global.effectID = noone;			// For obj_shader_handler
-global.sorterID = noone;			// For obj_depth_sorter
-global.playerID = noone;			// For obj_player
-global.textboxID = noone;			// For obj_textbox_handler
-global.cutsceneID = noone;*/		// For obj_cutscene
-
 global.singletonID = ds_map_create();
 // Add all the key value pairs and set their values to "noone" which is their default value.
 ds_map_add(global.singletonID, CONTROLLER,			noone);

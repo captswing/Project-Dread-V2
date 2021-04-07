@@ -1,17 +1,7 @@
-/// @description Unique Variable Initialization
+/// @description Variable Initialization
 
-#region SINGLETON CHECK
-
-if (global.textboxID != noone){
-	if (global.textboxID.object_index == object_index){
-		instance_destroy(self);
-		return;
-	}
-	instance_destroy(global.textboxID);
-}
-global.textboxID = id;
-
-#endregion
+// Add the object as a singleton to prevent duplicates. If it fails, exit the create event early.
+if (!add_singleton_object()) {return;}
 
 #region EDITING INHERITED VARIABLES
 
