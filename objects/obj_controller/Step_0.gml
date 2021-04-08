@@ -3,8 +3,26 @@
 // Call the script that updates the currently playing background music
 update_background_music();
 
-// Updating the currently active weather effect
+// Updating the currently active weather object
 with(weather) {weather_update();}
+
+// Updating the fade effect, dealing with it when its completed its animation
+if (fade != noone){
+	var _isDestroyed = false;
+	with(fade){
+		fade_update();
+		// The fade has completed, signal to the controller that the fade should be deleted
+		if (alpha <= 0 && fadingOut){
+			set_game_state(global.prevGameState, true);
+			_isDestroyed = true;
+		}
+	}
+	// Removing the fade object from memory
+	if (_isDestroyed){
+		delete fade;
+		fade = noone;
+	}
+}
 
 // Accurately tracking the current in-game playtime whenever the timer is activated
 // The value 35999999 is equal to 99:59:59 when converted, which is the maximum possible

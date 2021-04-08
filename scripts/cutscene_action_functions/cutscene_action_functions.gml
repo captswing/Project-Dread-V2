@@ -30,7 +30,7 @@ function cutscene_init_textbox(){
 		// the textbox object and this cutscene managing object.
 		ds_queue_dequeue(sceneData);
 		if (ds_queue_size(sceneData) == 0){
-			instance_destroy(global.textboxID);
+			instance_destroy(global.singletonID[? TEXTBOX]);
 			instance_destroy(self);
 			break; // Break out of the loop early
 		}
@@ -45,7 +45,7 @@ function cutscene_init_textbox(){
 /// NOTE --- THIS MUST BE PLACED AT THE END OF ANY TEXTBOX CHUNKS WITHIN THE CUTSCENE DATA!!!
 ///
 function cutscene_end_textbox(){
-	if (!instance_exists(obj_textbox)) {cutscene_end_action();}
+	if (!instance_exists(global.singletonID[? TEXTBOX])) {cutscene_end_action();}
 }
 
 /// @description Moves an entity object to a given destination, which will prevent the cutscene from moving
@@ -88,7 +88,30 @@ function cutscene_move_entity(_destX, _destY, _objectID){
 	}
 	directionSet = _directionSet;
 	
+	// The entity has reached its destination, end the current action.
 	if (_endAction) {cutscene_end_action();}
+}
+
+/// @description A simple instruction for the cutscene that teleports an existing entity to the given position.
+/// This action will only execute for 1 frame before moving onto the next instructions.
+/// @param x
+/// @param y
+/// @param objectID
+function cutscene_set_entity_position(_x, _y, _objectID){
+	with(_objectID){
+		x = _x;
+		y = _y;
+	}
+	cutscene_end_action();
+}
+
+/// @description Another simple instruction for the cutscene system that changes the entity's direction. This
+/// action only lasts for 1 in-game frame before moving onto the next instruction.
+/// @param direction
+/// @param objectID
+function cutscene_set_entity_direction(_direction, _objectID){
+	with(_objectID) {direction = _direction;}
+	cutscene_end_action();
 }
 
 /// @description Moves the camera to the desired position at the desired movement speed. Optionally, the
@@ -142,4 +165,63 @@ function cutscene_move_camera_object(_objectID, _moveSpeed, _pauseForMovement){
 	// The entity has been reached and the camera has been locked onto them OR the movement wait was bypassed
 	// and the cutscene will continue on before the camera has hit its required position.
 	if (!_pauseForMovement || _positionReached) {cutscene_end_action();}
+}
+
+/// @description Sets the camera to a given position instantly without any smooth movement. Useful for fading 
+/// out and then snapping the position to where the camera should be easily, for example.
+/// @param x
+/// @param y
+function cutscene_set_camera_position(_x, _y){
+	// If somehow the control object doesn't exist, skip this action
+	if (global.singletonID[? CONTROLLER] == noone){
+		cutscene_end_action();
+		return; // Exit before performing event actions
+	}
+	
+	// Place the camera at the desired position and move onto the next action
+	with(global.singletonID[? CONTROLLER]){
+		// NOTE -- If target position isn't set to the position the camera won't stay locked at it
+		targetPosition = [_x, _y];
+		curObject = noone;
+		x = _x;
+		y = _y;
+	}
+	cutscene_end_action();
+}
+
+/// @description Causes a color fade-in on the screen of a given color, speed, opaque time, as well as an
+/// optional flag that makes the cutscene queue wait for the fade to become fully opaque before moving onto
+/// the next instruction. Otherwise, it'll move onto the next instruction the frame after the fade is created.
+/// @param fadeColor
+/// @param fadeSpeed
+/// @param opaqueTime
+/// @param pauseForFade
+function cutscene_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime, _pauseForFade){
+	// If somehow the control object doesn't exist, skip this action
+	if (global.singletonID[? CONTROLLER] == noone){
+		cutscene_end_action();
+		return; // Exit before performing event actions
+	}
+	
+	// Creates the screen fade effect and optionally waits until it is opaue before moving onto the next
+	// instruction in the cutscene queue.
+	var _fadeFinished = false;
+	with(global.singletonID[? CONTROLLER]){
+		create_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime);
+		_fadeFinished = (fade.alpha >= 1);
+	}
+	
+	// Ends the action instantly or when the instruction condition is met
+	if (!_pauseForFade || _fadeFinished) {cutscene_end_action();}
+}
+
+/// @description Allows for creation of an item during a cutscene. Lasts one frame before moving onto the next action
+/// @param x
+/// @param y
+/// @param itemName
+/// @param quantity
+/// @param durability
+function cutscene_create_item(_x, _y, _itemName, _quantity, _durability){
+	create_item(_x, _y, _itemName, _quantity, _durability);
+	cutscene_end_action();
 }

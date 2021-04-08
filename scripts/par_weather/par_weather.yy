@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Effects",
-    "path": "folders/Objects/Global/Effects.yy",
+    "name": "Weather",
+    "path": "folders/Objects/Global/Effects/Weather.yy",
   },
   "resourceVersion": "1.0",
   "name": "par_weather",

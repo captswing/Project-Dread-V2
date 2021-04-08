@@ -41,27 +41,8 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 	}
 	numLayers = _totalLayers;
 	
-	// The alpha level for entirety of the weather effect, which causes a smooth fade in when 
-	// the fog effect starts up in-game.
-	alpha = 0;
-	
-	// Handles the animation of the fog; fading it in and out smoothly depending on if the 
-	// weather is beginning or ending. The speed determines how fast the fading is.
-	lerpProgress = 0;
-	lerpSpeed = 50;
-	
 	/// @description Updates the positions of each layer in the fog effect
 	function weather_update(){
-		// Fading in/fading out the fog depending on if the weather is starting or ending
-		lerpProgress += ((1 - lerpProgress) / lerpSpeed) * global.deltaTime;
-		alpha = !isClosing ? lerp(0, 1, lerpProgress) : lerp(0, 1, 1 - lerpProgress);
-		// Letting the handler object know this object needs to be deleted from memory
-		if (isClosing && alpha < 0.05){
-			isDestroyed = true;
-			return; // Don't bother updating the layer positions
-		}
-		
-		// Looping through each layer and updating its position based on their movement speeds
 		for (var i = 0; i < numLayers; i++){
 			with(fogLayer[| i]){
 				// Handling horizontal movement; wrapping the value between its width and 0
@@ -85,16 +66,13 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 	
 	/// @description Draws each of the layers onto the screen in order from first to last
 	function weather_draw(){
-		// Don't bother drawing if the image isn't visible
-		if (alpha <= 0) {return;}
 		// Loop through and draw all active layers with integer position values, to stop any sub-pixel drawing
-		var _alpha = alpha;
 		for (var i = 0; i < numLayers; i++){
 			with(fogLayer[| i]){
 				// Ignore any fog layers that have a scale of 0 or an alpha of 0
 				if (alpha == 0 || xSize == 0 || ySize == 0) {continue;}
 				// Tile the fog sprite to cover the entirety of the visible screen for each layer
-				draw_sprite_tiled_ext(spr_mist_effect, 0, xPos, yPos, scale, scale, c_white, _alpha * alpha);
+				draw_sprite_tiled_ext(spr_mist_effect, 0, xPos, yPos, scale, scale, c_white, alpha);
 			}
 		}
 	}

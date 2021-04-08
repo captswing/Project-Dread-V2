@@ -1,4 +1,9 @@
-/// @description Display General Debug Info
+/// @description  Screen Space Effects and Display General Debug Info
+
+// Display the screen fade if the object exists
+with(fade){ // Since it's only one line of code, it's faster to just draw here instead of another function
+	draw_sprite_ext(spr_rectangle, 0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, fadeColor, alpha);
+}
 
 shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);

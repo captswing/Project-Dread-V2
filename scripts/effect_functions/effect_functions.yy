@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Weather",
-    "path": "folders/Objects/Global/Effects/Weather.yy",
+    "name": "obj_controller",
+    "path": "folders/Scripts/Objects/Global/obj_controller.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_weather_fog",
+  "name": "effect_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

@@ -22,10 +22,11 @@ prevGameState = global.gameState;
 // to move during the scene.
 sceneData = ds_queue_create();
 
-// 
+// A timer used during the cutscene_wait action, or for whenever else a simple timer is needed.
 timer = 0;
 
-//
+// A flag for determining the direction an entity should be facing when they begin moving during any action
+// that causes movement to a child of par_dynamic_entity.
 directionSet = false;
 
 #endregion

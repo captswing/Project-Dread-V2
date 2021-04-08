@@ -38,17 +38,19 @@ function set_camera_window_size(_scale){
 /// @param moveSpeed
 /// @param snapToTarget
 function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
-	if (id != global.singletonID[? CONTROLLER] || curObject == _objectID || !instance_exists(_objectID)){
-		return; // Stop non-camera object from executing the function. Also, prevent invalid IDs from being followed
-	}
-	// Move into the controller object and set its target position or snap to target if required
-	curObject = _objectID;
-	if (!_snapToTarget){ // Smooth movement; set target position and temporarily unlock camera
-		newObjectSet = true; // Prevent curObject from being set to noone by the target position function
-		set_camera_target_position(_objectID.x, _objectID.y, _moveSpeed);
-	} else{ // Instantly lock the camera to the object's position
-		x = floor(_objectID.x);
-		y = floor(_objectID.y);
+	with(global.singletonID[? CONTROLLER]){
+		if (curObject == _objectID || !instance_exists(_objectID)){
+			return; // Prevent invalid IDs from being followed
+		}
+		// Move into the controller object and set its target position or snap to target if required
+		curObject = _objectID;
+		if (!_snapToTarget){ // Smooth movement; set target position and temporarily unlock camera
+			newObjectSet = true; // Prevent curObject from being set to noone by the target position function
+			set_camera_target_position(_objectID.x, _objectID.y, _moveSpeed);
+		} else{ // Instantly lock the camera to the object's position
+			x = floor(_objectID.x);
+			y = floor(_objectID.y);
+		}
 	}
 }
 
@@ -58,14 +60,13 @@ function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
 /// @param strength
 /// @param length
 function set_camera_shake(_strength, _length){
-	if (id != global.singletonID[? CONTROLLER]){
-		return; // The object that called this function isn't the camera; don't execute
-	}
-	// Only overwrite the current camera shake if the intensity of the new shake is greater than the current.
-	if (shakeMagnitude < _strength){
-		shakeMagnitude = _strength;
-		shakeStrength = _strength;
-		shakeLength = _length;
+	with(global.singletonID[? CONTROLLER]){
+		// Only overwrite the current camera shake if the intensity of the new shake is greater than the current.
+		if (shakeMagnitude < _strength){
+			shakeMagnitude = _strength;
+			shakeStrength = _strength;
+			shakeLength = _length;
+		}
 	}
 }
 
@@ -75,14 +76,13 @@ function set_camera_shake(_strength, _length){
 /// @param targetY
 /// @param moveSpeed
 function set_camera_target_position(_targetX, _targetY, _moveSpeed){
-	if (id != global.singletonID[? CONTROLLER]){
-		return; // The object that called this function isn't the camera; don't execute
+	with(global.singletonID[? CONTROLLER]){
+		// Remove any decimals from the target positions. Also prevent the move speed from being less than 0.
+		targetPosition = [floor(_targetX), floor(_targetY)];
+		moveSpeed = max(0.1, _moveSpeed);
+		// Always unlock the camera if not moving to followed object's position
+		if (!newObjectSet) {curObject = noone;}
 	}
-	// Remove any decimals from the target positions. Also prevent the move speed from being less than 0.
-	targetPosition = [floor(_targetX), floor(_targetY)];
-	moveSpeed = max(0.1, _moveSpeed);
-	// Always unlock the camera if not moving to followed object's position
-	if (!newObjectSet) {curObject = noone;}
 }
 
 /// @description Gets the top-left x-position of the screen in the current room's coordinates since the 

@@ -1,23 +1,13 @@
 /// @description FOR EASY TESTING
 
-/*if (weather != noone){
-	var _isDestroyed = false;
-	with(weather){
-		_isDestroyed = isDestroyed;
-		if (!isDestroyed){
-			lerpProgress = 0;
-			isClosing = true;
-		}
-	}
-	if (_isDestroyed){
-		delete weather;
-		weather = noone;
-	}
-} else{
-	weather = new obj_weather_fog(3, 0.8, 0.5, 2.5, 0.5, 0.9);
-}*/
+//if (weather == noone) {set_weather(Weather.Mist);}
+//else {set_weather(Weather.Clear);}
 
-room_restart();
+create_screen_fade(c_black, 0.06, 30);
+
+//with(par_dynamic_entity) {instance_destroy(self);}
+//with(par_static_entity) {instance_destroy(self);}
+//room_restart();
 
 /*create_textbox_actor_portrait("My Grandfather smoked his whole life. I was about 10 years old when my mother said to him, 'If you ever want to see your grandchildren graduate, you have to stop immediately.'.", Actor.Claire, 1);
 create_textbox_actor_portrait("Tears welled up in his eyes when he realized what exactly was at stake. He gave it up immediately. Three years later he died of lung cancer.", Actor.Claire, 2);
