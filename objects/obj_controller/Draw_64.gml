@@ -5,6 +5,8 @@ with(fade){ // Since it's only one line of code, it's faster to just draw here i
 	draw_sprite_ext(spr_rectangle, 0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, fadeColor, alpha);
 }
 
+// DEBUGGING STUFF BELOW HERE (WILL BE DELETED EVENTUALLY)
+
 shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);
 

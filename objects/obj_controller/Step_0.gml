@@ -1,4 +1,4 @@
-/// @description Updating the Current BGM, Current In-Game Playtime, and Handling Gamepad Stuff
+/// @description Updating Universal Stuff (Music, Weather, Screen Fade, Playtime, etc.)
 
 // Call the script that updates the currently playing background music
 update_background_music();

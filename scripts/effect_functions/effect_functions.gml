@@ -19,7 +19,7 @@ function set_weather(_weatherType){
 			case Weather.Mist:	
 				weather = new obj_weather_fog(3, 0.8, 0.5, 2.5, 0.5, 0.9); 
 				return;
-			case Weather.Rain:	
+			case Weather.Rain:
 				/* TODO -- Create rain object here */ 
 				return;
 		}

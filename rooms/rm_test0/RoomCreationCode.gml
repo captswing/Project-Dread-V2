@@ -1,2 +1,1 @@
-//set_background_music(mus_test, 140.50);
-global.isRoomSafe = true;
+set_background_music("mus_test.ogg", 138.964, 140.896);

@@ -55,6 +55,12 @@ if (indicatorOffset >= 2) {indicatorOffset = 0;}
 if (nextCharacter <= finalCharacter){
 	nextCharacter += global.settings[Settings.TextSpeed] * global.deltaTime;
 	visibleText = string_copy(textboxData[| 0][0], 1, nextCharacter);
+	// Play the text crawl's sound effect at a set speed interval
+	textboxSoundTimer -= global.deltaTime;
+	if (textboxSoundTimer < 0){
+		textboxSoundID = play_sound_effect(snd_ui_textbox_scroll, 0.15, true);
+		textboxSoundTimer += textboxSoundSpeed;
+	}
 }
 
 #endregion

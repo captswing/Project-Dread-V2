@@ -225,3 +225,9 @@ function cutscene_create_item(_x, _y, _itemName, _quantity, _durability){
 	create_item(_x, _y, _itemName, _quantity, _durability);
 	cutscene_end_action();
 }
+
+/// @description
+/// @param sound
+function cutscene_play_sound(_sound){
+	audio_play_sound(_sound, 0, false);
+}

@@ -1,66 +1,70 @@
-/// @description Changes the background music to another song. This initiates the smooth fade out of
-/// current song, which leads to the the smooth fading in of the new track.
-/// @param song
+/// @description Begins the fadeaway that will lead into changing the background song, which isn't caused by
+/// this function unless there was no song playing previously. In that case, this function will change the
+/// background music instantly.
+/// @param filename
+/// @param songLength
 /// @param loopLength
-function set_background_music(_song, _loopLength){
+function set_background_music(_filename, _songLength, _loopLength){
 	with(global.singletonID[? CONTROLLER]){
-		// Don't change the song if it isn't actually being changed
-		if (curSong != _song){
-			global.curSong = _song;
-			global.loopLength = _loopLength;
-			// Fade out whatever song is currently playing
-			audio_sound_gain(curSong, 0, fadeTime);
+		if (songID == noone){ // No previous song was playing, instantly start playing the music
+			change_background_music(_filename, _songLength, _loopLength);
+		} else{ // Another song was playing previously, begin the fade-out of the song into the new one
+			audio_sound_gain(songID, 0, songFadeTime);
+			// Keep track of the next song's filepath, song, and loop length for when the song actually changes.
+			changingSong = true; // Enable flag that begins checking for the song to complete its fadeaway
+			nextSongPath = _filename;
+			nextSongLength = _songLength;
+			nextSongLoopLength = _loopLength;
 		}
 	}
 }
 
-/// @description Gets the volume of the background music, which is calculated based on a ratio between
-/// the current master volume and 100. Then, that is multiplied by the current volume set for the music,
-/// which is then also divided by 100 to get the normalized value between 0 and 1.
-function get_background_music_volume(){
-	return (global.settings[Settings.Music] * (global.settings[Settings.Master] / 100)) / 100;
+/// @description The function that actually changes the song to the next one. It removes the previous song's
+/// stream from memory and starts up the stream for the next song. However, if the provided file doesn't
+/// exist the music will simply stop playing.
+/// @param filename
+/// @param songLength
+/// @param loopLength
+function change_background_music(_filename, _songLength, _loopLength){
+	// Make sure the file exists before attempting to create an audio stream from it. If no file with that
+	// name exists in the music folder, simply reset all music-related variables and don't play anything.
+	if (file_exists("music/" + _filename)){
+		songStream = audio_create_stream("music/" + _filename);
+		// Begin the next song that will play, storing its ID in a variable for easy manipulation of its playback.
+		songID = audio_play_sound(songStream, 100, false);
+		audio_sound_gain(songID, 0, 0); // Start the song out silent and fade in
+		audio_sound_gain(songID, get_audio_group_volume(Settings.Music), songFadeTime);
+		// After, store the length of the entire song and the length of its looping portion
+		songLength = _songLength;
+		songLoopLength = _loopLength;
+	} else{
+		songStream = noone;
+		songID = noone;
+		songLength = 0;
+		songLoopLength = 0;
+	}
+	// Finally, reset the flag that enables the song to change in the first place
+	changingSong = false;
 }
 
-/// @description Automatically plays the current background song with near-seamless looping. Also, it allows
-/// for automatic switch of the background music with a smooth fade-in and fade-out effect to the next track.
+/// @description The function that should be called every frame within a controller object; as it is responsible
+/// for checking when the previous song has completed its fade out, which will then begin the next song and
+/// its respective fade in. On top of that, this function also loops the song with near-seamless playback.
 function update_background_music(){
-	if (curSong != global.curSong){ // Swapping background song
-		if (audio_sound_get_gain(curSong) <= 0){
-			audio_stop_sound(curSong);
-			songID = audio_play_sound(global.curSong, 1000, false);
-			// Set the song to fade in smoothly
-			audio_sound_gain(songID, 0, 0);
-			audio_sound_gain(songID, get_background_music_volume(), fadeTime);
-			// Update the variables for the song and its loop length after transitioning to the 
-			// new background music
-			curSong = global.curSong;
-			loopLength = global.loopLength;
+	if (changingSong && audio_sound_get_gain(songID) == 0){
+		if (songID != noone){ // Delete the previous audio stream from memory
+			audio_stop_sound(songID);
+			audio_destroy_stream(songStream);
 		}
-	} else{ // Playing/looping the current song
-		var _position = audio_sound_get_track_position(songID);
-		if (_position >= loopLength){
-			audio_sound_set_track_position(songID, _position - loopLength);
-		}
-		// Automatically pausing and unpausing the song when it fades out or fades in whenever the functions
-		// pause_background_music or unpause_background_music are used.
-		if (audio_sound_get_gain(curSong) <= 0){
-			audio_pause_sound(songID);
-		} else if (audio_is_paused(songID)){
-			audio_resume_sound(songID);
+		change_background_music(nextSongPath, nextSongLength, nextSongLoopLength);
+		// Reset the storage variables responsible for holding what song will play next.
+		nextSongPath = "";
+		nextSongLength = 0;
+		nextSongLoopLength = 0;
+	} else{
+		var _songPosition = audio_sound_get_track_position(songID);
+		if (_songPosition >= songLength){ // Looping when the song's length is exceeded
+			audio_sound_set_track_position(songID, _songPosition - songLoopLength);
 		}
 	}
-}
-
-/// @description Pauses the background music by smoothly fading out the current song. The time it takes for
-/// fading out can be set to whatever value is required (in milliseconds).
-/// @param fadeTime
-function pause_background_music(_fadeTime){
-	audio_sound_gain(curSong, 0, _fadeTime);
-}
-
-/// @description Unpauses the background music by smoothly fading in the current song. The time it takes for
-/// fading in can be set to whatever value is required (in milliseconds).
-/// @param fadeTime
-function unpause_background_music(_fadeTime){
-	audio_sound_gain(curSong, get_background_music_volume(), _fadeTime);
 }

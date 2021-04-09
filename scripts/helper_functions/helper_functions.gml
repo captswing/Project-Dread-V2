@@ -1,3 +1,5 @@
+/// GAME STATE FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// @description Swaps the current active game state to another based on the argument provided. If the high
 /// priority flag is not toggled, the game state won't be set if it falls below the priority of the current
 /// state. Otherwise, it will overwrite regardless of the state. Finally, the previous state will be stored
@@ -15,6 +17,10 @@ function set_game_state(_newState, _highPriority){
 		global.gameState = _newState;
 	}
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// EVENT FLAG FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// @desceription Sets an event flag at a given index to either true or false. This allows setting an event flag
 /// without the risk of setting an invalid index, which could happen if not for this function.
@@ -36,6 +42,10 @@ function get_event_flag(_index){
 	}
 	return global.eventFlags[_index];
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// SINGLETON FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// @description Attempts to add the object into a one of the many singleton key/value pairs. If the object
 /// can't be a singleton to begin with or another singleton of this object already exists, the function will
@@ -75,3 +85,38 @@ function is_valid_singleton(){
 		default:					return undefined;
 	}
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// SOUND PLAYBACK FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// @description 
+/// @param sound
+/// @param volume
+/// @param stopPrevious
+function play_sound_effect(_sound, _volume, _stopPrevious){
+	if (_stopPrevious && audio_is_playing(_sound)){
+		audio_stop_sound(_sound);
+	}
+	// Plays the sound and sets the volume of it based on the setting and the argument provided
+	var _soundID = audio_play_sound(_sound, 0, false);
+	audio_sound_gain(_soundID, _volume * get_audio_group_volume(Settings.Sounds), 0);
+	// Return the sound's ID value, which is provided by game maker's built-in sound functions
+	return _soundID;
+}
+
+/// @description Gets the volume for a group of sounds, which is the ratio of the master volume (Ranges from 
+/// 0 to 1) and the ratio of that times the respective sound volume also divided by 100 to make it a range 
+/// between 0 and 1, like the master volume above.
+/// @param audioGroup
+function get_audio_group_volume(_audioGroup){
+	var _master = global.settings[Settings.Master] / 100;
+
+	switch(_audioGroup){
+		case Settings.Music:	return global.settings[Settings.Music] * _master / 100;
+		case Settings.Sounds:	return global.settings[Settings.Sounds] * _master / 100;
+		default:				return _master; // No valid group provided, just return the master volume
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

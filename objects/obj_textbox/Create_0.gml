@@ -26,7 +26,7 @@ sPixelHeight = shader_get_uniform(outlineShader, "pixelHeight");
 sOutlineColor = shader_get_uniform(outlineShader, "outlineColor");
 sDrawOutline = shader_get_uniform(outlineShader, "drawOutline");
 
-//
+// 
 isClosing = false;
 yTarget = WINDOW_HEIGHT - 57;
 alpha = 0;
@@ -36,7 +36,12 @@ visibleText = "";
 nextCharacter = 0;
 finalCharacter = 0;
 
-//
+// 
+textboxSoundID = noone;
+textboxSoundTimer = 0;
+textboxSoundSpeed = 4.25;
+
+// 
 indicatorOffset = 0;
 indicatorSpeed = 0.06;
 

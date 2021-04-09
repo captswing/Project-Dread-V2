@@ -85,12 +85,6 @@ global.freezeTimer = false;
 // the time in the correct format without having to constantly convert it whenever its needed.
 global.playtimeString = "00:00:00";
 
-// These variables are somewhat redundant data, but they are required in order to allow for seamless transitioning
-// of background music within the game. The first variable holds the index given by game maker for the song itself,
-// and the second variable tracks how long the song's loop is.
-global.curSong = -1;
-global.loopLength = -1;
-
 // The three main variables for handling the player's currently held items. The first variable (inventorySize) stores
 // the current accessible space within the item inventory. This variable can be increased by finding inventory upgrades
 // throughout available throughout the game. The final total space is different for almost all difficulty levels.

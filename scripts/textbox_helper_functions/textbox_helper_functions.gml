@@ -21,6 +21,7 @@ function open_next_textbox(){
 	finalCharacter = string_length(textboxData[| 0][0]);
 	nextCharacter = 0;
 	visibleText = "";
+	textboxSoundTimer = 0;
 }
 
 /// @description Attempts to add an actor's data to the map of actors for the current textboxes. However, if

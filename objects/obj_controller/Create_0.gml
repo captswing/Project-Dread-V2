@@ -64,19 +64,25 @@ create_camera(160, 90, global.settings[Settings.ResolutionScale]);
 
 // VARIABLES FOR BACKGROUND MUSIC //////////////////////////////////////////////////
 
-// Holds the index for the current song that is being played in the background. If this value is
-// different from the similar global variable, the song will be faded out and swapped to the newly
-// set song. The fadeTime variable determines how long the fade out and fade in will be in milliseconds.
-curSong = -1;
-fadeTime = 300;		// (1000 = 1 second)
-
-// This variable keeps track of how long the loop in the song is to allow for near-seamless looping of
-// the game's background music.
-loopLength = -1;
-
-// Stores the ID of the song that is returned upon using audio_play_sound(curSong). Allows for adjusting
-// the position values for looping the track and adjusting the gain, and other related effects.
+// The five variables responsible for playing the current background track. The first variable stores
+// the audio stream that is responsible for streaming the song into memory during playback. Meanwhile,
+// the next variable stores the song's ID value for easily manipulation during playback. Finally, the
+// last three variables store the song's full length, the length of its looping section, and the time
+// in milliseconds it takes for the song to fade in and out during playback and song changes.
+songStream = noone;
 songID = noone;
+songLength = 0;
+songLoopLength = 0;
+songFadeTime = 900;
+
+// Four variables that are used for changing between background tracks. The first is the flag that
+// actually allows the song and its audio stream to be switched over, and the next three variables
+// keep track of the next songs location in the files, as well as the song's length and its loop
+// length.
+changingSong = false;
+nextSongPath = "";
+nextSongLength = 0;
+nextSongLoopLength = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
@@ -91,10 +97,13 @@ frameTimer = 0;
 
 // VARIABLES FOR GLOBAL EFFECTS LIKE WEATHER AND SCREEN FADE ///////////////////////
 
-// 
+// Stores the "Lightweight" object that handles the game's universal screen fade. Updating
+// and drawing the effect are all handled in this controller object.
 fade = noone;
 
-// 
+// Stores the "Lightweight" object that handles the game's current weather effect. Also, the 
+// currently active weather type is tracked for when the weather is changed. Updating and
+// drawing the weather is all handled in this controller object.
 weather = noone;
 weatherType = Weather.Clear;
 
@@ -102,8 +111,7 @@ weatherType = Weather.Clear;
 
 #endregion
 
-// FOR TESTING WEATHER
-
+// FOR DEBUGGING AND TESTING
 show_debug_overlay(true);
 showDebugInfo = false;
 showItems = false;
