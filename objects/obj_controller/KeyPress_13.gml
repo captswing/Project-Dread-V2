@@ -1,9 +1,11 @@
 /// @description FOR EASY TESTING
 
+room_restart();
+
 //if (weather == noone) {set_weather(Weather.Mist);}
 //else {set_weather(Weather.Clear);}
 
-create_textbox_actor_portrait("My Grandfather smoked his whole life. I was about 10 years old when my mother said to him, 'If you ever want to see your grandchildren graduate, you have to stop immediately.'.", Actor.Claire, 1);
+/*create_textbox_actor_portrait("My Grandfather smoked his whole life. I was about 10 years old when my mother said to him, 'If you ever want to see your grandchildren graduate, you have to stop immediately.'.", Actor.Claire, 1);
 create_textbox_actor_portrait("Tears welled up in his eyes when he realized what exactly was at stake. He gave it up immediately. Three years later he died of lung cancer.", Actor.Claire, 2);
 create_textbox_actor_portrait("It was really sad and destroyed me. My mother said to me- 'Don't ever smoke. Please don't put your family through what your Grandfather put us through.' I agreed.", Actor.Claire, 0);
 create_textbox_actor_portrait("At 28, I have never touched a cigarette. I must say, I feel a very slight sense of regret for never having done it, because your post gave me cancer anyway.", Actor.Claire, 4);
@@ -15,5 +17,4 @@ create_textbox_actor_portrait("Which means there was a Cars Hitler, a Cars holoc
 create_textbox_actor_portrait("This leads to so many important questions, like: were the Cars Little Boy and Fat Man nukes sentient? Was it a suicide mission?", Actor.Claire, 0);
 create_textbox_actor_portrait("Are ALL Cars nuclear weapons sentient? Did Tsar Bomba have a personality? What kind of car was Car Hitler? A VW? A forklift?", Actor.Claire, 5);
 create_textbox_actor_portrait("Was there a Cars 9/11? Were the planes hijacked, or were the planes themselves radicalized? I could go on...", Actor.Claire, 4);
-create_textbox_actor_portrait("Edit: I just realized a Cars 9/11 gives a whole new layer of meaning to the phrase 'let's roll'", Actor.Claire, 6);
-   
+create_textbox_actor_portrait("Edit: I just realized a Cars 9/11 gives a whole new layer of meaning to the phrase 'let's roll'", Actor.Claire, 6);*/

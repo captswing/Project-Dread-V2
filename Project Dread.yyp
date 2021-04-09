@@ -64,6 +64,7 @@
     {"id":{"name":"entity_hitpoint_functions","path":"scripts/entity_hitpoint_functions/entity_hitpoint_functions.yy",},"order":2,},
     {"id":{"name":"obj_player_projectile","path":"objects/obj_player_projectile/obj_player_projectile.yy",},"order":1,},
     {"id":{"name":"obj_effect_handler","path":"objects/obj_effect_handler/obj_effect_handler.yy",},"order":2,},
+    {"id":{"name":"par_enemy","path":"objects/par_enemy/par_enemy.yy",},"order":0,},
     {"id":{"name":"obj_note","path":"objects/obj_note/obj_note.yy",},"order":2,},
     {"id":{"name":"par_weather","path":"scripts/par_weather/par_weather.yy",},"order":0,},
     {"id":{"name":"spr_cutscene_trigger","path":"sprites/spr_cutscene_trigger/spr_cutscene_trigger.yy",},"order":0,},

@@ -9,7 +9,7 @@
     "name": "spr_claire_unarmed_stand",
     "path": "sprites/spr_claire_unarmed_stand/spr_claire_unarmed_stand.yy",
   },
-  "persistent": false,
+  "persistent": true,
   "parentObjectId": {
     "name": "par_dynamic_entity",
     "path": "objects/par_dynamic_entity/par_dynamic_entity.yy",

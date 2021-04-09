@@ -22,6 +22,10 @@ prevGameState = global.gameState;
 // to move during the scene.
 sceneData = ds_queue_create();
 
+// Holds the ID for the cutscene trigger that created this object. Once the cutscene has been successfully
+// executed, the trigger will delete itself relative to this object's clean up event.
+parentTrigger = noone;
+
 // A timer used during the cutscene_wait action, or for whenever else a simple timer is needed.
 timer = 0;
 

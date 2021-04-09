@@ -27,10 +27,12 @@ function set_game_state(_newState, _highPriority){
 /// @param index
 /// @param flagState
 function set_event_flag(_index, _flagState){
-	if (_index < 0 || _index >= array_length(global.eventFlags)){
-		return; // An invalid index was put into the function, don't set any flags
+	 // Makes sure the flag index is within the bounds of the event flag array
+	if (_index >= 0 && _index < array_length(global.eventFlags)){
+		global.eventFlags[_index] = _flagState;
+		return true; // The flag was successfully set
 	}
-	global.eventFlags[_index] = _flagState;
+	return false; // Invalid flag attampted to be set, return false
 }
 
 /// @description Gets the state of the event flag at the provided index. However, if an invalid state was provided
@@ -90,7 +92,9 @@ function is_valid_singleton(){
 
 /// SOUND PLAYBACK FUNCTIONS ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/// @description 
+/// @description Plays a sound effect at a variable volume level relative to the setting for the volume of sounds.
+/// Optionally, the previous instance of the sound effect can be stopped before playing the current one to prevent
+/// any odd overlapping of the same sound, which sounds horrible.
 /// @param sound
 /// @param volume
 /// @param stopPrevious

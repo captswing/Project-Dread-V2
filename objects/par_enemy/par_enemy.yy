@@ -1,15 +1,15 @@
 {
   "spriteId": {
-    "name": "spr_table_small_1",
-    "path": "sprites/spr_table_small_1/spr_table_small_1.yy",
+    "name": "spr_collider_solid",
+    "path": "sprites/spr_collider_solid/spr_collider_solid.yy",
   },
   "solid": false,
   "visible": false,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
-    "name": "par_static_entity",
-    "path": "objects/par_static_entity/par_static_entity.yy",
+    "name": "par_dynamic_entity",
+    "path": "objects/par_dynamic_entity/par_dynamic_entity.yy",
   },
   "physicsObject": false,
   "physicsSensor": false,
@@ -24,16 +24,17 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
+    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
     {"isDnD":false,"eventNum":0,"eventType":0,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
   ],
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Apartments",
-    "path": "folders/Objects/Entities/Static/Decoration/Interior/Apartments.yy",
+    "name": "Hostile",
+    "path": "folders/Objects/Entities/Dynamic/Hostile.yy",
   },
   "resourceVersion": "1.0",
-  "name": "obj_table_small_1",
+  "name": "par_enemy",
   "tags": [],
   "resourceType": "GMObject",
 }

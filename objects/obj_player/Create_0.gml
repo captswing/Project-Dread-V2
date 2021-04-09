@@ -16,6 +16,8 @@ entity_create_light(0, -8, 15, 15, 0.1, c_ltgray, false);
 // Assign the player's starting amount of hitpoints, which can be upgraded over time
 maxHitpoints = 20;
 hitpoints = maxHitpoints;
+// The player will be allotted one second of invulnerability from attacks if they get hit
+timeToRecover = 60;
 // Initialize the inherited sprite variables with claire's default sprites
 standSprite = spr_claire_unarmed_stand;
 walkSprite = spr_claire_unarmed_walk;

@@ -143,3 +143,13 @@ function player_state_weapon_recoil(){
 	if (set_sprite(walkSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_fireRate - fireRateTimer) / _fireRate)) * sprFrames, sprFrames - 1);
 }
+
+/// @description A simple state that prevents all input and animation for the player. Hopefully, it'll really
+/// sell the impact of getting hit by an attack to the player.
+function state_player_stunlock(){
+	stunLockTimer -= global.deltaTime;
+	if (stunLockTimer < 0){ // The stun lock has completed, release the player
+		set_cur_state(lastState);
+		animateSprite = true;
+	}
+}

@@ -63,10 +63,12 @@ hpRegenFraction = 0;
 regenSpeed = 0;
 
 // A flag that grants the entity temporary invincibility frames after getting hit by an enemy's attack.
-// The time in frames (1 frame = 1/60 seconds) is variable and can be set to any amount of time.
+// The time in frames (1 frame = 1/60 seconds) is variable and can be set to any amount of time. Also,
+// an optional variable for locking the entity for a set section of invulnerability time.
 isHit = false;
 timeToRecover = 0;
 recoveryTimer = 0;
+stunLockTimer = 0;
 
 // Two flags that determines whether or not the entity can take damage and be killed or if they have had
 // their hitpoints reduced to 0; killing them at the start of the next frame.

@@ -3,7 +3,7 @@
 /// function that allows the entity's damage resistance value to be factored into the equation.
 /// @param modifier
 function update_hitpoints(_modifier){
-	hitpoints = clamp(hitpoints + (_modifier * damageResistance), 0, maxHitpoints);
+	hitpoints = clamp(hitpoints - (_modifier * damageResistance), 0, maxHitpoints);
 	if (hitpoints <= 0 && !isInvincible){
 		isDestroyed = true; // Destroys the entity on the next frame
 	}
