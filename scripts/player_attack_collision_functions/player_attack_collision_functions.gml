@@ -17,12 +17,33 @@ function player_attack_hitscan_collision(_startX, _startY, _endX, _endY, _zOffse
 		switch(object_get_parent(_objIndex)){
 			case par_collider: // Colliding with a wall or a tall enough object
 				if (_collisions[| i].colliderHeight == -1 || colliderHeight > zOffset){
-					show_debug_message("COLLISION");
 					i = _length; // Exits the loop
 				}
+				break;
+			case par_enemy: // Colliding with an enemy object
+				player_attack_enemy_collision(_collisions[| i]);
+				i = _length; // Always exits the loop after resolving collision
 				break;
 		}
 	}
 	// Finally, remove the ds_list from memory; preventing any memory leaks
 	ds_list_destroy(_collisions);
+}
+
+/// @description Handles collision with by a player's attack projectile/melee/hitscan with an enemy object. 
+/// Checks if the attack should cause a stunlock to the player relative to the damage that the attack dealt. 
+/// If the damage is less than the threshold value, the stun will be calculated by the percent chance of stun 
+/// out of 100% (Stored as a value between 0 and 1).
+/// @param enemyID
+function player_attack_enemy_collision(_enemyID){
+	var _playerDamage = damage * global.gameplay.playerDamageMod;
+	with(_enemyID){ // After calculating the player's damage, deal it to the enemy and check if stun locked
+		if (_playerDamage >= stunLockThreshold || random(1) <= stunLockChance){ // The enemy was stunned
+			set_entity_hit(_playerDamage, stunLockTime);
+			show_debug_message("ENEMY STUNNED");
+		} else{ // No stun has occurred, just deal out the damage
+			set_entity_hit(_playerDamage, 0);
+			show_debug_message("ENEMY NOT STUNNED");
+		}
+	}
 }

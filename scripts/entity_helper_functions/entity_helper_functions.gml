@@ -28,14 +28,17 @@ function set_sprite(_sprIndex, _sprDirections){
 }
 
 /// @description Deals out a variable amount of damage and sets the flag for temporary invulnerability from
-/// damage. Also, the second variable will optionally lock the entity for a set number of frames during said
-/// invulnerability.
+/// damage. Also, the second variable will optionally lock the entity for a set number of frames.
 /// @param damage
 /// @param stunTime
 function set_entity_hit(_damage, _stunTime){
 	update_hitpoints(_damage);
-	stunLockTimer = clamp(_stunTime, 0, timeToRecover);
+	stunLockTimer = _stunTime;
 	isHit = true;
+	if (_stunTime > 0){ // Changes the entity into the universal stun lock state
+		set_cur_state(state_entity_stun_locked);
+		animateSprite = false;
+	}
 }
 
 /// @description Creates a light for the entity's ambLight variable. From there, the size, color, 

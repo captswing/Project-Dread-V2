@@ -1,12 +1,18 @@
-// @description
+// @description 
 function player_attack_state_projectile(){
 	// Check if the projectile has exceeded its maximum range. If it has, the bullet will be destroyed
 	if (point_distance(startX, startY, x, y) >= range){
 		isDestroyed = true;
-		return; // Exit out of the script early
+		return; // Exit out of the state early
 	}
 	
-	// TODO -- Add hostile projectile check here
+	// Handling collisions with enemy objects
+	var _hostile = collision_line(x, y, x + deltaHspd, y + deltaVspd, par_enemy, false, true);
+	if (_hostile != noone){ // An entity was hit; deal damage to it if possible
+		player_attack_enemy_collision(_hostile);
+		isDestroyed = true;
+		return; // Exit out of the state early
+	}
 	
 	// First, remove fractions from the movement variables to prevent sub-pixel movement
 	remove_movement_fractions();

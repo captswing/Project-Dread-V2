@@ -1,10 +1,16 @@
 {
-  "spriteId": null,
+  "spriteId": {
+    "name": "spr_collider_solid",
+    "path": "sprites/spr_collider_solid/spr_collider_solid.yy",
+  },
   "solid": false,
   "visible": false,
   "spriteMaskId": null,
   "persistent": false,
-  "parentObjectId": null,
+  "parentObjectId": {
+    "name": "par_enemy",
+    "path": "objects/par_enemy/par_enemy.yy",
+  },
   "physicsObject": false,
   "physicsSensor": false,
   "physicsShape": 1,
@@ -23,11 +29,11 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Colliders",
-    "path": "folders/Objects/Colliders.yy",
+    "name": "Hostile",
+    "path": "folders/Objects/Entities/Dynamic/Hostile.yy",
   },
   "resourceVersion": "1.0",
-  "name": "par_collider",
+  "name": "obj_test_enemy",
   "tags": [],
   "resourceType": "GMObject",
 }

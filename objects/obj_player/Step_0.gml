@@ -1,4 +1,4 @@
-/// @description Gathering Input From User, Handle Current State and Other General Code
+/// @description Gathering Input From User, Handle Current State and Non-State Code
 
 #region HANDLING CURRENT STATE/MOVEMENT/OPENING INVENTORY
 
@@ -42,8 +42,6 @@ if (global.gameState == GameState.InGame && curState != NO_STATE){
 		if (_isHit){
 			set_camera_shake(_damage * 2.5, 10);
 			set_entity_hit(_damage, 10);
-			set_cur_state(state_player_stunlock);
-			animateSprite = false;
 		}
 	}
 	

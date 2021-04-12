@@ -11,13 +11,16 @@ zOffset = 12;
 
 #region UNIQUE VARIABLE INITIALIZATION
 
-// The two variables that are shared between the player and this projectile. It combines the base damage,
-// range values and both their modifier values into a pair of variables that can be referenced from this
-// object for ease during collision.
+// The three variables that are shared between the player and this projectile. The first variable stores the
+// name of the weapon that fired this projectile. Meanwhile, the second and third contain the combined damage
+// and damage modifier, as well as the range and range modifier, respectively.
+weaponName = 0;
 damage = 0;
 range = 0;
 
-// 
+// Stores the beginning positions for the bullet relative to their current position in the frame. If the
+// projectile's current position and this starting point exceeds the range in length, the projectile will be
+// deleted and do what it usually does upon destruction. This could be nothing or specific effects like explosions.
 startX = 0;
 startY = 0;
 

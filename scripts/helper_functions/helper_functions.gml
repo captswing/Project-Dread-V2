@@ -99,6 +99,8 @@ function is_valid_singleton(){
 /// @param volume
 /// @param stopPrevious
 function play_sound_effect(_sound, _volume, _stopPrevious){
+	if (_sound == -1) {return _sound;} // No sound effect was provided; exit the script
+	// Stop the previous instance of this sound effect that could still be playing
 	if (_stopPrevious && audio_is_playing(_sound)){
 		audio_stop_sound(_sound);
 	}

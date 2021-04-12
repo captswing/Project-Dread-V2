@@ -8,6 +8,7 @@ function collect_item(){
 		create_textbox("Your inventory is full...");
 	} else if (_num > 0){ // The inventory has space, but not enough for the full quantity
 		create_textbox("Picked up only " + string(global.worldItemData[? keyIndex][? QUANTITY] - _num) + " of the " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + global.worldItemData[? keyIndex][? NAME] + ". The inventory is full and cannot fit the rest, so it was left alone.");
+		play_sound_effect(snd_item_pickup, get_audio_group_volume(Settings.Sounds), true);
 	} else{ // Inventory has space for the whole quantity, display what was picked up
 		var _itemData = global.itemData[? ITEM_LIST][? global.worldItemData[? keyIndex][? NAME]];
 		if (_itemData[? MAX_STACK] == 1 || (string_count(WEAPON, _itemData[? ITEM_TYPE]) == 1)){ // The item isn't stackable or is a weapon, don't show the quantity
@@ -15,6 +16,7 @@ function collect_item(){
 		} else{ // The item can be stacked, show the player the quantity of what they picked up
 			create_textbox("Picked up " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + global.worldItemData[? keyIndex][? NAME] + ".");
 		}
+		play_sound_effect(snd_item_pickup, get_audio_group_volume(Settings.Sounds), true);
 	}
 	// Remove the data from the item list map if the entire quantity was picked up
 	if (_num <= 0){
@@ -35,6 +37,7 @@ function collect_inventory_expansion(){
 		create_textbox("Item pouch acquired! Maximum inventory space has been increased!");
 		global.invSize += 2;
 	}
+	play_sound_effect(snd_item_pickup, get_audio_group_volume(Settings.Sounds), true);
 	// Finally, delete the "Item Pouch" from the world item data, as it's been successfully collected
 	ds_map_delete(global.worldItemData, keyIndex);
 	instance_destroy(self);

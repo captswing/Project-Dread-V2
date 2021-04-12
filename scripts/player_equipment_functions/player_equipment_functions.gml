@@ -19,7 +19,7 @@ function player_equip_item(_slot, _itemType){
 	switch(_itemType){
 		case WEAPON: // Equipping a gun/melee weapon
 		case WEAPON_INF:
-			// Get the wepaon's stats and apply them to the player's variables
+			// Get the weapon's stats and apply them to the player's variables
 			var _data = global.itemData[? WEAPON_DATA][? global.invItem[_slot][0]];
 			weaponSlot =	_slot;
 			damage =		_data[? DAMAGE];
@@ -32,7 +32,9 @@ function player_equip_item(_slot, _itemType){
 			endFrame =		_data[? END_FRAME];
 			ammoTypes =		_data[? AMMO_TYPES];
 			
-			// TODO -- Add sprite changes and other required code here.
+			// Next, set the weapon's sounds and the player's current sprites
+			player_set_weapon_sounds(global.invItem[_slot][0]);
+			player_set_sprites(global.invItem[_slot][0]);
 			
 			// Finally, place the name of the item into the equipment slot
 			equipSlot[EquipSlot.Weapon] = global.invItem[_slot][0];
@@ -115,7 +117,9 @@ function player_unequip_item(_slot, _itemType){
 			fireRateMod =	0;
 			reloadRateMod = 0;
 			
-			// TODO -- Add sprite changes and other required code here.
+			// Next, reset the weapon's sounds and the player's current sprites
+			player_set_weapon_sounds(NO_ITEM);
+			player_set_sprites(NO_ITEM);
 			
 			// Finally, remove the name from the equipment slot to free it
 			equipSlot[EquipSlot.Weapon] = NO_ITEM;
@@ -208,6 +212,57 @@ function player_swap_current_ammo(_prevAmmoType){
 	return false;
 }
 
+/// @description Changes the weapon's sound effects to the currently equipped weapon. Likewise, the same function
+/// can also reset those sound effects to their default values (-1) if a non-valid item is passed into it as
+/// an argument.
+/// @param name
+function player_set_weapon_sounds(_name){
+	// TODO -- Add the rest of the weapon sounds here
+	switch(_name){
+		case HANDGUN:				// 9mm Handgun sounds
+			weaponUseSound = snd_handgun0;
+			weaponReloadSound =	-1;
+			break;
+		case HUNTING_RIFLE:			// Hunting rifle sounds
+			weaponUseSound = snd_hunting_rifle0;
+			weaponReloadSound =	-1;
+			break;
+		case HAND_CANNON:			// Hand cannon sounds
+			weaponUseSound = snd_hand_cannon0;
+			weaponReloadSound =	-1;
+			break;
+		case SUBMACHINE_GUN:		// Submachine gun sounds
+			weaponUseSound = snd_submachine_gun0;
+			weaponReloadSound =	-1;
+			break;
+		case GRENADE_LAUNCHER:		// Grenade launcher sounds
+		case INF_NAPALM_LAUNCHER:	// Infinite napalm launcher sounds
+			weaponUseSound = snd_grenade_launcher0;
+			weaponReloadSound = -1;
+			break;
+		default:				// Reset current sounds
+			weaponUseSound = -1;
+			weaponReloadSound =	-1;
+			break;
+	}
+}
+
+/// @description Sets the player's current sprites to the weapon that was equipped. Likewise, the sprites
+/// can be reset using the same function by putting a non-weapon item into the argument space.
+/// @param name
+function player_set_sprites(_name){
+	switch(_name){
+		// TODO -- Add sprites here based on weapons
+		default:				// Unarmed sprites will be set
+			standSprite = spr_claire_unarmed_stand;
+			walkSprite = spr_claire_unarmed_walk;
+			aimingSprite = -1;
+			reloadSprite = -1;
+			recoilSprite = -1;
+			break;
+	}
+}
+
 /// @description Using the player's current weapon. The effect of the weapon can either be a hitscan attack
 /// in the same frame, a projectile that travels until either a collision occurs or the weapon's range has
 /// been exceeded, or a melee hitbox that is destroyed after the animation reaches a certain point.
@@ -239,23 +294,26 @@ function player_use_weapon(_useAmmo){
 		var _direction, _object, _weaponData;
 		_direction = direction + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
 		_object = instance_create_depth(x + lengthdir_x(6, direction), y + lengthdir_y(10, direction), ENTITY_DEPTH, obj_player_projectile);
-		_weaponData = [damage + damageMod, range + rangeMod, bulletSpd];
+		_weaponData = [global.invItem[weaponSlot][0], damage + damageMod, range + rangeMod, bulletSpd];
 		// Pull all the necessary data in from the weapon to the projectile, which basically means
 		// the range and damage of the bullet.
 		with(_object){
-			// Pull in the weapon's damage and movement speed (Relative to its direction)
-			damage =	_weaponData[0];
-			range =		_weaponData[1];
-			hspd =		lengthdir_x(_weaponData[2], _direction);
-			vspd =		lengthdir_y(_weaponData[2], _direction);
+			// Pull in the weapon's name, damage, range, and movement speed (Relative to its direction)
+			weaponName =	_weaponData[0];
+			damage =		_weaponData[1];
+			range =			_weaponData[2];
+			hspd =			lengthdir_x(_weaponData[3], _direction);
+			vspd =			lengthdir_y(_weaponData[3], _direction);
 			// Set the variables that track the distance the bullet has travelled relative to its max range
-			startX =	x;
-			startY =	y;
+			startX =		x;
+			startY =		y;
 			// Next, set the state to handle the projectile movement for the weapon
 			set_cur_state(player_attack_state_projectile);
 			image_angle = _direction;
 		}
 	}
+	// Play the weapon's use sound effect. Nothing will play if the provided sound doesn't exist
+	play_sound_effect(weaponUseSound, get_audio_group_volume(Settings.Sounds), true);
 	// Finally, subtract one from the weapon's current magazine amount if it consumes ammo
 	if (_useAmmo) {global.invItem[weaponSlot][1]--;}
 	// Return that the weapon was successfully used by the player

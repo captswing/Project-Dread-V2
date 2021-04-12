@@ -32,6 +32,12 @@ zOffset = 0;
 hspdFraction = 0;
 vspdFraction = 0;
 
+// Stores the true movement speed for the entity in the current frame, which is the difference in time between
+// it and the previous frame. This allows for consistent movement speed without having to worry about changes
+// in the frame rate, which is an erratic and rapidly changing value.
+deltaHspd = 0;
+deltaVspd = 0;
+
 // Stores the current maximum possible horizontal and vertical velocities for the entity. These are different
 // from their respective const variables so that these can be altered without ever losing the initial values.
 maxHspd = 0;
