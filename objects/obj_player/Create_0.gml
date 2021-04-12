@@ -155,3 +155,7 @@ lightStrength = 0;
 lightColor = c_white;
 
 #endregion
+
+// FOR TESTING
+inventory_add(FLASHLIGHT, 1, 0);
+inventory_item_options_function(0, EQUIP_ITEM);

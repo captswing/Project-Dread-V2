@@ -11,6 +11,8 @@ function player_state_default(){
 		} else{ // Turning the flashlight back into the dim ambient light
 			update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);
 		}
+		// Play the flashlight toggle sound effect
+		play_sound_effect(snd_flashlight, get_audio_group_volume(Settings.Sounds), true);
 		// Finally, update collectability based on light sources
 		with(par_interactable) {checkForLights = true;}
 	}

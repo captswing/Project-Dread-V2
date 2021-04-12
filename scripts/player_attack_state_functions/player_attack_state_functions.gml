@@ -1,4 +1,6 @@
-// @description 
+/// @description The only state that is possible for the player's projectile bullets. This means it's only
+/// used when an object has a physical bullet when it's used, and not a single hitscan check.All grenade
+/// launcher shells used projectile attacks.
 function player_attack_state_projectile(){
 	// Check if the projectile has exceeded its maximum range. If it has, the bullet will be destroyed
 	if (point_distance(startX, startY, x, y) >= range){
