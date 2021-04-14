@@ -13,6 +13,7 @@ set_cur_state(player_state_default);
 entity_set_max_speed(1.25, 1.25, true);
 // Create a dim light source so the player is semi-visible even in complete darkness
 entity_create_light(0, -8, 15, 15, 0.1, c_ltgray, false);
+with(ambLight) {persistent = true;} // Makes the player's light source persistent like itself
 // Assign the player's starting amount of hitpoints, which can be upgraded over time
 maxHitpoints = 20;
 hitpoints = maxHitpoints;

@@ -197,8 +197,8 @@ function cutscene_set_camera_position(_x, _y){
 /// @param opaqueTime
 /// @param pauseForFade
 function cutscene_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime, _pauseForFade){
-	// If somehow the control object doesn't exist, skip this action
-	if (global.singletonID[? CONTROLLER] == noone){
+	// If somehow the effect handler object doesn't exist, skip this action
+	if (global.singletonID[? EFFECT_HANDLER] == noone){
 		cutscene_end_action();
 		return; // Exit before performing event actions
 	}
@@ -206,7 +206,7 @@ function cutscene_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime, _pauseForFade
 	// Creates the screen fade effect and optionally waits until it is opaue before moving onto the next
 	// instruction in the cutscene queue.
 	var _fadeFinished = false;
-	with(global.singletonID[? CONTROLLER]){
+	with(global.singletonID[? EFFECT_HANDLER]){
 		create_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime);
 		_fadeFinished = (fade.alpha >= 1);
 	}

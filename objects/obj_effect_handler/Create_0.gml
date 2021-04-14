@@ -13,6 +13,24 @@ visible = true;
 
 #region UNIQUE VARIABLE INITIALIZATION
 
+// Variable for Storing the Screen Fade Object /////////////////////////////////////
+
+// Holds the instance ID of the "Lightweight" screen fade object that handles any screen
+// fades that are needed by other objects. (Cutscenes, menus, etc.)
+fade = noone;
+
+////////////////////////////////////////////////////////////////////////////////////
+
+// Variables for the Current Weather Effect ////////////////////////////////////////
+
+// Stores the "Lightweight" object that handles the game's current weather effect. Also, the 
+// currently active weather type is tracked for when the weather is changed. Updating and
+// drawing the weather is all handled in the effect handler.
+weather = noone;
+weatherType = Weather.Clear;
+
+////////////////////////////////////////////////////////////////////////////////////
+
 // Variables that store the resulting surface after all effects have been processed; with two auxillary
 // surfaces that act as buffers to store the application surface whenever multiple passes are used in 
 // a shader's effect.

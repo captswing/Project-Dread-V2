@@ -30,10 +30,10 @@ function player_attack_hitscan_collision(_startX, _startY, _endX, _endY, _zOffse
 	ds_list_destroy(_collisions);
 }
 
-/// @description Handles collision with by a player's attack projectile/melee/hitscan with an enemy object. 
-/// Checks if the attack should cause a stunlock to the player relative to the damage that the attack dealt. 
-/// If the damage is less than the threshold value, the stun will be calculated by the percent chance of stun 
-/// out of 100% (Stored as a value between 0 and 1).
+/// @description Handles collision with by a player's projectile/melee attack with an enemy object. Checks if 
+/// the attack should cause a stunlock to the player relative to the damage that the attack dealt. If the 
+/// damage is less than the threshold value, the stun will be calculated by the percent chance of stun out of 
+/// 100% (Stored as a value between 0 and 1).
 /// @param enemyID
 function player_attack_enemy_collision(_enemyID){
 	var _playerDamage = damage * global.gameplay.playerDamageMod;

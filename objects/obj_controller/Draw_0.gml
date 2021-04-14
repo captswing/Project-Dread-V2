@@ -1,8 +1,5 @@
 /// @description Weather Effects/Debug Stuff
 
-// Display the current weather effect if one is active
-with(weather) {weather_draw();}
-
 // DEBUGGING STUFF BELOW HERE (WILL BE DELETED EVENTUALLY)
 
 // Drawing collision boxes for entities

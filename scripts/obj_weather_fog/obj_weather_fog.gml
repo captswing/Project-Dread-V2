@@ -14,15 +14,17 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 	
 	// Initialize the required number of layers; store that number in another variable.
 	fogLayer = ds_list_create();
-	var _scale, _data;
+	var _scale, _xSize, _ySize, _data;
 	for (var i = 0; i < _totalLayers; i++){
 		// Calculate the scaling outside of the data array
 		_scale = abs(random_range(_minScale, _maxScale));
+		_xSize = round(fogWidth * _scale);
+		_ySize = round(fogHeight * _scale);
 		// Gather the data from the arguments and store them in a struct for the fog's layer attributes
 		_data = {
 			// The position of the fog in world-space
-			xPos : random(fogWidth * _scale),
-			yPos : random(fogHeight * _scale),
+			xPos : 0,
+			yPos : 0,
 			// The fractional variables that prevent any sub-pixel movement
 			xPosFraction : 0,
 			yPosFraction : 0,
@@ -30,9 +32,10 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 			xSpeed : random_range(-_maxSpeed, _maxSpeed),
 			ySpeed : random_range(-_maxSpeed, _maxSpeed),
 			// The horizontal and vertical size of the fog layer's sprite, and its scaling factor
-			xSize : fogWidth * _scale,
-			ySize : fogHeight * _scale,
-			scale : _scale,
+			xSize : _xSize,
+			ySize : _ySize,
+			xScale : _xSize / fogWidth,
+			yScale : _ySize / fogHeight,
 			// Finally, the alpha level of the layer
 			alpha : abs(random_range(_minAlpha, _maxAlpha))
 		}
@@ -72,7 +75,7 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 				// Ignore any fog layers that have a scale of 0 or an alpha of 0
 				if (alpha == 0 || xSize == 0 || ySize == 0) {continue;}
 				// Tile the fog sprite to cover the entirety of the visible screen for each layer
-				draw_sprite_tiled_ext(spr_mist_effect, 0, xPos, yPos, scale, scale, c_white, alpha);
+				draw_sprite_tiled_ext(spr_mist_effect, 0, xPos, yPos, xScale, yScale, c_white, alpha);
 			}
 		}
 	}

@@ -95,20 +95,6 @@ frameTimer = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-// VARIABLES FOR GLOBAL EFFECTS LIKE WEATHER AND SCREEN FADE ///////////////////////
-
-// Stores the "Lightweight" object that handles the game's universal screen fade. Updating
-// and drawing the effect are all handled in this controller object.
-fade = noone;
-
-// Stores the "Lightweight" object that handles the game's current weather effect. Also, the 
-// currently active weather type is tracked for when the weather is changed. Updating and
-// drawing the weather is all handled in this controller object.
-weather = noone;
-weatherType = Weather.Clear;
-
-////////////////////////////////////////////////////////////////////////////////////
-
 #endregion
 
 // FOR DEBUGGING AND TESTING

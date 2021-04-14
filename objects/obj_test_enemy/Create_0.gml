@@ -11,7 +11,7 @@ hitpoints = maxHitpoints;
 damage = 1;
 // 
 stunLockThreshold = 1.5;
-stunLockChance = 25;
+stunLockChance = 0.25;
 stunLockTime = 10;
 
 #endregion
