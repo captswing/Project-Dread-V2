@@ -12,11 +12,17 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 	fogWidth = sprite_get_width(spr_mist_effect);
 	fogHeight = sprite_get_height(spr_mist_effect);
 	
+	// The transition effect for this weather effect. It will simply fade the weather in and out at the
+	// speed set by the variable "alphaSpeed."
+	alpha = 0;
+	alphaSpeed = 0.01;
+	
 	// Initialize the required number of layers; store that number in another variable.
 	fogLayer = ds_list_create();
 	var _scale, _xSize, _ySize, _data;
 	for (var i = 0; i < _totalLayers; i++){
-		// Calculate the scaling outside of the data array
+		// Calculate the scaling outside of the data array, which determines the size of the fog layer in
+		// whole pixels. Then, the scale used to achieve that whole-pixel size is calculated in the struct.
 		_scale = abs(random_range(_minScale, _maxScale));
 		_xSize = round(fogWidth * _scale);
 		_ySize = round(fogHeight * _scale);
@@ -44,8 +50,16 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 	}
 	numLayers = _totalLayers;
 	
-	/// @description Updates the positions of each layer in the fog effect
+	/// @description Updates the positions of each layer in the fog effect. Also, handle alpha transition
+	/// for the weather effect to smoothly enter and exit.
 	function weather_update(){
+		// Fade in the weather effect or out depending on if the effect is closing or not.
+		alpha += isClosing ? -alphaSpeed * global.deltaTime : alphaSpeed * global.deltaTime;
+		if (alpha < 0 && isClosing) {isDestroyed = true;}
+		else if (alpha > 1) {alpha = 1;}
+		
+		// Loop through all active fog layers and update their relative positional offsets relative to their
+		// size and scale to provide seemless movement and wrapping.
 		for (var i = 0; i < numLayers; i++){
 			with(fogLayer[| i]){
 				// Handling horizontal movement; wrapping the value between its width and 0
@@ -69,13 +83,10 @@ function obj_weather_fog(_totalLayers, _maxSpeed, _minScale, _maxScale, _minAlph
 	
 	/// @description Draws each of the layers onto the screen in order from first to last
 	function weather_draw(){
-		// Loop through and draw all active layers with integer position values, to stop any sub-pixel drawing
+		var _alpha = alpha; // Store the overall alpha into a temporary variable for fast access
 		for (var i = 0; i < numLayers; i++){
-			with(fogLayer[| i]){
-				// Ignore any fog layers that have a scale of 0 or an alpha of 0
-				if (alpha == 0 || xSize == 0 || ySize == 0) {continue;}
-				// Tile the fog sprite to cover the entirety of the visible screen for each layer
-				draw_sprite_tiled_ext(spr_mist_effect, 0, xPos, yPos, xScale, yScale, c_white, alpha);
+			with(fogLayer[| i]){ // Tile the fog sprite to cover the entirety of the visible screen for each layer
+				draw_sprite_tiled_ext(spr_mist_effect, 0, xPos, yPos, xScale, yScale, c_white, alpha * _alpha);
 			}
 		}
 	}

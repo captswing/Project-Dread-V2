@@ -98,6 +98,6 @@ frameTimer = 0;
 #endregion
 
 // FOR DEBUGGING AND TESTING
-//show_debug_overlay(true);
+show_debug_overlay(true);
 showDebugInfo = false;
 showItems = false;

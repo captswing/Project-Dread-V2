@@ -16,6 +16,6 @@ if (global.settings[Settings.Scanlines]){ // Activate the scanline effect if cur
 	scanline_effect(0.1);
 }
 
-with(fade){ // Display the screen fade if the object exists
-	draw_sprite_ext(spr_rectangle, 0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, fadeColor, alpha);
+if (fade != noone){ // Display the screen fade if the object exists
+	draw_sprite_ext(spr_rectangle, 0, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 0, fade.fadeColor, fade.alpha);
 }

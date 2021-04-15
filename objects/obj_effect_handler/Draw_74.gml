@@ -3,7 +3,7 @@
 // The result shader is used on multiple occasions to store the effect of a previous shader in order to 
 // correctly apply it to another shader. Also gets texture ID for any shaders that need to use it
 if (!surface_exists(resultSurface)){
-	resultSurface = surface_create(WINDOW_WIDTH, WINDOW_HEIGHT);	
+	resultSurface = surface_create(WINDOW_WIDTH, WINDOW_HEIGHT);
 	resultTexture = surface_get_texture(resultSurface);
 }
 
@@ -26,12 +26,11 @@ surface_set_target(resultSurface);
 draw_surface(application_surface, 0, 0);
 surface_reset_target();
 
-// The post processing effects are ordered as follows:
+// The world-space post processing effects are ordered as follows:
 //		1	--		Lighting System
 //		2	--		Bloom
 //		3	--		Blur
 //		4	--		Chromatic Abberation
-//		5	--		Heat Haze
 
 if (lightingEnabled){ // Activate lighting system if currently enabled
 	lightsDrawn = lighting_system(lightColor, lightBrightness, lightContrast, lightSaturation);
@@ -49,9 +48,5 @@ if (global.settings[Settings.Aberration]){ // Activate the aberration effect if 
 	aberration_effect(0.15);
 }
 
-if (isHazeEnabled){ // Activate the heat haze shader if it's currently enabled
-	heat_haze_effect(0.9, 0.01, 0.004);
-}
-
-// After applying all effects to the surface; render the resulting surface
+// Draw the final surface to the screen with all active post-processing effects applied
 draw_surface(resultSurface, 0, 0);

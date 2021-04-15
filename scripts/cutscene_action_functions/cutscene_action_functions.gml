@@ -215,14 +215,24 @@ function cutscene_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime, _pauseForFade
 	if (!_pauseForFade || _fadeFinished) {cutscene_end_action();}
 }
 
-/// @description Allows for creation of an item during a cutscene. Lasts one frame before moving onto the next action
+/// @description Allows for creation of an item during a cutscene. Lasts one frame before moving onto the 
+/// next cutscene action.
 /// @param x
 /// @param y
-/// @param itemName
+/// @param name
 /// @param quantity
 /// @param durability
-function cutscene_create_item(_x, _y, _itemName, _quantity, _durability){
-	create_item(_x, _y, _itemName, _quantity, _durability);
+function cutscene_create_item(_x, _y, _name, _quantity, _durability){
+	create_item(_x, _y, _name, _quantity, _durability);
+	cutscene_end_action();
+}
+
+/// @description Changes the current weather effect to another at a set intensity. This also lasts one frame
+/// before moving onto the next curscene action.
+/// @param type
+/// @param intensity
+function cutscene_change_weather(_type, _intensity){
+	with(global.singletonID[? EFFECT_HANDLER]) {set_weather(_type, _intensity);}
 	cutscene_end_action();
 }
 

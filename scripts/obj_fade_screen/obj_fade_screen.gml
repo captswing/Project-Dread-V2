@@ -1,15 +1,15 @@
 /// @description A simple "lightweight" object that fades in a color at a determinate speed, which will then
 /// cover the whole screen for a set amount of time before fading out, which will signal to whatever object
 /// that created this one to delete it. Otherwise, memory leaks will begin...
-/// @param fadeColor
-/// @param fadeSpeed
+/// @param color
+/// @param speed
 /// @param opaqueTime
-function obj_fade_screen(_fadeColor, _fadeSpeed, _opaqueTime) constructor{
+function obj_fade_screen(_color, _speed, _opaqueTime) constructor{
 	// The characteristics of how the fade will appear on-screen. The first variable controls the color the
 	// screen will fade into, the speed determines how fast that color will appear and disappear, and the
 	// opaque time determines how long the screen will remain the set color. (60 = 1 second)
-	fadeColor = _fadeColor;
-	fadeSpeed = _fadeSpeed;
+	fadeColor = _color;
+	fadeSpeed = _speed;
 	opaqueTime = _opaqueTime;
 	
 	// What controls the alpha's fading in and out, as well as how visible the color is currently on screen.

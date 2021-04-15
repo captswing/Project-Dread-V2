@@ -1,13 +1,3 @@
-///
-/// NOTE -- The order to apply these shaders is VERY IMPORTANT
-///				1	--	Lighting System
-///				2	--	Bloom Effect
-///				3	--	Chromatic Aberration Effect
-///				4	--	Heat Haze Effect
-///				5	--	Blur Effect
-///				6	--	Scanline Effect
-///
-
 /// @description Holds all the code for processing the simple lighting shader. First it goes through all existing
 /// and visible light sources in the room and draws them to a surface. After that, the shader effect is applied
 /// with the light surface; resulting in the final result output onto the screen.
@@ -74,22 +64,22 @@ function lighting_system(_lightColor, _brightness, _contrast, _saturation){
 /// @param bloomDarken
 /// @param bloomSaturation
 function bloom_effect(_bloomThreshold, _bloomRange, _blurSteps, _sigma, _bloomIntensity, _bloomDarken, _bloomSaturation){
-	// Before processing anything, copy over the resultSurface to auxSurfaceA
+	// Store the unaltered result surface in the second auxillary surface to avoid overwritting during the blurring process
 	surface_copy(auxSurfaceB, 0, 0, resultSurface);
-
+	
 	// First pass: Draw bright areas to resultSurface
 	shader_set(bloomShaderLuminence);
 	// Set all the uniforms to their corresponding values
 	shader_set_uniform_f(sBloomThreshold, _bloomThreshold);
 	shader_set_uniform_f(sBloomRange, _bloomRange);
-
+	
 	surface_set_target(resultSurface);
 	draw_surface(auxSurfaceB, 0, 0);
 	surface_reset_target();
-
+	
 	shader_reset();
-
-	// Second pass: Blur bright areas to auxSurfaceB
+	
+	// Apply the blur effect to the areas that will be bloomed
 	blur_effect(_blurSteps, _sigma);
 
 	// Third pass: Blend the blurred surface with the stored result surface
@@ -98,70 +88,13 @@ function bloom_effect(_bloomThreshold, _bloomRange, _blurSteps, _sigma, _bloomIn
 	shader_set_uniform_f(sBloomIntensity, _bloomIntensity);
 	shader_set_uniform_f(sBloomDarken, _bloomDarken);
 	shader_set_uniform_f(sBloomSaturation, _bloomSaturation);
-	texture_set_stage(sBloomTexture, resultTexture);
-	gpu_set_tex_filter_ext(sBloomTexture, true); // Linear filter for bloom surface for smoother looking bloom
-
-	surface_set_target(auxSurfaceA);
+	texture_set_stage(sBloomTexture, resultSurface);
+	
+	surface_set_target(resultSurface);
 	draw_surface(auxSurfaceB, 0, 0);
 	surface_reset_target();
 
 	shader_reset();
-
-	// Finally, copy to the surface that gets rendered after all post-processing effects
-	surface_copy(resultSurface, 0, 0, auxSurfaceA);
-}
-
-/// @description Holds the code for processing the chromatic aberration shader effect. It's a simple shader
-/// where colors get more distorted the further from the center the pixel is on the application surface.
-/// @param aberration
-function aberration_effect(_aberration){
-	shader_set(abrerrationShader);
-	// Set the uniform to its corresponding value.
-	shader_set_uniform_f(sAberration, _aberration);
-
-	// Draw the aberration effect to the first auxillary surface
-	surface_set_target(auxSurfaceA);
-	gpu_set_tex_filter(true); // Without a linear filter this shader looks like garbage
-
-	draw_surface(resultSurface, 0, 0);
-
-	gpu_set_tex_filter(false);
-	surface_reset_target();
-
-	shader_reset();
-
-	// Finally, copy to the surface that gets rendered after all post-processing effects
-	if (!isHazeEnabled){ // Don't copy to the result texture if the heat haze effect is enabled
-		surface_copy(resultSurface, 0, 0, auxSurfaceA);
-	}
-}
-
-/// @description Holds the code responsible for creating the wavy heat haze effect on the screen. The wave is
-/// caused by a texture (spr_heat_haze) being sampled from different points relative to a timer variable.
-/// @param hazeSize
-/// @param hazeStrength
-/// @param hazeSpeed
-function heat_haze_effect(_hazeSize, _hazeStrength, _hazeSpeed) {
-	shader_set(heatHazeShader);
-	// Set the uniforms to their corresponding values
-	shader_set_uniform_f(sHazeTime, time);
-	shader_set_uniform_f(sHazeSize, _hazeSize);
-	shader_set_uniform_f(sHazeStrength, _hazeStrength);
-	texture_set_stage(sHazeTexture, hazeTexture);
-
-	// Draw the aberration effect to the result surface
-	surface_set_target(resultSurface);
-	gpu_set_tex_filter(true); // Without a linear filter this shader looks like garbage
-
-	draw_surface(auxSurfaceA, 0, 0);
-
-	gpu_set_tex_filter(false);
-	surface_reset_target();
-
-	shader_reset();
-
-	// Increment the shader's time value
-	time += global.deltaTime * _hazeSpeed;
 }
 
 /// @description Holds all the code for processing a two-step blur shader effect. The first pass is a horizontal
@@ -190,6 +123,30 @@ function blur_effect(_blurSteps, _sigma) {
 	surface_reset_target();
 
 	shader_reset();
+}
+
+/// @description Holds the code for processing the chromatic aberration shader effect. It's a simple shader
+/// where colors get more distorted the further from the center the pixel is on the application surface.
+/// @param aberration
+function aberration_effect(_aberration){
+	shader_set(abrerrationShader);
+	// Set the uniform to its corresponding value.
+	shader_set_uniform_f(sAberration, _aberration);
+
+	// Draw the aberration effect to the first auxillary surface
+	surface_set_target(auxSurfaceA);
+	gpu_set_tex_filter(true); // Without a linear filter this shader looks like garbage
+
+	draw_surface(resultSurface, 0, 0);
+
+	gpu_set_tex_filter(false);
+	surface_reset_target();
+
+	shader_reset();
+	
+	surface_set_target(resultSurface);
+	draw_surface(auxSurfaceA, 0, 0);
+	surface_reset_target();
 }
 
 /// @description Holds the code that handles the scanline shader on the GUI surface. It's a very simple shader 

@@ -111,26 +111,6 @@ sAberration =		shader_get_uniform(abrerrationShader, "aberration");
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-// Variables for the Heat Haze Shader //////////////////////////////////////////////
-
-// This variable holds a reference to the shader's unique asset index value.
-heatHazeShader = shd_heat_haze;
-// Get the uniform locations; storing them in local variables
-sHazeTime =			shader_get_uniform(heatHazeShader, "time");
-sHazeSize =			shader_get_uniform(heatHazeShader, "size");
-sHazeStrength =		shader_get_uniform(heatHazeShader, "strength");
-sHazeTexture =		shader_get_sampler_index(heatHazeShader, "hazeTexture");
-
-// A flag that enables the heat haze effect
-isHazeEnabled = false;
-
-// A variable that holds the texture ID for the heat haze sprite used in this shader.
-// The variable below that one tracks the time used to move the shader's effect around.
-hazeTexture =		sprite_get_texture(spr_heat_haze, 0);
-time = 0;
-
-////////////////////////////////////////////////////////////////////////////////////
-
 // Variables for the Scanline Shader ///////////////////////////////////////////////
 
 // This variable holds a reference to the shader's unique asset index value.

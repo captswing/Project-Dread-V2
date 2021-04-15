@@ -18,8 +18,14 @@ if (fade != noone){
 	}
 }
 
-// Updating the currently active weather object
-with(weather) {weather_update();}
+// Updating the currently active weather object and handle closing transition for changing effects.
+var _isDestroyed = false;
+with(weather){
+	weather_update();
+	_isDestroyed = isDestroyed;
+}
+// Change the effect once the weather effect is considered "destroyed"
+if (_isDestroyed) {change_weather_effect(weatherType, 0);}
 
 // DEBUGGING COMMANDS //
 
@@ -38,18 +44,18 @@ if (_key){ // Only search through the switch tree if a key was actually pressed
 		case 52:	// Key -- "4"	(Toggling Chromatic Aberration)
 			global.settings[Settings.Aberration] = !global.settings[Settings.Aberration];
 			break;
-		case 53:	// Key -- "5"	(Toggling Heat Haze)
-			isHazeEnabled = !isHazeEnabled;
-			break;
-		case 54:	// Key -- "6"	(Toggling Film Grain)
+		case 53:	// Key -- "5"	(Toggling Film Grain)
 			global.settings[Settings.FilmGrain] = !global.settings[Settings.FilmGrain];
 			break;
-		case 55:	// Key -- "7"	(Toggling Scanlines)
+		case 54:	// Key -- "6"	(Toggling Scanlines)
 			global.settings[Settings.Scanlines] = !global.settings[Settings.Scanlines];
 			break;
-		case 56:	// Key -- "8"	(Toggling Mist Weather)
-			if (weather == noone) {set_weather(Weather.Mist);}
-			else {set_weather(Weather.Clear);}
+		case 55:	// Key -- "7"	(Toggling Mist Weather)
+			if (weather == noone) {set_weather(Weather.Mist, 0);}
+			else {set_weather(Weather.Clear, 0);}
+			break;
+		case 56:	// Key -- "8"	(Toggling Screen Fade)
+			create_screen_fade(c_black, 0.05, 60);
 			break;
 	}
 }
