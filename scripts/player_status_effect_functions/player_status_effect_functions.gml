@@ -1,4 +1,67 @@
-/// @description Sets the player's bleeding status condition. Optionally, the condition timer will be reset
+/// @description
+/// @param isPoisoned
+function player_set_poisoned(_isPoisoned){
+	isPoisoned = _isPoisoned;
+	if (!isBleeding) {conditionTimer = 0;} // Reset condition timer if it isn't currently active for bleeding
+	return argument_count;
+}
+
+/// @description
+/// @param isBleeding
+function player_set_bleeding(_isBleeding){
+	isBleeding = _isBleeding;
+	if (!isPoisoned) {conditionTimer = 0;} // Reset condition timer if it isn't current active for poison
+	return argument_count;
+}
+
+/// @description
+/// @param effectType
+/// @param duration
+/// @param startFunction
+/// @param endFunction
+function player_add_effect(_effectType, _duration, _startFunction, _endFunction){
+	// If the effect exists, overwrite the duration only if it's greater than the previous duration or if
+	// the duration being supplied is an indefinite duration value. If so, overwrite the current duration 
+	// value with the new one.
+	var _index = player_get_effect(_effectType); 
+	if (_index != -1){ // Don't add the effect to the timers since there's a duplicate; just attempt to overwrite the duration
+		if (effectTimers[| _index][0] == _effectType && (effectTimers[| _index][0] < _duration || effectTimers[| _index][0] == INDEFINITE_EFFECT)){
+			effectTimers[| _index][1] = _duration;
+		}
+	} else{ // Pushes the effect with all of its details onto the array of current effects
+		// Optionally, a script can be executed at the start of the effect, and also at the end. This allows 
+		// for easily reversible effects like temporary max HP loss/max sanity loss, and vice versa.
+		if (_startFunction != NO_SCRIPT && script_exists(_startFunction)){
+			script_execute(_startFunction);
+		}
+		ds_list_add(effectTimers, [_effectType, _duration, _endFunction]);
+	}
+	return argument_count;
+}
+
+/// @description
+/// @param effectType
+/// @param performEndFunction
+function player_remove_effect(_effectType, _performEndFunction){
+	var _index = ds_list_find_index(effectTimers, _effectType);
+	if (!is_undefined(_index)){
+		ds_list_delete(effectTimers, _index);
+		return -1;
+	}
+	return argument_count;
+}
+
+/// @description
+/// @param effectType
+function player_get_effect(_effectType){
+	var _length = ds_list_size(effectTimers);
+	for (var i = 0; i < _length; i++){
+		if (effectTimers[| i][0] == _effectType) {return i;}
+	}
+	return -1;
+}
+
+/*/// @description Sets the player's bleeding status condition. Optionally, the condition timer will be reset
 /// if the player isn't currently poisoned, since both conditions are tied to the same timer variable.
 /// @param isBleeding
 function set_bleeding(_isBleeding){
@@ -73,8 +136,15 @@ function update_max_sanity(_modifier){
 /// @param endFunction
 /// @param startFunction
 function add_new_effect(_effectType, _duration, _endFunction, _startFunction){
-	if (is_effect_active(_effectType)){
-		return; // Prevents two identical effect timers from being active at once
+	// If the effect exists, overwrite the duration only if it's greater than the previous duration or if
+	// the duration being supplied is an indefinite duration value. If so, overwrite the current duration 
+	// value with the new one.
+	var _index = get_active_effect(_effectType); 
+	if (_index != -1){ // Don't add the effect to the timers since there's a duplicate; just attempt to overwrite the duration
+		if (effectTimers[| _index][0] == _effectType && (effectTimers[| _index][0] < _duration || effectTimers[| _index][0] == INDEFINITE_EFFECT)){
+			effectTimers[| _index][1] = _duration;
+		}
+		return;
 	}
 	// Optionally, a script can be executed at the start of the effect, and also at the end. This allows 
 	// for easily reversible effects like temporary max HP loss/max sanity loss, and vice versa.
@@ -86,14 +156,15 @@ function add_new_effect(_effectType, _duration, _endFunction, _startFunction){
 }
 
 /// @description Linearly searches through the array of currently active effect timers for the required one.
-/// If it's found, the function will return true, and will return false if the effect isn't currently active.
+/// If it's found, the function will return that index, and will return undefinted if the effect isn't 
+/// currently active.
 /// @param effectType
-function is_effect_active(_effectType){
+function get_active_effect(_effectType){
 	var _length = ds_list_size(effectTimers);
 	for (var i = 0; i < _length; i++){
 		if (effectTimers[| i][0] == _effectType){
-			return true;
+			return i;
 		}
 	}
-	return false;
+	return -1;
 }

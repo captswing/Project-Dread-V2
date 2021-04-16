@@ -1,159 +1,161 @@
-/// @description Attemps to equip the item within the slot that was provided. If the item in that slot isn't
-/// able to be equiped by the player, nothing will occur. Otherwise, the item's type will be parsed and the
-/// item will be equipped to the correct slot in the player's equipment array.
+/// @description 
 /// @param slot
-/// @param itemType
-function player_equip_item(_slot, _itemType){
-	// If an invalid slot value was given, don't attempt to equip the item
-	if (_slot < 0 || _slot >= array_length(global.invItem)){
-		return false;
+function player_equip_item(_slot){
+	// Don't allow the function to execute anything if the slot provided is outside of the valid range
+	if (_slot < 0 || _slot > array_length(global.invItem)) {return;}
+	// Store the item's equipment data and equip script into variables
+	var _data, _script;
+	_data = global.itemData[? EQUIPABLE_DATA][? global.invItem[_slot][0]];
+	_script = asset_get_index(_data[? EQUIP_SCRIPT]);
+	// Before executing the script found inside of the data map, make sure it actually exists as an asset.
+	// Only if it exists will the item be equipped onto the player.
+	if (script_exists(_script)){
+		var _array = ds_list_to_array(_data[? EQUIP_ARGUMENTS]);
+		script_execute_ext(_script, _array);
+		global.invItem[_slot][3] = true; // Set the equipped flag on the item to true
+		// If the item was a weapon that was equipped, set the weapon's slot variable to the correct value.
+		var _type = global.itemData[? ITEM_LIST][? global.invItem[_slot][0]][? ITEM_TYPE];
+		if (string_count("Weapon", _type) == 1) {weaponSlot = _slot;}
 	}
-	
-	// This flag lets the function know whether the item was successfully equipped to the player or not.
-	var _itemEquipped = true;
-	
-	// Always attempt to unequip the weapon from the necessary slot. This prevents multiple
-	// items to have their effects active in a single slot.
-	player_unequip_item(_slot, _itemType);
-	
-	switch(_itemType){
-		case WEAPON: // Equipping a gun/melee weapon
-		case WEAPON_INF:
-			// Get the weapon's stats and apply them to the player's variables
-			var _data = global.itemData[? WEAPON_DATA][? global.invItem[_slot][0]];
-			weaponSlot =	_slot;
-			damage =		_data[? DAMAGE];
-			numBullets =	_data[? NUM_BULLETS];
-			range =			_data[? RANGE];
-			accuracy =		_data[? ACCURACY];
-			fireRate =		_data[? FIRE_RATE];
-			reloadRate =	_data[? RELOAD_RATE];
-			bulletSpd =		_data[? BULLET_SPEED];
-			endFrame =		_data[? END_FRAME];
-			ammoTypes =		_data[? AMMO_TYPES];
-			
-			// Next, set the weapon's sounds and the player's current sprites
-			player_set_weapon_sounds(global.invItem[_slot][0]);
-			player_set_sprites(global.invItem[_slot][0]);
-			
-			// Finally, place the name of the item into the equipment slot
-			equipSlot[EquipSlot.Weapon] = global.invItem[_slot][0];
-			break;
-		case ARMOR: // Equipping protection onto the player
-			if (global.invItem[_slot][0] == KEVLAR_VEST){ // The standard kevlar vest will slow the player down slightly
-				entity_update_max_speed(-maxHspdConst * 0.35, -maxVspdConst * 0.35);
-			}
-			damageResistance -= 0.25;
-			// Finally, place the name of the item into the equipment slot
-			equipSlot[EquipSlot.Armor] = global.invItem[_slot][0];
-			break;
-		case LIGHT_SOURCE: // A light source that surrounds the player when equipped
-			// The effectiveness of the light source differs between both flashlights; stats are located below
-			if (global.invItem[_slot][0] == FLASHLIGHT){
-				lightSize = 64;
-				lightStrength = 0.9;
-				lightColor = c_white;
-			} else if (global.invItem[_slot][0] == BRIGHT_FLASHLIGHT){
-				lightSize = 112;
-				lightStrength = 1.15;
-				lightColor = c_white;
-			}
-			update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);
-			isLightActive = true; // Always turn the flashlight on when it's first equipped
-			// Finally, place the name of the item into the equipment slot
-			equipSlot[EquipSlot.Flashlight] = global.invItem[_slot][0];
-			break;
-		case AMULET: // Equips an amulet with a unique effect to one of two available slots
-		
-			// TODO -- Add equipping amulet logic here
-			
-			break;
-		default: // No item could be equipped because an invalid slot ID was provided
-			_itemEquipped = false;
-			break;
-	}
-	
-	// If the item was successfully equipped; let the inventory know that's the case.
-	if (_itemEquipped) {global.invItem[_slot][3] = true;}
-	
-	return _itemEquipped;
 }
 
-/// @description Unequips the item from a player's equipment slot based on the item's type. If the type
-/// passed in wasn't a valid piece of equipment, nothing will occur and the function will return false.
+/// @description 
 /// @param slot
-/// @param itemType
-function player_unequip_item(_slot, _itemType){
-	// If an invalid slot value was given, don't attempt to uneuip the item
-	if (_slot < 0 || _slot >= array_length(global.invItem)){
-		return false;
+function player_unequip_item(_slot){
+	// Don't allow the function to execute anything if the slot provided is outside of the valid range
+	if (_slot < 0 || _slot > array_length(global.invItem)) {return;}
+	// Store the item's equipment data and unequip script into variables
+	var _data, _script; 
+	_data = global.itemData[? EQUIPABLE_DATA][? global.invItem[_slot][0]];
+	_script = asset_get_index(_data[? UNEQUIP_SCRIPT]);
+	// Before executing the script found inside of the data map, make sure it actually exists as an asset.
+	// Only if it exists will the item be attempted to be unequipped from the player.
+	if (script_exists(_script)){
+		var _array = ds_list_to_array(_data[? UNEQUIP_ARGUMENTS]);
+		script_execute_ext(_script, _array);
+		global.invItem[_slot][3] = true; // Set the equipped flag on the item to false
 	}
-	
-	// This flag is set to false if the supplied item was successfully unequipped.
-	var _itemUnequipped = true;
-	
-	switch(_itemType){
-		case WEAPON: // Unequipping the current weapon; resetting all stats back to 0
-		case WEAPON_INF:
-			// Reset all of the weapon's stat values back to 0; the slot is set to -1, since 0 is
-			// a valid slot within the inventory
-			weaponSlot =   -1;
-			damage =		0;
-			numBullets =	0;
-			range =			0;
-			accuracy =		0;
-			fireRate =		0;
-			reloadRate =	0;
-			bulletSpd =		0;
-			startFrame =	0;
-			endFrame =		0;
-			curAmmoType =	0;
-			ds_list_clear(ammoTypes);
-			
-			// Also, reset the modification values for their respective stats
-			damageMod =		0;
-			rangeMod =		0;
-			accuracyMod =	0;
-			fireRateMod =	0;
-			reloadRateMod = 0;
-			
-			// Next, reset the weapon's sounds and the player's current sprites
-			player_set_weapon_sounds(NO_ITEM);
-			player_set_sprites(NO_ITEM);
-			
-			// Finally, remove the name from the equipment slot to free it
-			equipSlot[EquipSlot.Weapon] = NO_ITEM;
-			break;
-		case ARMOR: // Resets the applied damage resistance/movement penalties
-			if (_name == KEVLAR_VEST){ // Reset the move speed penalty if the player unequips a standard kevlar vest
-				entity_update_max_speed(maxHspdConst * 0.35, maxVspdConst * 0.35);
-			}
-			damageResistance += 0.25;
-			// Finally, remove the name from the equipment slot to free it
-			equipSlot[EquipSlot.Weapon] = NO_ITEM;
-			break;
-		case LIGHT_SOURCE: // Returns the player's ambient light back to its default values
-			update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);
-			isLightActive = false; // Always disable the light when unequipping it
-			// Finally, remove the name from the equipment slot to free it
-			equipSlot[EquipSlot.Flashlight] = NO_ITEM;
-			break;
-		case AMULET: // Removes the amulet from the second slot AND THEN the first slot; along with their effect
-			
-			// TODO -- Add amulet removal logic here
-			
-			break;
-		default: // No item was unequipped because an invalid slot ID was provided
-			_itemUnequipped = false;
-			break;
+}
+
+/// @description 
+/// @param name
+function player_equip_weapon(_name){
+	// If another weapon was currently equipped to the player, reset all the modifier values back to 0 and
+	// also clear the list containing the names of all the different ammunition types.
+	if (equipSlot[EquipSlot.Weapon] != NO_ITEM){
+		var _slot = inventory_find_equipped_item(equipSlot[EquipSlot.Weapon]);
+		global.invItem[_slot][3] = false;
+		damageMod =			0;
+		rangeMod =			0;
+		accuracyMod =		0;
+		fireRateMod =		0;
+		reloadRateMod =		0;
+		curAmmoType =		0;
+		ds_list_clear(ammoTypes);
 	}
-	
-	// Sets the "equipped" flag of the item to false, regardless of if the item was successfully
-	// unequiped or not. This is the case because it doesn't actually matter if an item that can't
-	// be equipped has the flag set to false, so it's set anyway.
-	global.invItem[_slot][3] = false;
-	
-	return _itemUnequipped;
+	// After the modifier data is cleared or it didn't need to be cleared in the first place, get the weapon's
+	// data based on its name and add its data to the player's weapon stat vairables.
+	var _data = global.itemData[? WEAPON_DATA][? _name];
+	damage =				_data[? DAMAGE];
+	numBullets =			_data[? NUM_BULLETS];
+	range =					_data[? RANGE];
+	accuracy =				_data[? ACCURACY];
+	fireRate =				_data[? FIRE_RATE];
+	reloadRate =			_data[? RELOAD_RATE];
+	bulletSpd =				_data[? BULLET_SPEED];
+	startFrame =			_data[? START_FRAME];
+	endFrame =				_data[? END_FRAME];
+	ammoTypes =				_data[? AMMO_TYPES];
+	// Since the weapon sprite/sound data is stored in lists within the weapon data, we need to pull it out
+	// of the lists and into individual variables.
+	var _sounds = _data[? SOUNDS]; // Gathering the sound data
+	weaponUseSound =		asset_get_index(_sounds[| 0]);
+	weaponReloadSound =		asset_get_index(_sounds[| 1]);
+	var _sprites = global.itemData[? WEAPON_DATA][? INF_CHAINSAW][? SPRITES]; // Gathering the sprite data
+	standSprite =			asset_get_index(_sprites[| 0]);
+	walkSprite =			asset_get_index(_sprites[| 1]);
+	aimingSprite =			asset_get_index(_sprites[| 2]);
+	recoilSprite =			asset_get_index(_sprites[| 3]);
+	reloadSprite =			asset_get_index(_sprites[| 4]);
+}
+
+/// @description 
+/// @param name
+function player_unequip_weapon(){
+	// Reset all the main weapon variables, which store the initial stats and ammunition types.
+	weaponSlot =		   -1;
+	damage =				0;
+	numBullets =			0;
+	range =					0;
+	accuracy =				0;
+	fireRate =				0;
+	reloadRate =			0;
+	bulletSpd =				0;
+	startFrame =			0;
+	endFrame =				0;
+	curAmmoType =			0;
+	ds_list_clear(ammoTypes);
+	// Also, reset the sound variables to -1 and all sprites back to Claire's unarmed sprites. There are
+	// no sprites for aiming, firing, and reloding when no weapon is equipped, so using those sprites while
+	// Claire in unarmed will result in a crash.
+	weaponUseSound =       -1;
+	weaponReloadSound =    -1;
+	standSprite =			spr_claire_unarmed_stand;
+	walkSprite =			spr_claire_unarmed_walk;
+	aimingSprite =		   -1;
+	recoilSprite =		   -1;
+	reloadSprite =		   -1;
+}
+
+/// @description 
+/// @param name
+function player_equip_flashlight(_name){
+	// Set the player variables for the flashlight's characteristics, for when it's toggled on from off
+	// after already being equipped, which is entirely possible by pressing the flashlight key.
+	var _data = global.itemData[? FLASHLIGHT_DATA][? _name];
+	lightSize =			_data[? SIZE];
+	lightStrength =		_data[? STRENGTH];
+	lightColor =		make_color_rgb(_data[? COLOR][| 0], _data[? COLOR][| 0], _data[? COLOR][| 2]);
+	isLightActive =		true;
+	// Update the light and set the lightActive variable to true, to let the game know it is on.
+	update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);
+	equipSlot[EquipSlot.Flashlight] = _name;
+}
+
+/// @description 
+function player_unequip_flashlight(){
+	update_light_settings(ambLight, 15, 15, 0.05, c_ltgray);
+	equipSlot[EquipSlot.Flashlight] = NO_ITEM;
+}
+
+/// @description 
+/// @param name
+function player_equip_armor(_name){
+	// Unequip the previous armor if one is currently equipped by the player
+	if (equipSlot[EquipSlot.Armor] != NO_ITEM){
+		var _slot = inventory_find_equipped_item(equipSlot[EquipSlot.Armor]);
+		global.invItem[_slot][3] = false;
+		player_unequip_armor(equipSlot[EquipSlot.Armor]);
+	}
+	// Get the stats for the armor that is being equipped, which is the damage resistance and maximum 
+	// speed modifier values.
+	var _data = global.itemData[? ARMOR_DATA][? _name];
+	entity_update_max_speed(-maxHspdConst * _data[? SPEED_MODIFIER], -maxVspdConst * _data[? SPEED_MODIFIER]); 
+	damageResistance -= _data[? DAMAGE_RESIST];
+	equipSlot[EquipSlot.Armor] = _name;
+}
+
+/// @description 
+/// @param name
+function player_unequip_armor(_name){
+	// Exit the function if the armor that is equipped doesn't match the provided name
+	if (equipSlot[EquipSlot.Armor] != _name) {return;}
+	// Only unequip the armor and restore the player's original stats if it is the same armor that is
+	// equipped to them currently.
+	var _data = global.itemData[? ARMOR_DATA][? _name];
+	entity_update_max_speed(maxHspdConst * _data[? SPEED_MODIFIER], maxVspdConst * _data[? SPEED_MODIFIER]); 
+	damageResistance += _data[? DAMAGE_RESIST];
+	equipSlot[EquipSlot.Armor] = NO_ITEM;
 }
 
 /// @description Attempts to swap to the next ammunition type that the weapon can take. If the player
@@ -210,57 +212,6 @@ function player_swap_current_ammo(_prevAmmoType){
 	
 	// No ammunition could be swapped; return false
 	return false;
-}
-
-/// @description Changes the weapon's sound effects to the currently equipped weapon. Likewise, the same function
-/// can also reset those sound effects to their default values (-1) if a non-valid item is passed into it as
-/// an argument.
-/// @param name
-function player_set_weapon_sounds(_name){
-	// TODO -- Add the rest of the weapon sounds here
-	switch(_name){
-		case HANDGUN:				// 9mm Handgun sounds
-			weaponUseSound = snd_handgun0;
-			weaponReloadSound =	-1;
-			break;
-		case HUNTING_RIFLE:			// Hunting rifle sounds
-			weaponUseSound = snd_hunting_rifle0;
-			weaponReloadSound =	-1;
-			break;
-		case HAND_CANNON:			// Hand cannon sounds
-			weaponUseSound = snd_hand_cannon0;
-			weaponReloadSound =	-1;
-			break;
-		case SUBMACHINE_GUN:		// Submachine gun sounds
-			weaponUseSound = snd_submachine_gun0;
-			weaponReloadSound =	-1;
-			break;
-		case GRENADE_LAUNCHER:		// Grenade launcher sounds
-		case INF_NAPALM_LAUNCHER:	// Infinite napalm launcher sounds
-			weaponUseSound = snd_grenade_launcher0;
-			weaponReloadSound = -1;
-			break;
-		default:				// Reset current sounds
-			weaponUseSound = -1;
-			weaponReloadSound =	-1;
-			break;
-	}
-}
-
-/// @description Sets the player's current sprites to the weapon that was equipped. Likewise, the sprites
-/// can be reset using the same function by putting a non-weapon item into the argument space.
-/// @param name
-function player_set_sprites(_name){
-	switch(_name){
-		// TODO -- Add sprites here based on weapons
-		default:				// Unarmed sprites will be set
-			standSprite = spr_claire_unarmed_stand;
-			walkSprite = spr_claire_unarmed_walk;
-			aimingSprite = -1;
-			reloadSprite = -1;
-			recoilSprite = -1;
-			break;
-	}
 }
 
 /// @description Using the player's current weapon. The effect of the weapon can either be a hitscan attack

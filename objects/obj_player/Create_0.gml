@@ -159,4 +159,7 @@ lightColor = c_white;
 
 // FOR TESTING
 inventory_add(FLASHLIGHT, 1, 0);
-inventory_item_options_function(0, EQUIP_ITEM);
+inventory_add(HANDGUN, 7, 60);
+inventory_add(HANDGUN_AMMO_PLUS, 35, 0);
+player_equip_item(0);
+player_equip_item(1);

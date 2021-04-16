@@ -10,14 +10,14 @@
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
   },
-  "soundFile": "snd_submachine_gun0.wav",
-  "duration": 1.407834,
+  "soundFile": "snd_hand_cannon_fire.wav",
+  "duration": 1.504252,
   "parent": {
     "name": "Weaponry",
     "path": "folders/Sounds/Objects/Entities/Dynamic/obj_player/Weaponry.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snd_submachine_gun0",
+  "name": "snd_hand_cannon_fire",
   "tags": [],
   "resourceType": "GMSound",
 }

@@ -58,19 +58,6 @@
 #macro	MOVE_ITEM					"Move"
 #macro	DROP_ITEM					"Drop"
 
-// Item data map values
-#macro	ITEM_LIST					"Item List"
-#macro	CRAFTING_DATA				"Crafting Data"
-#macro	WEAPON_DATA					"Weapon Data"
-#macro	AMMO_DATA					"Ammo Data"
-#macro	CONSUMABLE_DATA				"Consumable Data"
-
-// Item list map values
-#macro	ITEM_TYPE					"Type"
-#macro	EQUIPMENT_TYPE				"Equipment Type"
-#macro	DESCRIPTION					"Description"
-#macro	MAX_STACK					"Max Stack"
-
 // Item type map values
 #macro	WEAPON						"Weapon"
 #macro	WEAPON_INF					"Weapon (Inf)"
@@ -81,6 +68,22 @@
 #macro	ARMOR						"Armor"
 #macro	LIGHT_SOURCE				"Light Source"
 #macro	AMULET						"Amulet"
+
+// Item data map values
+#macro	ITEM_LIST					"Item List"
+#macro	CRAFTING_DATA				"Crafting Data"
+#macro	WEAPON_DATA					"Weapon Data"
+#macro	AMMO_DATA					"Ammo Data"
+#macro	CONSUMABLE_DATA				"Consumable Data"
+#macro	ARMOR_DATA					"Armor Data"
+#macro	FLASHLIGHT_DATA				"Flashlight Data"
+#macro	EQUIPABLE_DATA				"Equipable Data"
+
+// Item list map values
+#macro	ITEM_TYPE					"Type"
+#macro	EQUIPMENT_TYPE				"Equipment Type"
+#macro	DESCRIPTION					"Description"
+#macro	MAX_STACK					"Max Stack"
 
 // Crafting data map values
 #macro	VALID_ITEMS					"Valid Items"
@@ -100,6 +103,8 @@
 #macro	END_FRAME					"End Frame"
 #macro	BULLET_SPEED				"Speed"
 #macro	AMMO_TYPES					"Ammo Types"
+#macro	SOUNDS						"Sounds"
+#macro	SPRITES						"Sprites"
 
 // Ammo data map values
 #macro	DAMAGE_MOD					"Dmg Mod"
@@ -109,13 +114,23 @@
 #macro	RELOAD_RATE_MOD				"RRate Mod"
 
 // Consumable data map values
-#macro	HITPOINT_GAIN				"HP Gain"
-#macro	SANITY_GAIN					"Sanity Gain"
-#macro	CURE_POISON					"Cure Poison"
-#macro	CURE_BLEEDING				"Cure Bleeding"
-#macro	POISON_IMMUNITY				"Poison Immunity"
-#macro	BLEED_IMMUNITY				"Bleed Immunity"
+#macro	USE_SCRIPTS					"Use Scripts"
+#macro	USE_ARGUMENTS				"Use Arguments"
+
+// Armor data map values
 #macro	DAMAGE_RESIST				"Damage Resist"
+#macro	SPEED_MODIFIER				"Speed Modifier"
+
+// Flashlight data map values
+#macro	SIZE						"Size"
+#macro	STRENGTH					"Strength"
+#macro	COLOR						"Color"
+
+// Equipable data map values
+#macro	EQUIP_SCRIPT				"Equip Script"
+#macro	EQUIP_ARGUMENTS				"Equip Arguments"
+#macro	UNEQUIP_SCRIPT				"Unequip Script"
+#macro	UNEQUIP_ARGUMENTS			"Unequip Arguments"
 
 // World item data map values
 #macro	NAME						"Name"

@@ -3,6 +3,9 @@
 // Add the object as a singleton to prevent duplicates. If it fails, exit the create event early.
 if (!add_singleton_object()) {return;}
 
+// Disable the automatic drawing of the application surface
+application_surface_draw_enable(false);
+
 #region EDITING INHERITED VARIABLES
 
 image_speed = 0;
@@ -31,6 +34,8 @@ weatherType = Weather.Clear;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
+// Variables for surfaces and textures /////////////////////////////////////////////
+
 // Variables that store the resulting surface after all effects have been processed; with two auxillary
 // surfaces that act as buffers to store the application surface whenever multiple passes are used in 
 // a shader's effect.
@@ -43,6 +48,8 @@ auxSurfaceB = -1;
 resultTexture = -1;
 auxTextureA = -1;
 auxTextureB = -1;
+
+////////////////////////////////////////////////////////////////////////////////////
 
 // Variables for Lighting Shader ///////////////////////////////////////////////////
 
@@ -69,7 +76,7 @@ lightsDrawn = 0;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-// Variable for the Bloom Shaders //////////////////////////////////////////////////
+// Variables for the Bloom Shader //////////////////////////////////////////////////
 
 // This variable holds a reference to the shader's unique asset index value.
 bloomShaderLuminence = shd_bloom_luminence;
@@ -135,7 +142,4 @@ noiseStrength = 0.15;
 
 ////////////////////////////////////////////////////////////////////////////////////
 
-// Disable the automatic drawing of the application surface
-application_surface_draw_enable(false);
-
-#endregion/
+#endregion

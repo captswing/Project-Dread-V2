@@ -16,6 +16,8 @@ if (global.gameState == GameState.InGame && curState != NO_STATE){
 		instance_create_depth(0, 0, GLOBAL_DEPTH, obj_cutscene);
 		with(global.singletonID[? CUTSCENE]){ // Copy over the data from the trigger and begin the cutscene
 			ds_queue_copy(sceneData, _trigger.sceneData);
+			var _sceneData = ds_queue_head(sceneData);
+			sceneScript = _sceneData[0];
 			parentTrigger = _trigger;
 		}
 		return; // Exit out of the step event early

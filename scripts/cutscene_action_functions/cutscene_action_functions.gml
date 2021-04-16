@@ -1,3 +1,16 @@
+/// @description Ends the current action and deletes it from the queue of cutscene instruction data. If the
+/// element that was destroyed was the final element in the queue, the object will be destroyed and the
+/// cutscene will be finished executing.
+function cutscene_end_action(){
+	ds_queue_dequeue(sceneData);
+	if (ds_queue_size(sceneData) == 0){
+		instance_destroy(self);
+		return;
+	}
+	var _scriptData = ds_queue_head(sceneData);
+	sceneScript = _scriptData[0];
+}
+
 /// @description Pauses the cutscene for a set duration in seconds. After that, the action ends and the 
 /// cutscene moves onto the next instruction for execution.
 /// @param seconds
@@ -25,7 +38,7 @@ function cutscene_init_textbox(){
 	var _queueHead = ds_queue_head(sceneData);
 	while(_queueHead[0] != cutscene_end_textbox){
 		// Create the textbox with the function data provided from the queue's head
-		cutscene_execute(_queueHead);
+		script_execute_ext(_queueHead[0], _queueHead, 1);
 		// Dequeue that data and make sure the queue hasn't run dry during this loop. If it does, delete
 		// the textbox object and this cutscene managing object.
 		ds_queue_dequeue(sceneData);
@@ -36,6 +49,7 @@ function cutscene_init_textbox(){
 		}
 		// The queue still isn't empty, move onto the next textbox function.
 		_queueHead = ds_queue_head(sceneData);
+		sceneScript = _queueHead[0];
 	}
 }
 

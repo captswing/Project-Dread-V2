@@ -46,33 +46,29 @@ function get_actor_data(_actor){
 	var _data = noone;
 	// The variables that can exist within the _data struct include:
 	//
-	//			textboxSprite		--		sprite_index
-	//			textboxColor		--		color
-	//			namespaceSprite		--		sprite_index
-	//			namespaceWidth		--		number
-	//			portraitSprite		--		sprite_index
 	//			firstName			--		string
-	//			lastName			--		string
+	//			textboxColor		--		color
+	//			textboxSprite		--		sprite_index
+	//			namespaceSprite		--		sprite_index
+	//			portraitSprite		--		sprite_index
 	//
 	
 	// Go through the list of possible actor indexes to find the one taht needs to be returned
 	switch(_actor){
 		case Actor.Claire: // The main character's actor data
 			_data = {
-				textboxSprite : spr_textbox0,
-				textboxColor : make_color_rgb(110, 0, 204),
-				namespaceSprite : spr_textbox0_namespace,
-				//namespaceWidth : 35,
-				portraitSprite : spr_claire_portraits,
 				firstName : "Claire",
-				lastName : "Foster"
+				textboxColor : make_color_rgb(110, 0, 204),
+				textboxSprite : spr_textbox0,
+				namespaceSprite : spr_textbox0_namespace,
+				portraitSprite : spr_claire_portraits
 			}
 			break;
-		default: // The default actor data (Usually no actor)
-			_data = { // NOTE -- Only the background sprite, its color, and firstName variable needs to exist
-				textboxSprite : spr_textbox0,
+		default: // The default actor data (No specified actor)
+			_data = { // NOTE -- Only the name, background color and sprite variables need to exist
+				firstName : "NoActor",
 				textboxColor : make_color_rgb(0, 0, 188),
-				firstName : "NoActor"
+				textboxSprite : spr_textbox0,
 			}
 			break;
 	}

@@ -10,14 +10,14 @@
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
   },
-  "soundFile": "snd_handgun0.wav",
-  "duration": 0.906875,
+  "soundFile": "snd_hunting_rifle_fire.wav",
+  "duration": 1.109127,
   "parent": {
     "name": "Weaponry",
     "path": "folders/Sounds/Objects/Entities/Dynamic/obj_player/Weaponry.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snd_handgun0",
+  "name": "snd_hunting_rifle_fire",
   "tags": [],
   "resourceType": "GMSound",
 }

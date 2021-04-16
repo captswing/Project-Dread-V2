@@ -10,14 +10,14 @@
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
   },
-  "soundFile": "snd_hand_cannon0.wav",
-  "duration": 1.504252,
+  "soundFile": "snd_grenade_launcher_fire.wav",
+  "duration": 0.705884,
   "parent": {
     "name": "Weaponry",
     "path": "folders/Sounds/Objects/Entities/Dynamic/obj_player/Weaponry.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snd_hand_cannon0",
+  "name": "snd_grenade_launcher_fire",
   "tags": [],
   "resourceType": "GMSound",
 }

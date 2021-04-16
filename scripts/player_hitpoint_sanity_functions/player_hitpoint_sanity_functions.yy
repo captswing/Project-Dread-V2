@@ -6,7 +6,7 @@
     "path": "folders/Scripts/Objects/Entities/Dynamic/Friendly/obj_player.yy",
   },
   "resourceVersion": "1.0",
-  "name": "player_condition_functions",
+  "name": "player_hitpoint_sanity_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

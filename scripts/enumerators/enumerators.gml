@@ -112,11 +112,14 @@ enum Actor{
 // An enumerator that holds the indexes for the various weather effects that can be toggled in-game
 enum Weather{
 	Clear,
-	Rain,
 	Mist,
+	Rain,
 }
 
-// An enumerator that holds the indexes for the character's equipment slot array
+// An enumerator that holds the indexes for the character's equipment slot array.
+//
+//		BE CAUTIOUS WHEN ADJUSTING THESE VALUES IF THAT EVER NEEDS TO HAPPEN
+//
 enum EquipSlot{
 	Weapon,
 	Flashlight,
@@ -127,7 +130,11 @@ enum EquipSlot{
 	Length,
 }
 
-// An enumerator that holds the values for each of the possible temporary/indefinite effects that can be applied onto the player.
+// An enumerator that holds the values for each of the possible temporary/indefinite effects that can be 
+// applied onto the player. Shifting the order of these values will break some of the consumable items.
+//
+//		BE CAUTIOUS WHEN ADJUSTING THESE VALUES IF THAT EVER NEEDS TO HAPPEN
+//
 enum Effect{
 	BleedImmunity,
 	PoisonImmunity,

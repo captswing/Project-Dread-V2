@@ -167,6 +167,22 @@ function inventory_count(_name){
 	return _count;
 }
 
+/// @description Linearly searches through the inventory to find the equipped item of the provided name. It
+/// will only compare the name of the item with an equipped item, and the rest of the items will just be
+/// ignored by the loop.
+/// @param itemName
+function inventory_find_equipped_item(_itemName){
+	// NOTE -- There shouldn't ever be two of the same item equipped at once, so that's why this code doesn't
+	// bother to handle that kind of exception. If that does occur, there's something wrong outside of this 
+	// function.
+	for (var i = 0; i < global.invSize; i++){
+		if (global.invItem[i][3] && global.invItem[i][0] == _itemName){
+			return i; // Return the slot's index for the equipped weapon
+		}
+	}
+	return -1; // That item isn't currently equipped, return -1.
+}
+
 /// TODO -- Move this code to another script file that contains data for the item menu as well, since this
 /// code is only ever being used by the item menu in the inventory.
 
@@ -221,47 +237,7 @@ function inventory_item_options(_slot){
 /// @param slot
 /// @param option
 function inventory_item_options_function(_slot, _option){
-	var _itemType = global.itemData[? ITEM_LIST][? global.invItem[_slot][0]][? ITEM_TYPE];
 	
-	// The function of the options provided by the items based on their type defined in the 
-	// item_data JSON file.
-	switch(_option){
-		case USE_ITEM: // Using a consumable or key item
-			var _itemUsed = false;
-			if (_itemType == CONSUMABLE) {_itemUsed = inventory_item_use_consumable(_slot);} 
-			else if (_itemType == KEY_ITEM) {/* USING A KEY ITEM -- Usually has a unique function associated with it */}
-			// Only remove the item from the inventory if it was successfully used
-			if (_itemUsed) {inventory_remove(global.invItem[_slot][0], 1);}
-			break;
-		case EQUIP_ITEM: // Equips the item to the player character
-			with(global.singletonID[? PLAYER]) {player_equip_item(_slot, _itemType);}
-			break;
-		case UNEQUIP_ITEM: // Unequips the item from the player character
-			with(global.singletonID[? PLAYER]) {player_unequip_item(_slot, _itemType);}
-			break;
-		case RELOAD_ITEM: // Reloads the player's currently equipped weapon if possible
-			if (_itemType != WEAPON_INF){
-				with(global.singletonID[? PLAYER]){ // Jumps over to the player object to handle reloading
-					if (weaponSlot == _slot && inventory_count(ammoTypes[| curAmmoType]) > 0){
-						player_reload_weapon(global.invItem[weaponSlot][1]);
-					}
-				}
-			}
-			break;
-		case COMBINE_ITEM:
-			// TODO -- Add combination logic here
-			break;
-		case MOVE_ITEM:
-			// TODO -- Add combination logic here
-			break;
-		case DROP_ITEM: // Dropping the item out of the player's inventory
-			with(global.singletonID[? PLAYER]){
-				// If the item was equipped by the player, unequip the item before removing the data
-				if (global.invItem[_slot][3]) {player_unequip_item(_slot, _itemType);}
-				inventory_remove_slot(_slot, true, x, y);
-			}
-			break;
-	}
 }
 
 /// @description Consumes the selected item and applies its effect(s) to the player. There are seven possible
@@ -269,73 +245,4 @@ function inventory_item_options_function(_slot, _option){
 /// consumed it will check for all seven effects and if it needs to apply them or not.
 /// @param slot
 function inventory_item_use_consumable(_slot){
-	var _consumableData, _itemConsumed;
-	_consumableData = global.itemData[? CONSUMABLE_DATA][? global.invItem[_slot][0]];
-	_itemConsumed = false;
-	
-	// Go through all the possible consumption effects and see which ones are triggered by the consumable.
-	// It can include hitpoint/sanity gain, poison/bleeding curing, temporary damage resistance, poison
-	// immunity or bleed immunity.
-	with(global.singletonID[? PLAYER]){
-		// UNIQUE CASE -- Using the item "Revitalife" works different form other consumables. Instead of fitting
-		// into the seven different possible effects for the standard consumable, this item increases the current
-		// maximum health of the player -- to a maximum of 50.
-		if (global.invItem[_slot][0] == REVITALIFE){
-			if (maxHitpoints < 50) {set_max_hitpoints(maxHitpoints + 5, true);}
-			return true; // Ignore the rest of the function
-		}
-		
-		// Increase the player's health by a percentage value relative to their current max health
-		if (_consumableData[? HITPOINT_GAIN] > 0){
-			update_hitpoints(maxHitpoints * (_consumableData[? HITPOINT_GAIN] / 100));
-			_itemConsumed = true; // Item was successfully consumed
-		}
-		
-		// Increase the player's current sanity value by a percentage relative to their current maximum
-		if (_consumableData[? SANITY_GAIN] > 0){
-			update_sanity(maxSanity * (_consumableData[? SANITY_GAIN] / 100), true);
-			_itemConsumed = true; // Item was successfully consumed
-		}
-		
-		// Remove poisoning from the player, regardless of if they're poisoned or not, since there's no
-		// way a player would want to be poisoned from consuming an item...
-		if (_consumableData[? CURE_POISON]){
-			set_poisoned(false);
-			_itemConsumed = true;  // Item was successfully consumed
-		}
-		
-		// Remove bleeding effect from the player, regardless of whether or not the status condition is
-		// currently effecting the player or not; just like above.
-		if (_consumableData[? CURE_BLEEDING]){
-			set_bleeding(false);
-			_itemConsumed = true;  // Item was successfully consumed
-		}
-		
-		// Granting the player with temporary immunity from being poisoned. This timer is determined by the
-		// item's consumable data itself, where 60 units of that timer equals 1 second of real-time.
-		if (_consumableData[? POISON_IMMUNITY] > 0){
-			add_new_effect(Effect.PoisonImmunity, _consumableData[? POISON_IMMUNITY], NO_SCRIPT, NO_SCRIPT);
-			if (isPoisoned) {set_poisoned(false);} // Remove poison effect if it's currently active
-			_itemConsumed = true;  // Item was successfully consumed
-		}
-		
-		// Granting the player a temporary immunity from getting the bleeding effect. THe timer is determined
-		// the same way as the poison immunity timer is right above.
-		if (_consumableData[? BLEED_IMMUNITY] > 0){
-			add_new_effect(Effect.BleedImmunity, _consumableData[? BLEED_IMMUNITY], NO_SCRIPT, NO_SCRIPT);
-			if (isBleeding) {set_poisoned(false);} // Remove bleeding effect if it's currently active
-			_itemConsumed = true;  // Item was successfully consumed
-		}
-		
-		// Gives the player a temporary damage resistance, which cuts any incoming damage by 50% relative
-		// to their current damage resistance. This means the effect is greater when the player isn't wearing
-		// the kevlar vest or fortified amulet.
-		if (_consumableData[? DAMAGE_RESIST] > 0){
-			add_new_effect(Effect.DamageResist, _consumableData[? DAMAGE_RESIST], NO_SCRIPT, NO_SCRIPT);
-			_itemConsumed = true;  // Item was successfully consumed
-		}
-	}
-	
-	// Returns whether or not the item was successfully consumed
-	return _itemConsumed;
 }

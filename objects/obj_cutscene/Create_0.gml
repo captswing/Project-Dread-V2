@@ -22,6 +22,10 @@ prevGameState = global.gameState;
 // to move during the scene.
 sceneData = ds_queue_create();
 
+// Stores the index for the current script in a seperate variable in order to use it in the script_execute_ext
+// to properly work.
+sceneScript = NO_SCRIPT;
+
 // Holds the ID for the cutscene trigger that created this object. Once the cutscene has been successfully
 // executed, the trigger will delete itself relative to this object's clean up event.
 parentTrigger = noone;

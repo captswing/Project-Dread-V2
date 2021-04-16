@@ -14,7 +14,7 @@ if (!surface_exists(auxSurfaceA)){
 	auxTextureA = surface_get_texture(auxSurfaceA);
 }
 
-// The second auxillary surface that is used to store any effects that are being processed by a shader. 
+// The second auxillary surface that is used to store any effects that are being processed by a shader.
 // Also gets the texture ID for the same purpose.
 if (!surface_exists(auxSurfaceB)){
 	auxSurfaceB = surface_create(WINDOW_WIDTH, WINDOW_HEIGHT);

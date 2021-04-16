@@ -40,10 +40,8 @@ function player_attack_enemy_collision(_enemyID){
 	with(_enemyID){ // After calculating the player's damage, deal it to the enemy and check if stun locked
 		if (_playerDamage >= stunLockThreshold || random(1) <= stunLockChance){ // The enemy was stunned
 			set_entity_hit(_playerDamage, stunLockTime);
-			show_debug_message("ENEMY STUNNED");
 		} else{ // No stun has occurred, just deal out the damage
 			set_entity_hit(_playerDamage, 0);
-			show_debug_message("ENEMY NOT STUNNED");
 		}
 	}
 }
