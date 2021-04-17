@@ -2,6 +2,9 @@
 
 #region REMOVING SINGLETON ID/RESTORING GAME STATE
 
+// Don't clean up uninitialized data if the textbox object was a duplicate of the existing singleton
+if (global.singletonID[? TEXTBOX] != id) {return;}
+
 // Remove this id value from the textbox singleton; allowing another instance of obj_textbox to take its place
 remove_singleton_object();
 

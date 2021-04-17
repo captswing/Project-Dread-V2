@@ -32,7 +32,7 @@ function set_sprite(_sprIndex, _sprDirections){
 /// @param damage
 /// @param stunTime
 function set_entity_hit(_damage, _stunTime){
-	update_hitpoints(_damage);
+	entity_update_hitpoints(_damage);
 	stunLockTimer = _stunTime;
 	isHit = true;
 	if (_stunTime > 0){ // Changes the entity into the universal stun lock state

@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Global",
-    "path": "folders/Scripts/Objects/Global.yy",
+    "name": "Data Handling",
+    "path": "folders/Scripts/Data Handling.yy",
   },
   "resourceVersion": "1.0",
-  "name": "inventory_functions",
+  "name": "save_data_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

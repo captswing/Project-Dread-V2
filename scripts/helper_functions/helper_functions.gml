@@ -126,3 +126,135 @@ function get_audio_group_volume(_audioGroup){
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// FUNCTIONS FOR WORLD ITEM DATA ///////////////////////////////////////////////////////////////////////////////////////////////
+
+/// @description
+function initialize_world_item_data(){
+	// FAILSAFE -- If somehow this function is called before another world item data map isn't cleared from memory, clear out that map beforehand.
+	if (ds_exists(global.worldItemData, ds_type_map)) {clear_world_item_data();}
+	global.worldItemData = encrypted_json_load("world_item_data", "fTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@");
+}
+
+/// @description Removes all the data from the global world item data ds_map, which means going into each index of the main map
+/// and deleting the maps inside before deleting the outer map. Otherwise, a big ass memory leak will eventually happen.
+function clear_world_item_data(){
+	var _key = ds_map_find_first(global.worldItemData);
+	while(!is_undefined(_key)){ // Looping through all the parts on the map that contain the inner item map data
+		ds_map_destroy(global.worldItemData[? _key]);
+		_key = ds_map_find_next(global.worldItemData, _key);
+	}
+	ds_map_destroy(global.worldItemData);
+	global.worldItemData = -1; // Remove the invalid pointer value
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// DIFFICULTY INITIALIZATION FUNCTIONS /////////////////////////////////////////////////////////////////////////////////////////
+
+/// @description Initializes the game's difficulty level based on the provided combat difficulty, since the puzzle difficulty doesn't
+/// have as much of an impact on the game as the combat difficulty does. 
+/// @param combatDifficulty
+/// @param puzzleDifficulty
+function initialize_difficulty(_combatDifficulty, _puzzleDifficulty){
+	// Find the difficulty level and sets up everything related to said difficulty accordingly. (Ex. Player health regeneration,
+	// starting items, damage modifiers, etc.) If no difficulty is found, this function will adjust nothing.
+	switch(_combatDifficulty){
+		case Difficulty.Forgiving:		// Forgiving Difficulty AKA "Easy" Mode
+			with(global.gameplay){
+				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
+				gameplayDifficulty = _combatDifficulty;
+				puzzleDifficulty = _puzzleDifficulty;
+				// Enable player health regeneration; prevent sanity loss; give the player the infinite ammo starting pistol; 
+				// apply a 1.5x damage modifier to the player, and a 2.0x modifier to the effectiveness of healing items.
+				playerHealthRegen = true;
+				playerStartingPistol = true;
+				playerDamageMod = 1.5;
+				healingEffectMod = 2.0;
+				// Apply a modifier that causes enemies to only deal out 50% of their potential attack damage.
+				enemyDamageMod = 0.5;
+			}
+			// Set the inventory's starting size as well as its maximum possible size
+			global.invSize = 12;
+			global.maxInvSize = 24;
+			break;
+		case Difficulty.Standard:		// Standard Difficulty AKA "Normal" Mode
+			with(global.gameplay){
+				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
+				gameplayDifficulty = _combatDifficulty;
+				puzzleDifficulty = _puzzleDifficulty;
+				// The only variable that needs to be adjusted for standard difficulty is enabling the depletion of the player's
+				// sanity value. Nothing else needs to be changed.
+				playerLosesSanity = true;
+			}
+			// Set the inventory's starting size as well as its maximum possible size
+			global.invSize = 8;
+			global.maxInvSize = 20;
+			break;
+		case Difficulty.Punishing:		// Punishing Difficulty AKA "Hard" Mode
+			with(global.gameplay){
+				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
+				gameplayDifficulty = _combatDifficulty;
+				puzzleDifficulty = _puzzleDifficulty;
+				// Adjust the player's damage modifier to 0.75x their normal damage.
+				playerDamageMod = 0.75;
+				// Adjust the enemy damage modifier so all enemies deal slightly more damage.
+				enemyDamageMod = 1.5;
+				// Enable the gameplay's limited saves flag, which will enable cassette tapes to be scattered around the world.
+				// These tapes are required for saving, so it is heavily limited in this mode.
+				limitedSaves = true;
+			}
+			// Set the inventory's starting size as well as its maximum possible size
+			global.invSize = 8;
+			global.maxInvSize = 16;
+			break;
+		case Difficulty.Nightmare:		// Nightmare Difficulty AKA "Very Hard" Mode, which is an unlockable difficulty
+			with(global.gameplay){
+				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
+				gameplayDifficulty = _combatDifficulty;
+				puzzleDifficulty = _puzzleDifficulty;
+				// Adjust the player's damage modifier to 0.75x their normal damage.
+				playerDamageMod = 0.75;
+				// Adjust the enemy damage modifier so all enemies deal double their nromal damage.
+				enemyDamageMod = 2;
+				// Enable limited saves using cassette tapes like in "Punishing" difficulty, but with the added toggle of the
+				// player's weapons degrading over time; lower their daamge as the durability inches closer to zero.
+				weaponDurability = true;
+				limitedSaves = true;
+			}
+			// Set the inventory's starting size as well as its maximum possible size
+			global.invSize = 6;
+			global.maxInvSize = 12;
+			break;
+		case Difficulty.OneLifeMode:		// One Life Mode, which is an unlockable difficulty
+			with(global.gameplay){
+				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
+				gameplayDifficulty = _combatDifficulty;
+				puzzleDifficulty = _puzzleDifficulty;
+				// Adjust the player's damage modifier to 0.5x their normal damage.
+				playerDamageMod = 0.5;
+				// Adjust the enemy damage modifier so all enemies deal double their nromal damage.
+				enemyDamageMod = 2;
+				// Enable the flag that prevents saving the game in its entirety for this difficulty and another flag that causes
+				// a return to title screen when you die, which is the oneLifeMode flag. Also, weapon durability is enabled much 
+				// like the previous difficulty.
+				weaponDurability = true;
+				preventSaving = true;
+				oneLifeMode = true;
+			}
+			// Set the inventory's starting size as well as its maximum possible size
+			global.invSize = 6;
+			global.maxInvSize = 10;
+			break;
+	}
+	// Finally, after getting the maximum possible size for the inventory relative to the selected difficulty,
+	// initialize the array that contains the item information relative to the set maximum size.
+	for (var i = 0; i < global.maxInvSize; i++){
+		global.invItem[i][0] = NO_ITEM;	// The item's key within the item data map
+		global.invItem[i][1] = 0;		// Total number of items currently in the slot
+		global.invItem[i][2] = 0;		// The item's durability (Nightmare and One Life Mode only)
+		global.invItem[i][3] = false;	// A flag storing if the item is equipped to the player or not
+	}
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

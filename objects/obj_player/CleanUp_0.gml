@@ -1,5 +1,8 @@
 /// @description Cleaning Up Allocated Memory and Other Data
 
+// Don't clean up uninitialized data if the player object was a duplicate of the existing singleton
+if (global.singletonID[? PLAYER] != id) {return;}
+
 // Remove this id value from the player singleton; allowing another instance of obj_player to take its place
 remove_singleton_object();
 

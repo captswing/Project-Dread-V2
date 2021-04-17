@@ -1,5 +1,8 @@
 /// @description Cleaning Up Allocated Memory and Other Data
 
+// Don't clean up uninitialized data if the cutscene object was a duplicate of the existing singleton
+if (global.singletonID[? CUTSCENE] != id) {return;}
+
 // Remove this id value from the cutscene singleton; allowing another instance of obj_cutscene to take its place
 remove_singleton_object();
 

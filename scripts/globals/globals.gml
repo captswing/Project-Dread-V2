@@ -18,8 +18,7 @@ global.itemData = encrypted_json_load("item_data", "5v8x/A?D(G+KbPeShVmYq3t6w9z$
 //					NOTE -- The only items that contain an x and y position, plus a room index are
 //							items that have been dropped onto the ground by the player.
 //
-global.worldItemData = encrypted_json_load("world_item_data", "fTjWnZr4u7x!z%C*F-JaNdRgUkXp2s5v8y/B?D(G+KbPeShVmYq3t6w9z$C&F)H@");
-// TODO -- Move this to when the "New Game" is selected, since loading from a save file will use the world item data map from that file's data
+global.worldItemData = -1; // No data is loaded until a game is actually started (NEVER SET A DATA STRUCTURE TO 0 AFTER DELETING IT)
 
 // A map that stores all the texture data for the game's available fonts. The key is the number given to the 
 // font given by GML itself, which is a constant given by referencing the font resource itself.
@@ -103,10 +102,6 @@ global.invSize = 0;
 global.maxInvSize = 0;
 global.invItem = 0;
 
-// FOR TESTING
-inventory_initialize(Difficulty.Standard);
-// FOR TESTING
-
 // The main variable for keeping track of the player's currently found notes and important documents. The size of this
 // section of the inventory isn't limited, and a theoretical infinite amount of notes/memos/documents can be stored
 // at one time. All it stores is a string value for the name of the note, which will allow easy reference to the 
@@ -129,17 +124,24 @@ global.gameplay = {
 	puzzleDifficulty : PuzzleDifficulty.NotSelected,
 	// Gameplay variables that effect the player character. They include optional health regeneration, a
 	// toggle to prevent sanity loss, another to start them with a weak infinite ammo pistol, and a modifier
-	// for their overall damage output.
+	// for their overall damage output as well as how effective healing items are.
 	playerHealthRegen : false,
 	playerLosesSanity : false,
 	playerStartingPistol : false,
 	playerDamageMod : 1.0,
+	healingEffectMod : 1.0,
 	// Gameplay variables that effect all enemies in the game. This includes just a damage modifier for
 	// now, but could potentially include a hitpoint multiplier and others in the future.
 	enemyDamageMod : 1.0,
 	// Gameplay variables that effect things all a global scale; like enabling durability on all weapons,
-	// or limited save files using cassette tapes, and even a toggle to disable reloading/respawning.
+	// or limited save files using cassette tapes; preventing saving at all, and even a toggle to disable 
+	// reloading/respawning.
 	weaponDurability : false,
+	preventSaving : false,
 	limitedSaves : false,
 	oneLifeMode : false,
 }
+
+// FOR TESTING
+initialize_world_item_data();
+initialize_difficulty(Difficulty.Standard, PuzzleDifficulty.Standard);

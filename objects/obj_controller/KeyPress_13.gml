@@ -1,6 +1,7 @@
 /// @description FOR EASY TESTING
 
-room_restart();
+save_game_data(1);
+//room_restart();
 
 //if (weather == noone) {set_weather(Weather.Mist);}
 //else {set_weather(Weather.Clear);}
