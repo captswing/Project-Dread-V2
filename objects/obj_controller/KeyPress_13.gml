@@ -1,5 +1,6 @@
 /// @description FOR EASY TESTING
 
+with(global.singletonID[? PLAYER]) {player_unequip_weapon();}
 save_game_data(1);
 //room_restart();
 

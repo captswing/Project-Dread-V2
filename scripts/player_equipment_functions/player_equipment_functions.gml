@@ -43,8 +43,7 @@ function player_equip_weapon(_name){
 	// If another weapon was currently equipped to the player, reset all the modifier values back to 0 and
 	// also clear the list containing the names of all the different ammunition types.
 	if (equipSlot[EquipSlot.Weapon] != NO_ITEM){
-		var _slot = inventory_find_equipped_item(equipSlot[EquipSlot.Weapon]);
-		global.invItem[_slot][3] = false;
+		global.invItem[weaponSlot][3] = false;
 		damageMod =			0;
 		rangeMod =			0;
 		accuracyMod =		0;
@@ -56,6 +55,7 @@ function player_equip_weapon(_name){
 	// After the modifier data is cleared or it didn't need to be cleared in the first place, get the weapon's
 	// data based on its name and add its data to the player's weapon stat vairables.
 	var _data = global.itemData[? WEAPON_DATA][? _name];
+	if (is_undefined(_data)) {return;} // Exit the script if an invalid item was provided.
 	damage =				_data[? DAMAGE];
 	numBullets =			_data[? NUM_BULLETS];
 	range =					_data[? RANGE];
@@ -77,10 +77,11 @@ function player_equip_weapon(_name){
 	aimingSprite =			asset_get_index(_sprites[| 2]);
 	recoilSprite =			asset_get_index(_sprites[| 3]);
 	reloadSprite =			asset_get_index(_sprites[| 4]);
+	// Finally, set the equip slot of the weapon to the weapon's name
+	equipSlot[EquipSlot.Weapon] = _name;
 }
 
 /// @description 
-/// @param name
 function player_unequip_weapon(){
 	// Reset all the main weapon variables, which store the initial stats and ammunition types.
 	weaponSlot =		   -1;
@@ -105,6 +106,8 @@ function player_unequip_weapon(){
 	aimingSprite =		   -1;
 	recoilSprite =		   -1;
 	reloadSprite =		   -1;
+	// Finally, empty the name out of the equip slot
+	equipSlot[EquipSlot.Weapon] = NO_ITEM;
 }
 
 /// @description 
@@ -113,6 +116,7 @@ function player_equip_flashlight(_name){
 	// Set the player variables for the flashlight's characteristics, for when it's toggled on from off
 	// after already being equipped, which is entirely possible by pressing the flashlight key.
 	var _data = global.itemData[? FLASHLIGHT_DATA][? _name];
+	if (is_undefined(_data)) {return;} // Exit the script if an invalid item was provided.
 	lightSize =			_data[? SIZE];
 	lightStrength =		_data[? STRENGTH];
 	lightColor =		make_color_rgb(_data[? COLOR][| 0], _data[? COLOR][| 0], _data[? COLOR][| 2]);
@@ -140,6 +144,7 @@ function player_equip_armor(_name){
 	// Get the stats for the armor that is being equipped, which is the damage resistance and maximum 
 	// speed modifier values.
 	var _data = global.itemData[? ARMOR_DATA][? _name];
+	if (is_undefined(_data)) {return;} // Exit the script if an invalid item was provided.
 	entity_update_max_speed(-maxHspdConst * _data[? SPEED_MODIFIER], -maxVspdConst * _data[? SPEED_MODIFIER]); 
 	damageResistance -= _data[? DAMAGE_RESIST];
 	equipSlot[EquipSlot.Armor] = _name;
@@ -148,8 +153,8 @@ function player_equip_armor(_name){
 /// @description 
 /// @param name
 function player_unequip_armor(_name){
-	// Exit the function if the armor that is equipped doesn't match the provided name
-	if (equipSlot[EquipSlot.Armor] != _name) {return;}
+	// Exit the function if the armor that is equipped doesn't match the provided name or no armor is equipped
+	if (_name == NO_ITEM || equipSlot[EquipSlot.Armor] != _name) {return;}
 	// Only unequip the armor and restore the player's original stats if it is the same armor that is
 	// equipped to them currently.
 	var _data = global.itemData[? ARMOR_DATA][? _name];

@@ -58,12 +58,32 @@ function save_game_data(_saveNum){
 	for (var i = 0; i < _length; i++) {ds_map_add(_eventMap, string(i), global.eventFlags[i]);}
 	ds_map_add_map(_map, "event_flags", _eventMap);
 	
-	// 
+	// Save the current weather effect that is active. The weather effect will be set to it once said file is loaded.
+	with(global.singletonID[? EFFECT_HANDLER]) {ds_map_add(_map, "current_weather", weatherType);}
+	
+	// Saves all the player's necessary variables and data into a map that is then passed into the map that will be 
+	// encoded into a JSON string before being encrypted and written to file.
 	var _playerMap = ds_map_create();
 	with(global.singletonID[? PLAYER]){
+		// Most importantly, save the position and orientation of the player when they saved their game.
 		ds_map_add(_playerMap, "x", x);
 		ds_map_add(_playerMap, "y", y);
 		ds_map_add(_playerMap, "direction", direction);
+		
+		// Write the player's current hitpoints and maximum possible hitpoints into the player's data map.
+		ds_map_add(_playerMap, "hitpoints", hitpoints);
+		ds_map_add(_playerMap, "max_hitpoints", maxHitpoints);
+		
+		// Also write the player's current sanity and maximum possible sanity into the map.
+		ds_map_add(_playerMap, "sanity", curSanity);
+		ds_map_add(_playerMap, "max_sanity", maxSanity);
+		
+		// Add the equipment variables that are necessary for loading the data back into the game properly. Instead
+		// of saving all the weapon/armor/flashlight variables and all that mess, only what is equipped will be saved.
+		// When the game reloads this data, the equip functions will provide the correct data to the variables.
+		ds_map_add_list(_playerMap, "equipment", array_to_ds_list(equipSlot));
+		ds_map_add(_playerMap, "light_active", isLightActive);
+		ds_map_add(_playerMap, "ammo_type", curAmmoType);
 	}
 	ds_map_add_map(_map, "player_data", _playerMap);
 	
@@ -143,7 +163,7 @@ function load_game_data(_saveNum){
 	// since they aren't saved either. Also set the number of available inventory slots currently available to
 	// them from picking up item pouches.
 	var _itemData = -1;
-	for (var i = 0; i < global.invSize; i++){
+	for (var i = 0; i < global.maxInvSize; i++){
 		_itemData = _map[? "inventory_contents"][? string(i)];
 		if (is_undefined(_itemData)) {continue;} // Skip over empty slots since those aren't saved
 		global.invItem[i] = ds_list_to_array(_itemData);
@@ -156,15 +176,70 @@ function load_game_data(_saveNum){
 	var _length = ds_map_size(_map[? "event_flags"]);
 	for (var i = 0; i < _length; i++) {global.eventFlags[i] = _map[? "event_flags"][? string(i)];}
 	
-	// 
-	var _playerMap = _map[? "player_data"];
-	instance_create_depth(0, 0, ENTITY_DEPTH, obj_player);
+	// Load the saved weather effect into the effect handler object. This will overwrite whatever previous weather
+	// effect was active when this save file was created. Also, set the weather type to the same type incase the game
+	// is saved again, so it won't be changed to the wrong value.
+	with(global.singletonID[? EFFECT_HANDLER]){
+		change_weather_effect(_map[? "current_weather"], 0);
+		weatherType = _map[? "current_weather"];
+	}
+	
+	// Go through the player object and set/reset all variables that are affected by the data that was written to
+	// the save file's player data map. If variables need to be reset instead of creating a new object they will 
+	// be reset to compensate.
+	var _playerMap, _resetVariables;
+	_playerMap = _map[? "player_data"];
+	_resetVariables = (global.singletonID[? PLAYER] != noone);
+	if (!_resetVariables) {instance_create_depth(0, 0, ENTITY_DEPTH, obj_player);}
 	with(global.singletonID[? PLAYER]){
+		// Resets variables relating to the equipped weapon and other variables that aren't put into the save file.
+		// This is only necessary if the player object isn't deleted when the file's data is loaded from, which can
+		// only occur when loading a save file while in-game.
+		if (_resetVariables){
+			player_unequip_weapon();
+			player_unequip_flashlight();
+			player_unequip_armor(equipSlot[EquipSlot.Armor]);
+			// TODO -- Add Two calls to player_unequip_amulet for both amulet slots
+		}
+		
+		// Set the player to the correct position and orientation.
 		x = _playerMap[? "x"];
 		y = _playerMap[? "y"];
 		direction = _playerMap[? "direction"];
+		
+		// Restores the hitpoints they player had when they saved.
+		hitpoints = _playerMap[? "hitpoints"];
+		maxHitpoints = _playerMap[? "max_hitpoints"];
+		
+		// Also restores the saved sanity level.
+		curSanity = _playerMap[? "sanity"];
+		maxSanity = _playerMap[? "max_sanity"];
+		
+		// Equip all the items that were equiped onto the player when they saved the game.
+		var _length = ds_list_size(_playerMap[? "equipment"]);
+		equipSlot = ds_list_to_array(_playerMap[? "equipment"]);
+		player_equip_weapon(equipSlot[EquipSlot.Weapon]);
+		player_equip_armor(equipSlot[EquipSlot.Armor]);
+		player_equip_flashlight(equipSlot[EquipSlot.Flashlight]);
+		// TODO -- Add Two calls to player_equip_amulet for both amulet slots
+		
+		// Getting the player's weapon modifier values from the save file and applying any modifier 
+		// values that need to be set for said ammunition.
+		curAmmoType = _playerMap[? "ammo_type"];
+		var _statModifiers = global.itemData[? AMMO_DATA][? equipSlot[EquipSlot.Weapon]];
+		if (!is_undefined(_statModifiers)){ // If the weapon has a valid ammunition type applied, set its modifier values 
+			damageMod =			_statModifiers[? DAMAGE_MOD];
+			accuracyMod =		_statModifiers[? ACCURACY_MOD];
+			rangeMod =			_statModifiers[? RANGE_MOD];
+			fireRateMod =		_statModifiers[? FIRE_RATE_MOD];
+			reloadRateMod =		_statModifiers[? RELOAD_RATE_MOD];
+		}
+		
+		// Always makes sure to activate or deactivate the flashlight to match the player's flashlight when they saved. If the light
+		// isn't active, the player's ambient light is set to the default values, which barely illuminate them in pitch-black.
+		isLightActive = _playerMap[? "light_active"];
+		if (!isLightActive) {update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);}
 	}
-	set_camera_cur_object(global.singletonID[? PLAYER], 0, false);
 	
 	// Finally, destroy the map that was used to save all the data to the save file. Since it was used in tandem with "json_decode",
 	// only the top layer of the map needs to be destroyed in order for the entire map and all its inner layers to be freed.
