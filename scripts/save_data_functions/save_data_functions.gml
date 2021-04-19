@@ -196,10 +196,9 @@ function load_game_data(_saveNum){
 		// This is only necessary if the player object isn't deleted when the file's data is loaded from, which can
 		// only occur when loading a save file while in-game.
 		if (_resetVariables){
-			player_unequip_weapon();
-			player_unequip_flashlight();
-			player_unequip_armor(equipSlot[EquipSlot.Armor]);
-			// TODO -- Add Two calls to player_unequip_amulet for both amulet slots
+			for (var i = 0; i < EquipSlot.Length; i++){
+				if (equipSlot[i] != -1) {player_unequip_item(equipSlot[i]);}
+			}
 		}
 		
 		// Set the player to the correct position and orientation.
@@ -218,21 +217,25 @@ function load_game_data(_saveNum){
 		// Equip all the items that were equiped onto the player when they saved the game.
 		var _length = ds_list_size(_playerMap[? "equipment"]);
 		equipSlot = ds_list_to_array(_playerMap[? "equipment"]);
-		player_equip_weapon(equipSlot[EquipSlot.Weapon]);
-		player_equip_armor(equipSlot[EquipSlot.Armor]);
-		player_equip_flashlight(equipSlot[EquipSlot.Flashlight]);
-		// TODO -- Add Two calls to player_equip_amulet for both amulet slots
+		for (var i = 0; i < EquipSlot.Length; i++){
+			if (equipSlot[i] != -1) {player_equip_item(equipSlot[i]);}
+		}
 		
 		// Getting the player's weapon modifier values from the save file and applying any modifier 
 		// values that need to be set for said ammunition.
 		curAmmoType = _playerMap[? "ammo_type"];
-		var _statModifiers = global.itemData[? AMMO_DATA][? equipSlot[EquipSlot.Weapon]];
-		if (!is_undefined(_statModifiers)){ // If the weapon has a valid ammunition type applied, set its modifier values 
-			damageMod =			_statModifiers[? DAMAGE_MOD];
-			accuracyMod =		_statModifiers[? ACCURACY_MOD];
-			rangeMod =			_statModifiers[? RANGE_MOD];
-			fireRateMod =		_statModifiers[? FIRE_RATE_MOD];
-			reloadRateMod =		_statModifiers[? RELOAD_RATE_MOD];
+		if (equipSlot[EquipSlot.Weapon] >= 0 && equipSlot[EquipSlot.Weapon] < global.invSize){
+			var _weaponName = global.invItem[equipSlot[EquipSlot.Weapon]][0];
+			ammoTypes = global.itemData[? WEAPON_DATA][? _weaponName][? AMMO_TYPES];
+			// After getting the wepaon's ammunition types again, get the current ammo's modifiers if it has some
+			var _statModifier = global.itemData[? AMMO_DATA][? ammoTypes[| curAmmoType]];
+			if (!is_undefined(_statModifier)){ // If the weapon has a valid ammunition type applied, set its modifier values 
+				damageMod =			_statModifier[? DAMAGE_MOD];
+				accuracyMod =		_statModifier[? ACCURACY_MOD];
+				rangeMod =			_statModifier[? RANGE_MOD];
+				fireRateMod =		_statModifier[? FIRE_RATE_MOD];
+				reloadRateMod =		_statModifier[? RELOAD_RATE_MOD];
+			}
 		}
 		
 		// Always makes sure to activate or deactivate the flashlight to match the player's flashlight when they saved. If the light

@@ -127,22 +127,6 @@ function inventory_count(_name){
 	return _count;
 }
 
-/// @description Linearly searches through the inventory to find the equipped item of the provided name. It
-/// will only compare the name of the item with an equipped item, and the rest of the items will just be
-/// ignored by the loop.
-/// @param itemName
-function inventory_find_equipped_item(_itemName){
-	// NOTE -- There shouldn't ever be two of the same item equipped at once, so that's why this code doesn't
-	// bother to handle that kind of exception. If that does occur, there's something wrong outside of this 
-	// function.
-	for (var i = 0; i < global.invSize; i++){
-		if (global.invItem[i][3] && global.invItem[i][0] == _itemName){
-			return i; // Return the slot's index for the equipped weapon
-		}
-	}
-	return -1; // That item isn't currently equipped, return -1.
-}
-
 /// TODO -- Move this code to another script file that contains data for the item menu as well, since this
 /// code is only ever being used by the item menu in the inventory.
 

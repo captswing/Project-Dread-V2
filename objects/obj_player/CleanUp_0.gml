@@ -10,5 +10,5 @@ remove_singleton_object();
 ds_list_destroy(effectTimers);
 ds_list_destroy(ammoTypes);
 
-//
+// Removes the ambient light source and deletes the entity from the depth sorting list
 event_inherited();

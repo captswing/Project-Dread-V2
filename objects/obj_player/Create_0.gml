@@ -64,7 +64,7 @@ inputMagnitude = 0;
 // two out of the eight amulets, and current weapon slot, which holds the name for whatever weapon is currently
 // equipped. Otherwise, the armor slot is specifically for the Kevlar Vest item, and the flashlight slot is 
 // specifically for the flashlight item.
-equipSlot = array_create(EquipSlot.Length, NO_ITEM);
+equipSlot = array_create(EquipSlot.Length, -1);
 
 // Two flags that determine if the player character current has either the poisoned or bleeding status. Both
 // of these status conditions use the same timer, but the poison's damage is every other check. This means
@@ -111,7 +111,6 @@ effectTimers = ds_list_create();
 // and reload rate. Also, the speed of the bullet can be set, (which enables a physical projectile instead of
 // a hitscan check) or the starting/ending frames of animation for an attack can be set. (which is used for
 // the active frames of a melee attack)
-weaponSlot = -1;
 damage = 0;
 numBullets = 0;
 range = 0;
@@ -139,7 +138,7 @@ weaponReloadSound = -1;
 // Stores a list of names relating to the valid ammunition used by the currently equipped weapon. The ammo
 // can only be swapped from the 0th ammunition (which is the default ammo type) if said ammo exists in the
 // player's inventory.
-ammoTypes = ds_list_create();
+ammoTypes = -1;
 curAmmoType = 0;
 
 // Two timers that control how long the player is stuck within the reloading and recoiling state, respectively.
