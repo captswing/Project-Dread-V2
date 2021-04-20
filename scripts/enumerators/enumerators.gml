@@ -139,4 +139,6 @@ enum Effect{
 	BleedImmunity,
 	PoisonImmunity,
 	DamageResist,
+	// Holds the Total Number of Temporary Effects //
+	Length,
 }

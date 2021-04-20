@@ -42,6 +42,6 @@ directionSet = false;
 #region SETTING GAME STATE AND LOCKING PLAYER MOVEMENT
 
 set_game_state(GameState.Cutscene, true); // Always prioritize the cutscene's state
-with(global.singletonID[? PLAYER]) {set_sprite(standSprite, 4);}
+with(global.singletonID[? PLAYER]) {entity_set_sprite(standSprite, 4);}
 
 #endregion

@@ -14,7 +14,7 @@ function set_cur_state(_newState){
 /// requires, but it should be either 4 or 8 directions.
 /// @param sprIndex
 /// @param sprDirections
-function set_sprite(_sprIndex, _sprDirections){
+function entity_set_sprite(_sprIndex, _sprDirections){
 	if (sprite_index == _sprIndex){
 		return false; // Don't bother updating the sprite data if the sprite hasn't actually changed
 	}
@@ -31,7 +31,7 @@ function set_sprite(_sprIndex, _sprDirections){
 /// damage. Also, the second variable will optionally lock the entity for a set number of frames.
 /// @param damage
 /// @param stunTime
-function set_entity_hit(_damage, _stunTime){
+function entity_set_hit(_damage, _stunTime){
 	entity_update_hitpoints(_damage);
 	stunLockTimer = _stunTime;
 	isHit = true;
@@ -50,10 +50,12 @@ function set_entity_hit(_damage, _stunTime){
 /// @param strength
 /// @param color
 /// @param trueLight
-function entity_create_light(_offsetX, _offsetY, _radiusX, _radiusY, _strength, _color, _trueLight) {
+/// @param persistent
+function entity_create_light(_offsetX, _offsetY, _radiusX, _radiusY, _strength, _color, _trueLight, _persistent) {
 	ambLight = instance_create_depth(x + _offsetX, y + _offsetY, ENTITY_DEPTH, obj_light);
 	with(ambLight){ // Apply all the entity's settings to the light itself
 		light_create_circle(_radiusX, _radiusY, _strength, _color, _trueLight);
+		persistent = _persistent;
 	}
 	lightPosition = [_offsetX, _offsetY];
 }

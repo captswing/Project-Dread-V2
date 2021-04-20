@@ -21,7 +21,7 @@ function player_attack_hitscan_collision(_startX, _startY, _endX, _endY, _zOffse
 				}
 				break;
 			case par_enemy: // Colliding with an enemy object
-				player_attack_enemy_collision(_collisions[| i]);
+				player_attack_enemy_collision(_collisions[| i], player_get_weapon_damage());
 				i = _length; // Always exits the loop after resolving collision
 				break;
 		}
@@ -35,13 +35,13 @@ function player_attack_hitscan_collision(_startX, _startY, _endX, _endY, _zOffse
 /// damage is less than the threshold value, the stun will be calculated by the percent chance of stun out of 
 /// 100% (Stored as a value between 0 and 1).
 /// @param enemyID
-function player_attack_enemy_collision(_enemyID){
-	var _playerDamage = damage * global.gameplay.playerDamageMod;
+/// @param damage
+function player_attack_enemy_collision(_enemyID, _damage){
 	with(_enemyID){ // After calculating the player's damage, deal it to the enemy and check if stun locked
-		if (_playerDamage >= stunLockThreshold || random(1) <= stunLockChance){ // The enemy was stunned
-			set_entity_hit(_playerDamage, stunLockTime);
+		if (_damage >= stunLockThreshold || random(1) <= stunLockChance){ // The enemy was stunned
+			entity_set_hit(_damage, stunLockTime);
 		} else{ // No stun has occurred, just deal out the damage
-			set_entity_hit(_playerDamage, 0);
+			entity_set_hit(_damage, 0);
 		}
 	}
 }

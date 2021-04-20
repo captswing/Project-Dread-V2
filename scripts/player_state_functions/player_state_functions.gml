@@ -73,11 +73,11 @@ function player_state_default(){
 	
 	// Setting the correct sprite for the entity; reflecting what the player is doing at that moment
 	if (inputMagnitude != 0){  // The player is moving; update the direction based on input
-		set_sprite(walkSprite, 4);
+		entity_set_sprite(walkSprite, 4);
 		// TODO -- Add change to running sprite here
 		direction = inputDirection;
 	} else{ // The player is standing still; don't update direction based on input
-		set_sprite(standSprite, 4);
+		entity_set_sprite(standSprite, 4);
 	}
 }
 
@@ -107,7 +107,7 @@ function player_state_weapon_ready(){
 	
 	// Setting the sprite for the entity -- relative to direction that they are facing.
 	if (inputMagnitude != 0) {direction = inputDirection;}
-	set_sprite(standSprite, 4); // TODO -- SWAP WITH WEAPON'S READY SPRITE
+	entity_set_sprite(standSprite, 4); // TODO -- SWAP WITH WEAPON'S READY SPRITE
 }
 
 /// @description The state that the player is in whenever they are reloading their current weapon OR are
@@ -129,7 +129,7 @@ function player_state_weapon_reload(){
 	}
 	
 	// Overwrite the sprite's index with a index relative to the remaining reload time
-	if (set_sprite(walkSprite, 4)) {sprSpeed = 0;}
+	if (entity_set_sprite(walkSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_reloadRate - reloadTimer) / _reloadRate)) * sprFrames, sprFrames - 1);
 }
 
@@ -148,6 +148,6 @@ function player_state_weapon_recoil(){
 	}
 	
 	// Overwrite the sprite's index with a index relative to the remaining recoil time
-	if (set_sprite(walkSprite, 4)) {sprSpeed = 0;}
+	if (entity_set_sprite(walkSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_fireRate - fireRateTimer) / _fireRate)) * sprFrames, sprFrames - 1);
 }

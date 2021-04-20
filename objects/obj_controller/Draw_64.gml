@@ -31,11 +31,41 @@ if (!showDebugInfo){
 
 draw_text(5, 5, "In-Game Playtime:\nDelta Time:\nRoom Size:\nInstances:\nDynamic Entities:\nStatic Entities:\nEntities Drawn:\nLights Drawn:\n\n-- Camera Data --\nPosition:\nFollowing:\n\n-- Player Data --\nCurrent State:\nLast State:\nPosition:\nMax Speed:\nHitpoints:\nCurrent Sanity:\nSanity Modifier:");
 
-var _baseSanityMod, _playerID;
+// Getting the number of objects drawn by the depth sorter
+var _totalObjectsDrawn = 0;
+with(global.singletonID[? DEPTH_SORTER]) {_totalObjectsDrawn = totalObjectsDrawn;}
+
+// Getting the number of lights drawn by the lighting shader
+var _totalLightsDrawn = 0;
+with(global.singletonID[? EFFECT_HANDLER]) {_totalLightsDrawn = lightsDrawn;}
+
+// Getting the camera's followed object's index
+var _objectIndex = noone;
+with(curObject) {_objectIndex = object_index;}
+
+// Getting player information for the debug HUD
+var _baseSanityMod, _x, _y, _maxHspd, _maxVspd, _hitpoints, _maxHitpoints, _sanity, _maxSanity, _sanityModifier, _curState, _lastState;
 _baseSanityMod = global.isRoomSafe ? SANITY_MOD_SAFE : SANITY_MOD_UNSAFE;
-_playerID = global.singletonID[? PLAYER];
+with(global.singletonID[? PLAYER]){
+	_x = x;
+	_y = y;
+	
+	_maxHspd = maxHspd;
+	_maxVspd = maxVspd;
+	
+	_hitpoints = hitpoints;
+	_maxHitpoints = maxHitpoints;
+	
+	_sanity = curSanity;
+	_maxSanity = maxSanity;
+	_sanityModifier = sanityModifier;
+	
+	_curState = curState;
+	_lastState = lastState;
+}
 
 shader_set_uniform_f_array(sOutlineColor, [0.5, 0, 0]);
+draw_set_halign(fa_right);
 draw_set_color(c_red);
 draw_text(136, 5, global.playtimeString + "\n" +
 				  string(global.deltaTime) + "\n" +
@@ -43,19 +73,19 @@ draw_text(136, 5, global.playtimeString + "\n" +
 				  string(instance_number(all)) + "\n" + 
 				  string(instance_number(par_dynamic_entity)) + "\n" +
 				  string(instance_number(par_static_entity)) + "\n" +
-				  string(global.singletonID[? DEPTH_SORTER].totalObjectsDrawn) + "\n" +
-				  string(global.singletonID[? EFFECT_HANDLER].lightsDrawn) + "\n\n\n" +
+				  string(_totalObjectsDrawn) + "\n" +
+				  string(_totalLightsDrawn) + "\n\n\n" +
 				  "[" + string(x) + ", " + string(y) + "]\n" +
-				  object_get_name(curObject.object_index) + "\n\n\n\n\n" +
-				  "[" + string(_playerID.x) + ", " + string(_playerID.y) + "]\n" + 
-				  "[" + string(_playerID.maxHspd) + ", " + string(_playerID.maxVspd) + "]\n" +
-				  string(_playerID.hitpoints) + "/" + string(_playerID.maxHitpoints) + "\n" +
-				  string(_playerID.curSanity) + "/" + string(_playerID.maxSanity) + "\n" +
-				  string(_baseSanityMod + _playerID.sanityModifier));
+				  object_get_name(_objectIndex) + "\n\n\n\n\n" +
+				  "[" + string(_x) + ", " + string(_y) + "]\n" + 
+				  "[" + string(_maxHspd) + ", " + string(_maxVspd) + "]\n" +
+				  string(_hitpoints) + "/" + string(_maxHitpoints) + "\n" +
+				  string(_sanity) + "/" + string(_maxSanity) + "\n" +
+				  string(_baseSanityMod + _sanityModifier));
 
 draw_set_halign(fa_left);
 draw_text(70, 5, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n" + 
-				  script_get_name(_playerID.curState) + "\n" +
-				  script_get_name(_playerID.lastState));
+				  script_get_name(_curState) + "\n" +
+				  script_get_name(_lastState));
 
 shader_reset();

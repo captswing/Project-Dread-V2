@@ -25,7 +25,7 @@ function player_add_effect(_effectType, _duration, _startFunction, _endFunction)
 	// value with the new one.
 	var _index = player_get_effect(_effectType); 
 	if (_index != -1){ // Don't add the effect to the timers since there's a duplicate; just attempt to overwrite the duration
-		if (effectTimers[| _index][0] == _effectType && (effectTimers[| _index][0] < _duration || effectTimers[| _index][0] == INDEFINITE_EFFECT)){
+		if (effectTimers[| _index][0] == _effectType && (effectTimers[| _index][1] < _duration || effectTimers[| _index][1] == INDEFINITE_EFFECT)){
 			effectTimers[| _index][1] = _duration;
 		}
 	} else{ // Pushes the effect with all of its details onto the array of current effects
@@ -34,7 +34,8 @@ function player_add_effect(_effectType, _duration, _startFunction, _endFunction)
 		if (_startFunction != NO_SCRIPT && script_exists(_startFunction)){
 			script_execute(_startFunction);
 		}
-		ds_list_add(effectTimers, [_effectType, _duration, _endFunction]);
+		// The start function is placed in the effect timer index for when the data is saved and then loaded again.
+		ds_list_add(effectTimers, [_effectType, _duration, _startFunction, _endFunction]);
 	}
 	return argument_count;
 }
@@ -43,10 +44,12 @@ function player_add_effect(_effectType, _duration, _startFunction, _endFunction)
 /// @param effectType
 /// @param performEndFunction
 function player_remove_effect(_effectType, _performEndFunction){
-	var _index = ds_list_find_index(effectTimers, _effectType);
-	if (!is_undefined(_index)){
+	var _index = player_get_effect(_effectType);
+	if (_index != -1){ // If a valid index was found
+		if (_performEndFunction && script_exists(effectTimers[| _index][3])){
+			script_execute(effectTimers[| _index][3]); // Optionally perform the end function associated with the removed effect
+		}
 		ds_list_delete(effectTimers, _index);
-		return -1;
 	}
 	return argument_count;
 }

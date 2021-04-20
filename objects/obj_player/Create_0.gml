@@ -12,8 +12,7 @@ set_cur_state(player_state_default);
 // Sets the player's maximum hspd and vspd
 entity_set_max_speed(1.25, 1.25, true);
 // Create a dim light source so the player is semi-visible even in complete darkness
-entity_create_light(0, -8, 15, 15, 0.1, c_ltgray, false);
-with(ambLight) {persistent = true;} // Makes the player's light source persistent like itself
+entity_create_light(0, -8, 15, 15, 0.1, c_ltgray, false, true);
 // Assign the player's starting amount of hitpoints, which can be upgraded over time
 maxHitpoints = 20;
 hitpoints = maxHitpoints;
@@ -130,6 +129,10 @@ accuracyMod = 0;
 fireRateMod = 0;
 reloadRateMod = 0;
 
+// A multiplier for the weapon's damage, which is only ever altered by items like the Power Amulet and items
+// that grant temporary damage boosts; if those ever become a thing...
+damageMultiplier = 1;
+
 // Each of these variables contains a sound effect that will play for performing a given action when using 
 // the currently equipped weapon.
 weaponUseSound = -1;
@@ -160,5 +163,14 @@ lightColor = c_white;
 inventory_add(FLASHLIGHT, 1, 0);
 inventory_add(HANDGUN, 7, 60);
 inventory_add(HANDGUN_AMMO_PLUS, 35, 0);
+inventory_add(KEVLAR_VEST, 1, 0);
+inventory_add(TOUGHNESS_AMULET, 1, 0);
+inventory_add(IMMUNITY_AMULET, 1, 0);
+
 player_equip_item(0);
 player_equip_item(1);
+player_equip_item(3);
+player_equip_item(4);
+player_equip_item(5);
+
+inventory_swap(1, 5);

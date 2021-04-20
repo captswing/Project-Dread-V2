@@ -89,13 +89,13 @@ function cutscene_move_entity(_destX, _destY, _objectID){
 		
 		// The entity has reached its destinations, lock them onto the desination position and end the action
 		if (point_distance(0, 0, deltaHspd, deltaHspd) > point_distance(x, y, _destX, _destY)){
-			set_sprite(standSprite, 4);
+			entity_set_sprite(standSprite, 4);
 			x = floor(_destX);
 			y = floor(_destY);
 			_endAction = true;
 			_directionSet = false; // Reset the set direction flag
 		} else{ // Entity has not reached their destination; move them and set to moving sprite
-			set_sprite(walkSprite, 4);
+			entity_set_sprite(walkSprite, 4);
 			x += deltaHspd;
 			y += deltaVspd;
 		}
@@ -146,7 +146,7 @@ function cutscene_move_camera_position(_targetX, _targetY, _moveSpeed, _pauseFor
 	// the cutscene action if the said target position has been reached.
 	var _positionReached = false;
 	with(global.singletonID[? CONTROLLER]){
-		set_camera_target_position(_targetX, _targetY, _moveSpeed);
+		camera_set_target_position(_targetX, _targetY, _moveSpeed);
 		_positionReached = (x == targetPosition[X] && y == targetPosition[Y]);
 	}
 	
@@ -172,7 +172,7 @@ function cutscene_move_camera_object(_objectID, _moveSpeed, _pauseForMovement){
 	// when the flag newObjectSet is false while the curObject variable stores a valid ID for an object.
 	var _positionReached = false;
 	with(global.singletonID[? CONTROLLER]){
-		set_camera_cur_object(_objectID, _moveSpeed, false);
+		camera_set_cur_object(_objectID, _moveSpeed, false);
 		_positionReached = (!newObjectSet && curObject != noone);
 	}
 	

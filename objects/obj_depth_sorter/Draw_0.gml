@@ -35,8 +35,8 @@ _spriteTexture = -1;
 
 // Loop through each object in the list and draw them
 var _screenX, _screenY, _screenW, _screenH;
-_screenX = get_camera_x();
-_screenY = get_camera_y();
+_screenX = camera_get_x();
+_screenY = camera_get_y();
 _screenW = _screenX + WINDOW_WIDTH;
 _screenH = _screenY + WINDOW_HEIGHT;
 for (var i = 0; i < _index; i++){

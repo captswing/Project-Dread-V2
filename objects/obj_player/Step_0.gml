@@ -42,8 +42,8 @@ if (global.gameState == GameState.InGame && curState != NO_STATE){
 		// Lock the player in a stun for a set number of frames while shaking the screen at varying intensity
 		// relative to the damage the player has been dealt. Also, freezes their current animation during stun.
 		if (_isHit){
-			set_camera_shake(_damage * 2.5, 10);
-			set_entity_hit(_damage, 10);
+			camera_set_shake(_damage * 2.5, 10);
+			entity_set_hit(_damage, 10);
 		}
 	}
 	
@@ -69,12 +69,12 @@ if (conditionTimer >= maxConditionTimer){
 	conditionTimer -= maxConditionTimer;
 	// Dealing bleeding damage every check (2.5 seconds of real-time)
 	if (isBleeding){ // Damage is 5% of current maximum health constantly
-		update_hitpoints(-maxHitpoints * 0.05);
+		entity_update_hitpoints(-maxHitpoints * 0.05);
 	}
 	// Dealing poison damage every other check (5 seconds of real-time)
 	if (isPoisoned){ // Damage doubles every time; starts at 1% of current maximum health
 		if (dealPoisonDamage){
-			update_hitpoints(-maxHitpoints * curPoisonDamage);
+			entity_update_hitpoints(-maxHitpoints * curPoisonDamage);
 			curPoisonDamage = min(curPoisonDamage * 2, 1); // Maxes out at damage at 100% of current maximum health
 		}
 		dealPoisonDamage = !dealPoisonDamage;
@@ -102,8 +102,8 @@ for (var i = 0; i < _length; i++){
 		effectTimers[| i][1] -= global.deltaTime;
 		if (effectTimers[| i][1] <= 0){ // Deletes the index from the array when the temporary effect is over.
 			// Optionally, a function can be executed for the ending of a given effect
-			if (effectTimers[| i][2] != NO_SCRIPT && script_exists(effectTimers[| i][2])){
-				script_execute(effectTimers[| i][2]);
+			if (effectTimers[| i][3] != NO_SCRIPT && script_exists(effectTimers[| i][3])){
+				script_execute(effectTimers[| i][3]);
 			}
 			ds_list_delete(effectTimers, i);
 			_length--; // Removes one from length to compensate for the deleted array index

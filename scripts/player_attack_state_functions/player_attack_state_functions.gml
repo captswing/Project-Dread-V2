@@ -11,7 +11,7 @@ function player_attack_state_projectile(){
 	// Handling collisions with enemy objects
 	var _hostile = collision_line(x, y, x + deltaHspd, y + deltaVspd, par_enemy, false, true);
 	if (_hostile != noone){ // An entity was hit; deal damage to it if possible
-		player_attack_enemy_collision(_hostile);
+		player_attack_enemy_collision(_hostile, damage);
 		isDestroyed = true;
 		return; // Exit out of the state early
 	}

@@ -83,6 +83,10 @@ function inventory_remove(_name, _quantity){
 /// @param x
 /// @param y
 function inventory_remove_slot(_slot, _createItem, _x, _y){
+	// Before removing all the data from the item slot, unequip the item if it is equipped onto the player
+	with(global.singletonID[? PLAYER]) {player_unequip_item(_slot);}
+	
+	// Optionally, create a physical item on the ground. Then, remove the item's data from the inventory array.
 	if (_createItem) {create_item(_x, _y, global.invItem[_slot][0], global.invItem[_slot][1], global.invItem[_slot][2]);}
 	global.invItem[_slot] = [NO_ITEM, 0, 0, false];
 }
@@ -94,6 +98,12 @@ function inventory_remove_slot(_slot, _createItem, _x, _y){
 function inventory_swap(_firstSlot, _secondSlot){
 	// Same slot supplied twice, don't execute any code
 	if (_firstSlot == _secondSlot) {return;}
+
+	// Before actually swapping the data, make sure to switch the player's equipSlot array data to reflect
+	// the item's slot change if the item is currently equipped to the player character.
+	if (global.invItem[_firstSlot][3] || global.invItem[_secondSlot][3]){
+		with(global.singletonID[? PLAYER]) {player_update_equip_slot(_firstSlot, _secondSlot);}
+	}
 
 	// Stores the data from the first slot into a temporary array
 	var _tempSlot = array_create(0, 0);

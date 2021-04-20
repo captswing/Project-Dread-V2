@@ -78,6 +78,27 @@ function save_game_data(_saveNum){
 		ds_map_add(_playerMap, "sanity", curSanity);
 		ds_map_add(_playerMap, "max_sanity", maxSanity);
 		
+		// Save variables for the main conditions that can effect the player from enemies and hostile
+		// environmental objects -- otherwise known as bleeding and poison. It saves the timer that counts
+		// down to dish out the damage for the conditions and the flag that determines which condition check
+		// will deal poison damage to the player. Also, the current poison damage is saved as well.
+		ds_map_add(_playerMap, "is_bleeding", isBleeding);
+		ds_map_add(_playerMap, "is_poisoned", isPoisoned);
+		ds_map_add(_playerMap, "condition_timer", conditionTimer);
+		ds_map_add(_playerMap, "deal_poison_damage", dealPoisonDamage);
+		ds_map_add(_playerMap, "cur_poison_damage", curPoisonDamage);
+		
+		// Create a new list that will store the copied data from the current temporary effect that are 
+		// active on the player object currently, This is needed because simply "copying" over the list
+		// in game maker marks it to be deleted once it's encoded to a JSON file.
+		var _effectTimers, _length;
+		_effectTimers = ds_list_create();
+		_length = ds_list_size(effectTimers);
+		for (var i = 0; i < _length; i++){
+			ds_list_add(_effectTimers, effectTimers[| i]);
+		}
+		ds_map_add_list(_playerMap, "effect_timers", _effectTimers);
+		
 		// Add the equipment variables that are necessary for loading the data back into the game properly. Instead
 		// of saving all the weapon/armor/flashlight variables and all that mess, only what is equipped will be saved.
 		// When the game reloads this data, the equip functions will provide the correct data to the variables.
@@ -115,11 +136,27 @@ function load_game_data(_saveNum){
 	if (ds_exists(global.worldItemData, ds_type_map)) {clear_world_item_data();}
 	global.worldItemData = ds_map_create();
 	
+	// Resets variables relating to the equipped weapon and other variables that aren't put into the save file.
+	// This is only necessary if the player object isn't deleted when the file's data is loaded from, which can
+	// only occur when loading a save file while in-game.
+	with(global.singletonID[? PLAYER]){
+		for (var i = 0; i < EquipSlot.Length; i++){
+			player_unequip_item(equipSlot[i]);
+		}
+		// Wipes out all effects applied to the player object before the file was loaded.
+		while(ds_list_size(effectTimers) > 0){
+			if (effectTimers[| i][3] != NO_SCRIPT && script_exists(effectTimers[| 0][3])){
+				script_execute(effectTimers[| 0][3]); // Performs the optional effect ending function when required
+			}
+			ds_list_delete(effectTimers, 0);
+		}
+	}
+	
 	// Make sure to decrypt the file's contents before attempting to read from it. Otherwise, all that will
 	// be read in is junk data and the game will crash.
 	var _decryptedFilename = "data_DECRYPTED.000";
 	file_fast_crypt_ultra_zlib(_filename, _decryptedFilename, false, "8y/B?E(H+MbQeThWmZq4t7w9z$C&F)J@NcRfUjXn2r5u8x/A%D*G-KaPdSgVkYp3");
-	
+
 	// After ensuring the file exists and there are no memory leaks to be had, load in the file and decode
 	// the JSON data, which will return a ds_map containing inner maps and lists that data will be read from.
 	var _file, _map;
@@ -185,22 +222,11 @@ function load_game_data(_saveNum){
 	}
 	
 	// Go through the player object and set/reset all variables that are affected by the data that was written to
-	// the save file's player data map. If variables need to be reset instead of creating a new object they will 
-	// be reset to compensate.
-	var _playerMap, _resetVariables;
-	_playerMap = _map[? "player_data"];
-	_resetVariables = (global.singletonID[? PLAYER] != noone);
-	if (!_resetVariables) {instance_create_depth(0, 0, ENTITY_DEPTH, obj_player);}
+	// the save file's player data map. If no player object currently exists, it needs to be created before setting
+	// all the variables to what they need to be.
+	var _playerMap = _map[? "player_data"];
+	if (global.singletonID[? PLAYER] == noone) {instance_create_depth(0, 0, ENTITY_DEPTH, obj_player);}
 	with(global.singletonID[? PLAYER]){
-		// Resets variables relating to the equipped weapon and other variables that aren't put into the save file.
-		// This is only necessary if the player object isn't deleted when the file's data is loaded from, which can
-		// only occur when loading a save file while in-game.
-		if (_resetVariables){
-			for (var i = 0; i < EquipSlot.Length; i++){
-				if (equipSlot[i] != -1) {player_unequip_item(equipSlot[i]);}
-			}
-		}
-		
 		// Set the player to the correct position and orientation.
 		x = _playerMap[? "x"];
 		y = _playerMap[? "y"];
@@ -214,11 +240,27 @@ function load_game_data(_saveNum){
 		curSanity = _playerMap[? "sanity"];
 		maxSanity = _playerMap[? "max_sanity"];
 		
+		// Restore all the player's status conditions that were active when they last saved. Also restores 
+		// the timer, the poison's current damage, and if the poison will deal damage on the next check.
+		isBleeding = _playerMap[? "is_bleeding"];
+		isPoisoned = _playerMap[? "is_poisoned"];
+		conditionTimer = _playerMap[? "condition_timer"];
+		dealPoisonDamage = _playerMap[? "deal_poison_damage"];
+		curPoisonDamage = _playerMap[? "cur_poison_damage"];
+		
+		// Restores the temporary effects that were affecting the player when they last saved; reapplying
+		// them and executing any required starting functions for a given effect.
+		var _effectTimers, _length;
+		_effectTimers = _playerMap[? "effect_timers"];
+		_length = ds_list_size(_effectTimers);
+		for (var i = 0; i < _length; i++){
+			player_add_effect(_effectTimers[| 0], _effectTimers[| 1], _effectTimers[| 2], _effectTimers[| 3]);
+		}
+		
 		// Equip all the items that were equiped onto the player when they saved the game.
-		var _length = ds_list_size(_playerMap[? "equipment"]);
 		equipSlot = ds_list_to_array(_playerMap[? "equipment"]);
 		for (var i = 0; i < EquipSlot.Length; i++){
-			if (equipSlot[i] != -1) {player_equip_item(equipSlot[i]);}
+			player_equip_item(equipSlot[i]);
 		}
 		
 		// Getting the player's weapon modifier values from the save file and applying any modifier 

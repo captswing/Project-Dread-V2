@@ -1,8 +1,12 @@
-/// @description 
+/// @description The function that handles equipping any item that has valid data within the "Equipable Data"
+/// section of the "item_data.json" file. It will attempt to parse out the script it needs to run for that
+/// item, and if it can't find a valid script tied to the item it won't be euqipped at all. The function
+/// will also prevent attempts to equip the same item onto the player character again.
 /// @param slot
 function player_equip_item(_slot){
-	// Don't allow the function to execute anything if the slot provided is outside of the valid range
-	if (_slot < 0 || _slot > array_length(global.invItem)) {return;}
+	// Don't allow the function to execute anything if the slot provided is outside of the valid range OR
+	// if the item in the slot is already equipped
+	if (_slot < 0 || _slot > array_length(global.invItem) || global.invItem[_slot][3]) {return;}
 	
 	// Store the item's equipment data into a variable and check if the item is an amulet, which uses
 	// a slightly different function for equipping and unequipping.
@@ -17,21 +21,20 @@ function player_equip_item(_slot){
 	// Before executing the script found inside of the data map, make sure it actually exists as an asset.
 	// Only if it exists will the item be equipped onto the player.
 	if (script_exists(_script)){
-		var _array, _equipmentSlot;
-		_array = ds_list_to_array(_data[? EQUIP_ARGUMENTS]);
-		_equipmentSlot = script_execute_ext(_script, _array);
+		script_execute(_script, _slot);
 		global.invItem[_slot][3] = true; // Set the equipped flag on the item to true
-		if (!is_undefined(_equipmentSlot)){ // Stores the equipment's name and its current slot 
-			equipSlot[_equipmentSlot] = _slot;
-		}
 	}
 }
 
-/// @description 
+/// @description The function that handles unequipping any item that is currently flagged as equipped onto
+/// the player character. It will also attempt to parse a script's index out of the data provided like the
+/// above function; resulting in no item being unequipped if it can't find a valid script. This function will
+/// also prevent the player from unequipping items that aren't actually flagged as equipped.
 /// @param slot
 function player_unequip_item(_slot){
-	// Don't allow the function to execute anything if the slot provided is outside of the valid range
-	if (_slot < 0 || _slot > array_length(global.invItem)) {return;}
+	// Don't allow the function to execute anything if the slot provided is outside of the valid range OR
+	// if the item in the slot provided isn't equipped.
+	if (_slot < 0 || _slot > array_length(global.invItem) || !global.invItem[_slot][3]) {return;}
 	
 	// Store the item's equipment data into a variable and check if the item is an amulet, which uses
 	// a slightly different function for equipping and unequipping.
@@ -46,19 +49,14 @@ function player_unequip_item(_slot){
 	// Before executing the script found inside of the data map, make sure it actually exists as an asset.
 	// Only if it exists will the item be attempted to be unequipped from the player.
 	if (script_exists(_script)){
-		var _array, _equipmentSlot;
-		_array = ds_list_to_array(_data[? UNEQUIP_ARGUMENTS]);
-		_equipmentSlot = script_execute_ext(_script, _array);
+		script_execute(_script);
 		global.invItem[_slot][3] = true; // Set the equipped flag on the item to false
-		if (!is_undefined(_equipmentSlot)){ // Remove the equipment's data from its slot
-			equipSlot[_equipmentSlot] = -1;
-		}
 	}
 }
 
 /// @description 
-/// @param name
-function player_equip_weapon(_name){
+/// @param slot
+function player_equip_weapon(_slot){
 	// If another weapon was currently equipped to the player, reset all the modifier values back to 0 and
 	// also clear the list containing the names of all the different ammunition types.
 	if (equipSlot[EquipSlot.Weapon] != -1){
@@ -74,7 +72,7 @@ function player_equip_weapon(_name){
 	
 	// After the modifier data is cleared or it didn't need to be cleared in the first place, get the weapon's
 	// data based on its name and add its data to the player's weapon stat vairables.
-	var _data = global.itemData[? WEAPON_DATA][? _name];
+	var _data = global.itemData[? WEAPON_DATA][? global.invItem[_slot][0]];
 	if (is_undefined(_data)) {return;} // Exit the script if an invalid item was provided.
 	damage =				_data[? DAMAGE];
 	numBullets =			_data[? NUM_BULLETS];
@@ -99,8 +97,8 @@ function player_equip_weapon(_name){
 	recoilSprite =			asset_get_index(_sprites[| 3]);
 	reloadSprite =			asset_get_index(_sprites[| 4]);
 	
-	// Finally, return the equipment slot that a weapon is placed into
-	return EquipSlot.Weapon;
+	// Finally, set the equipped item's slot to the weapon's current slot
+	equipSlot[EquipSlot.Weapon] = _slot;
 }
 
 /// @description 
@@ -129,16 +127,16 @@ function player_unequip_weapon(){
 	recoilSprite =		   -1;
 	reloadSprite =		   -1;
 	
-	// Finally, return the equipment slot that a weapon was removed from
-	return EquipSlot.Weapon;
+	// Finally, reset the weapon's equipped slot value
+	equipSlot[EquipSlot.Weapon] = -1;
 }
 
 /// @description 
-/// @param name
-function player_equip_flashlight(_name){
+/// @param slot
+function player_equip_flashlight(_slot){
 	// Set the player variables for the flashlight's characteristics, for when it's toggled on from off
 	// after already being equipped, which is entirely possible by pressing the flashlight key.
-	var _data = global.itemData[? FLASHLIGHT_DATA][? _name];
+	var _data = global.itemData[? FLASHLIGHT_DATA][? global.invItem[_slot][0]];
 	if (is_undefined(_data)) {return;} // Exit the script if an invalid item was provided.
 	lightSize =			_data[? SIZE];
 	lightStrength =		_data[? STRENGTH];
@@ -147,96 +145,112 @@ function player_equip_flashlight(_name){
 	// Update the light and set the lightActive variable to true, to let the game know it is on.
 	update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);
 	
-	// Finally, return the equipment slot that a flashlight is placed into
-	return EquipSlot.Flashlight;
+	// Finally, set the equipped item's slot to the flashlight's current slot
+	equipSlot[EquipSlot.Flashlight] = _slot;
 }
 
 /// @description 
 function player_unequip_flashlight(){
 	update_light_settings(ambLight, 15, 15, 0.05, c_ltgray);
 	
-	// Finally, return the equipment slot that a flashlight was removed from
-	return EquipSlot.Flashlight;
+	// Finally, reset the flashlight's equipped slot value
+	equipSlot[EquipSlot.Flashlight] = -1;
 }
 
 /// @description 
-/// @param name
-function player_equip_armor(_name){
+/// @param slot
+function player_equip_armor(_slot){
 	// Unequip the previous armor if one is currently equipped by the player
-	if (equipSlot[EquipSlot.Armor] != NO_ITEM){
-		var _slot = inventory_find_equipped_item(equipSlot[EquipSlot.Armor]);
-		global.invItem[_slot][3] = false;
-		player_unequip_armor(equipSlot[EquipSlot.Armor]);
+	if (equipSlot[EquipSlot.Armor] != -1){
+		global.invItem[equipSlot[EquipSlot.Armor]][3] = false;
+		player_unequip_armor();
 	}
 	
 	// Get the stats for the armor that is being equipped, which is the damage resistance and maximum 
 	// speed modifier values.
-	var _data = global.itemData[? ARMOR_DATA][? _name];
+	var _data = global.itemData[? ARMOR_DATA][? global.invItem[_slot][0]];
 	if (is_undefined(_data)) {return;} // Exit the script if an invalid item was provided.
 	entity_update_max_speed(-maxHspdConst * _data[? SPEED_MODIFIER], -maxVspdConst * _data[? SPEED_MODIFIER]); 
 	damageResistance -= _data[? DAMAGE_RESIST];
 	
-	// Finally, return the equipment slot that the armor is placed into
-	return EquipSlot.Armor;
+	// Finally, set the equipped item's slot to the armor's current slot
+	equipSlot[EquipSlot.Armor] = _slot;
 }
 
 /// @description 
-/// @param name
-function player_unequip_armor(_name){
-	// Exit the function if the armor that is equipped doesn't match the provided name or no armor is equipped
-	if (_name == NO_ITEM || equipSlot[EquipSlot.Armor] != _name) {return;}
+function player_unequip_armor(){
+	// Exit the function if no armor is currently equipped in the provided slot
+	if (equipSlot[EquipSlot.Armor] == -1) {return;}
 	
 	// Only unequip the armor and restore the player's original stats if it is the same armor that is
 	// equipped to them currently.
-	var _data = global.itemData[? ARMOR_DATA][? _name];
+	var _data = global.itemData[? ARMOR_DATA][? global.invItem[equipSlot[EquipSlot.Armor]][0]];
+	if (is_undefined(_data)) {return;} // Exit the script if an invalid item was provided.
 	entity_update_max_speed(maxHspdConst * _data[? SPEED_MODIFIER], maxVspdConst * _data[? SPEED_MODIFIER]); 
 	damageResistance += _data[? DAMAGE_RESIST];
 	
-	// Finally, return the equipment slot that the armor was removed from
-	return EquipSlot.Armor;
+	// Finally, reset the armor's equipped slot value
+	equipSlot[EquipSlot.Armor] = -1;
 }
 
-/// @description
+/// @description 
 /// @param slot
 /// @param data
 function player_equip_amulet(_slot, _data){
+	if (equipSlot[EquipSlot.AmuletOne] == _slot || equipSlot[EquipSlot.AmuletTwo] == _slot){
+		return; // Don't equip the amulet if it's already equipped to the player.
+	}
+	
 	// If an amulet exists within the second slot currently, unequip that amulet and remove its effect.
 	if (equipSlot[EquipSlot.AmuletTwo] != -1){
 		player_unequip_item(equipSlot[EquipSlot.AmuletTwo]);
 	}
 	
-	// If the amulet is already equipped to either slot, don't equip the item again. Instead, move it to
-	// the first slot and the first slot's amulet to the second or just exit the script if it's already
-	// in the first slot.
-	if (equipSlot[EquipSlot.AmuletTwo][1] == _slot){
-		var _temp = equipSlot[EquipSlot.AmuletOne];
-		equipSlot[EquipSlot.AmuletOne] = equipSlot[EquipSlot.AmuletTwo];
-		equipSlot[EquipSlot.AmuletTwo] = _temp;
-		return; // Exit out of the script without equiping the amulet again.
-	} else if (equipSlot[EquipSlot.AmuletOne] == _slot){
-		return; // Simply exit the script without equipping the amulet.
+	// Get the amulet's script arguments and execute the script's code for unequipping the amulet.
+	if (!is_undefined(_data[? EQUIP_SCRIPT])){
+		var _script = asset_get_index(_data[? EQUIP_SCRIPT]);
+		// Before executing the script found inside of the data map, make sure it actually exists as an asset.
+		// Only if it exists will the amulet be equipped onto the player.
+		if (script_exists(_script)) {script_execute(_script);}
 	}
-	
-	// Get the amulet's script arguments and execute the script's code for equipping the amulet.
-	var _script = asset_get_index(_data[? EQUIP_SCRIPT]);
-	// Before executing the script found inside of the data map, make sure it actually exists as an asset.
-	// Only if it exists will the item be equipped onto the player.
-	if (script_exists(_script)){
-		var _array = ds_list_to_array(_data[? EQUIP_ARGUMENTS]);
-		script_execute_ext(_script, _array);
-		global.invItem[_slot][3] = false; // Set the equipped flag on the item to false
-	}
+	global.invItem[_slot][3] = true; // Set the equipped flag on the item to true
 	
 	// Finally, push whatever secondary amulet was previously equipped into the first slot into the second slot.
 	equipSlot[EquipSlot.AmuletTwo] = equipSlot[EquipSlot.AmuletOne];
 	equipSlot[EquipSlot.AmuletOne] = _slot;
 }
 
-/// @description
+/// @description 
 /// @param slot
 /// @param data
 function player_unequip_amulet(_slot, _data){
+	// Get the amulet's script arguments and execute the script's code for unequipping the amulet.
+	if (!is_undefined(_data[? UNEQUIP_SCRIPT])){
+		var _script = asset_get_index(_data[? UNEQUIP_SCRIPT]);
+		// Before executing the script found inside of the data map, make sure it actually exists as an asset.
+		// Only if it exists will the amulet be unequipped from the player.
+		if (script_exists(_script)) {script_execute(_script);}
+	}
+	global.invItem[_slot][3] = false; // Set the equipped flag on the item to false
 	
+	// If the amulet that is being unequipped is in the first slot; move the second slot's amulet into the
+	// the first amulet's slot after unequipping the amulet in the first slot.
+	equipSlot[EquipSlot.AmuletOne] = equipSlot[EquipSlot.AmuletTwo];
+	equipSlot[EquipSlot.AmuletTwo] = -1;
+}
+
+/// @description Swaps the equipped slot(s) to another value. This is useful when switching items between slots
+/// in the inventory, since these values need to be updated in order to accurately reflect the item's new
+/// position within the inventory.
+/// @param oldSlot
+/// @param newSlot
+function player_update_equip_slot(_oldSlot, _newSlot){
+	for (var i = 0; i < EquipSlot.Length; i++){
+		// Check if the slot is equal to both the old slot and the new slot so switching two equipped items
+		// can be handled in a single function call.
+		if (equipSlot[i] == _oldSlot) {equipSlot[i] = _newSlot;}
+		else if (equipSlot[i] == _newSlot) {equipSlot[i] = _oldSlot;}
+	}
 }
 
 /// @description Attempts to swap to the next ammunition type that the weapon can take. If the player
@@ -332,7 +346,8 @@ function player_use_weapon(_useAmmo){
 		var _direction, _object, _weaponData;
 		_direction = direction + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
 		_object = instance_create_depth(x + lengthdir_x(6, direction), y + lengthdir_y(10, direction), ENTITY_DEPTH, obj_player_projectile);
-		_weaponData = [global.invItem[_slot][0], damage + damageMod, range + rangeMod, bulletSpd];
+		_weaponData = [global.invItem[_slot][0], player_get_weapon_damage(), range + rangeMod, bulletSpd];
+		
 		// Pull all the necessary data in from the weapon to the projectile, which basically means
 		// the range and damage of the bullet.
 		with(_object){
@@ -353,8 +368,16 @@ function player_use_weapon(_useAmmo){
 	
 	// Play the weapon's use sound effect. Nothing will play if the provided sound doesn't exist
 	play_sound_effect(weaponUseSound, get_audio_group_volume(Settings.Sounds), true);
-	// Finally, subtract one from the weapon's current magazine amount if it consumes ammo
-	if (_useAmmo) {global.invItem[_slot][1]--;}
+	
+	// Finally, subtract one from the weapon's current magazine amount if it consumes ammo. The only exception
+	// to this is when the player has the refund amulet equipped, which has a 33% chance of not consuming ammo.
+	if (_useAmmo){
+		global.invItem[_slot][1]--;
+		if (player_is_amulet_equipped(REFUND_AMULET)){
+			var _refundChance = irandom_range(1, 100); // Choses a number between 1 and 100 for refund chance
+			if (_refundChance <= 33) {global.invItem[_slot][1]++;}
+		}
+	}
 	
 	// Return that the weapon was successfully used by the player
 	return true;
@@ -371,4 +394,11 @@ function player_reload_weapon(_clipRemainder){
 	_maxQuantity = global.itemData[? ITEM_LIST][? global.invItem[_slot][0]][? MAX_STACK];
 	_remainder = inventory_remove(ammoTypes[| curAmmoType], _maxQuantity - _clipRemainder);
 	global.invItem[_slot][1] = _maxQuantity - _remainder;
+}
+
+/// @description Simply returns the final damage that the player will deal out with their weapon, which is
+/// a sum of the weapon's base damage and its ammunition modifier value, as well as the damage multiplier
+/// and the difficulty's damage modifier.
+function player_get_weapon_damage(){
+	return (damage + damageMod) * damageMultiplier * global.gameplay.playerDamageMod;
 }

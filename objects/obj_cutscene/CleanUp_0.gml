@@ -21,4 +21,4 @@ parentTrigger = noone;
 // Return to the state the game was in when the cutscene object was created. Also, move the camera back to
 // the player object if it isn't already following the player at the end of the cutscene instructions.
 set_game_state(prevGameState, true);
-with(global.singletonID[? CONTROLLER]) {set_camera_cur_object(global.singletonID[? PLAYER], 0.5, false);}
+with(global.singletonID[? CONTROLLER]) {camera_set_cur_object(global.singletonID[? PLAYER], 0.5, false);}

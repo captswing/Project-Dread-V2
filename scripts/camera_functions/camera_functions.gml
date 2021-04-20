@@ -16,13 +16,13 @@ function create_camera(_x, _y, _scale){
 		camera_set_view_mat(cameraID, matrix_build_lookat(x, y, -10, x, y, 0, 0, 1, 0));
 		camera_set_proj_mat(cameraID, matrix_build_projection_ortho(WINDOW_WIDTH, WINDOW_HEIGHT, 1, 10000));
 		// Finally, set the window's size based on the current scaling factor
-		set_camera_window_size(_scale);
+		camera_set_window_size(_scale);
 	}
 }
 
 /// @description Sets the window's size based on a scaling factor relative to its currently set aspect ratio.
 /// @param scale
-function set_camera_window_size(_scale){
+function camera_set_window_size(_scale){
 	var _windowDimensions = [camera_get_view_width(cameraID) * floor(_scale), camera_get_view_height(cameraID) * floor(_scale)];
 	// After calculating the scale value for the window's dimensions, set the position and resize
 	window_set_position(round((display_get_width() - _windowDimensions[X]) / 2), round((display_get_height() - _windowDimensions[Y]) / 2));
@@ -37,7 +37,7 @@ function set_camera_window_size(_scale){
 /// @param objectID
 /// @param moveSpeed
 /// @param snapToTarget
-function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
+function camera_set_cur_object(_objectID, _moveSpeed, _snapToTarget){
 	with(global.singletonID[? CONTROLLER]){
 		if (curObject == _objectID || !instance_exists(_objectID)){
 			return; // Prevent invalid IDs from being followed
@@ -46,7 +46,7 @@ function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
 		curObject = _objectID;
 		if (!_snapToTarget){ // Smooth movement; set target position and temporarily unlock camera
 			newObjectSet = true; // Prevent curObject from being set to noone by the target position function
-			set_camera_target_position(_objectID.x, _objectID.y, _moveSpeed);
+			camera_set_target_position(_objectID.x, _objectID.y, _moveSpeed);
 		} else{ // Instantly lock the camera to the object's position
 			x = floor(_objectID.x);
 			y = floor(_objectID.y);
@@ -59,7 +59,7 @@ function set_camera_cur_object(_objectID, _moveSpeed, _snapToTarget){
 /// shake's magnitude it will not be overwritten. (1 second = 60)
 /// @param strength
 /// @param length
-function set_camera_shake(_strength, _length){
+function camera_set_shake(_strength, _length){
 	with(global.singletonID[? CONTROLLER]){
 		// Only overwrite the current camera shake if the intensity of the new shake is greater than the current.
 		if (shakeMagnitude < _strength){
@@ -75,7 +75,7 @@ function set_camera_shake(_strength, _length){
 /// @param targetX
 /// @param targetY
 /// @param moveSpeed
-function set_camera_target_position(_targetX, _targetY, _moveSpeed){
+function camera_set_target_position(_targetX, _targetY, _moveSpeed){
 	with(global.singletonID[? CONTROLLER]){
 		// Remove any decimals from the target positions. Also prevent the move speed from being less than 0.
 		targetPosition = [floor(_targetX), floor(_targetY)];
@@ -87,19 +87,19 @@ function set_camera_target_position(_targetX, _targetY, _moveSpeed){
 
 /// @description Gets the top-left x-position of the screen in the current room's coordinates since the 
 /// actual camera's position is in the center of the screen.
-function get_camera_x(){
+function camera_get_x(){
 	return global.singletonID[? CONTROLLER].x - (WINDOW_WIDTH / 2);
 }
 
 /// @description Gets the top-left y-position of the screen in the current room's coordinates since the
 /// actual camera's position is in the center of the screen.
-function get_camera_y(){
+function camera_get_y(){
 	return global.singletonID[? CONTROLLER].y - (WINDOW_HEIGHT / 2);
 }
 
 /// @description Updates the position of the camera used the currently desired movement method, whether that be
 /// free and smooth movement while unlocked, or a locked-on movement with a deadzone in the center.
-function update_camera_position() {
+function camera_update_position(){
 	// Calculating the bounds of the camera relative to the edges of the room
 	var _halfWidth, _halfHeight;
 	_halfWidth = WINDOW_WIDTH / 2;
