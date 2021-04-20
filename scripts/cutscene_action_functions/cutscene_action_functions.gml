@@ -217,7 +217,7 @@ function cutscene_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime, _pauseForFade
 		return; // Exit before performing event actions
 	}
 	
-	// Creates the screen fade effect and optionally waits until it is opaue before moving onto the next
+	// Creates the screen fade effect and optionally waits until it is opaque before moving onto the next
 	// instruction in the cutscene queue.
 	var _fadeFinished = false;
 	with(global.singletonID[? EFFECT_HANDLER]){
@@ -250,8 +250,11 @@ function cutscene_change_weather(_type, _intensity){
 	cutscene_end_action();
 }
 
-/// @description
+/// @description Plays a sound effect at a set volume level. This lasts for one in-game frame before moving
+/// onto the next cutscene instruction.
 /// @param sound
-//function cutscene_play_sound(_sound){
-	//audio_play_sound(_sound, 0, false);
-//}
+/// @param volume
+function cutscene_play_sound(_sound, _volume){
+	play_sound_effect(_sound, _volume, false);
+	cutscene_end_action();
+}

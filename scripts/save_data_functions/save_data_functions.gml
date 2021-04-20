@@ -145,7 +145,7 @@ function load_game_data(_saveNum){
 		}
 		// Wipes out all effects applied to the player object before the file was loaded.
 		while(ds_list_size(effectTimers) > 0){
-			if (effectTimers[| i][3] != NO_SCRIPT && script_exists(effectTimers[| 0][3])){
+			if (effectTimers[| 0][3] != NO_SCRIPT && script_exists(effectTimers[| 0][3])){
 				script_execute(effectTimers[| 0][3]); // Performs the optional effect ending function when required
 			}
 			ds_list_delete(effectTimers, 0);
