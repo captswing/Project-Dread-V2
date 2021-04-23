@@ -45,7 +45,7 @@ function save_game_data(_saveNum){
 	var _itemMap = ds_map_create();
 	for (var i = 0; i < global.invSize; i++){
 		if (global.invItem[i][0] == NO_ITEM) {continue;}
-		ds_map_add(_itemMap, string(i), global.invItem[i]);
+		ds_map_add(_itemMap, string(i), [global.invItem[i][0], global.invItem[i][1], global.invItem[i][2]]);
 	}
 	ds_map_add_map(_map, "inventory_contents", _itemMap);
 	ds_map_add(_map, "inventory_size", global.invSize);
@@ -168,7 +168,7 @@ function load_game_data(_saveNum){
 	// Load in the general global data from the save file; warping to the room index found in the file, getting
 	// the current playtime and setting its respective string value in the "HH:MM:SS" format. Then, set the
 	// position of the camera to its saved position.
-	room_goto(_map[? "current_room"]);
+	if (room != _map[? "current_room"]) {room_goto(_map[? "current_room"]);}
 	global.totalPlaytime = _map[? "total_playtime"];
 	global.playtimeString = number_as_time(global.totalPlaytime);
 	with(global.singletonID[? CONTROLLER]){ // Sets the camera to the correct position
@@ -204,6 +204,7 @@ function load_game_data(_saveNum){
 		_itemData = _map[? "inventory_contents"][? string(i)];
 		if (is_undefined(_itemData)) {continue;} // Skip over empty slots since those aren't saved
 		global.invItem[i] = ds_list_to_array(_itemData);
+		global.invItem[i][3] = false; // Re-initialize all equip flags and set them to false
 	}
 	global.invSize = _map[? "inventory_size"];
 	
@@ -250,17 +251,18 @@ function load_game_data(_saveNum){
 		
 		// Restores the temporary effects that were affecting the player when they last saved; reapplying
 		// them and executing any required starting functions for a given effect.
-		var _effectTimers, _length;
+		var _effectTimers, _length, _data;
 		_effectTimers = _playerMap[? "effect_timers"];
 		_length = ds_list_size(_effectTimers);
 		for (var i = 0; i < _length; i++){
-			player_add_effect(_effectTimers[| 0], _effectTimers[| 1], _effectTimers[| 2], _effectTimers[| 3]);
+			_data = _effectTimers[| i];
+			player_add_effect(_data[| 0], _data[| 1], _data[| 2], _data[| 3]);
 		}
 		
 		// Equip all the items that were equiped onto the player when they saved the game.
-		equipSlot = ds_list_to_array(_playerMap[? "equipment"]);
+		var _equipSlot = ds_list_to_array(_playerMap[? "equipment"]);
 		for (var i = 0; i < EquipSlot.Length; i++){
-			player_equip_item(equipSlot[i]);
+			player_equip_item(_equipSlot[i]);
 		}
 		
 		// Getting the player's weapon modifier values from the save file and applying any modifier 
@@ -283,7 +285,8 @@ function load_game_data(_saveNum){
 		// Always makes sure to activate or deactivate the flashlight to match the player's flashlight when they saved. If the light
 		// isn't active, the player's ambient light is set to the default values, which barely illuminate them in pitch-black.
 		isLightActive = _playerMap[? "light_active"];
-		if (!isLightActive) {update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);}
+		//if (isLightActive) {update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);}
+		//else {update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);}
 	}
 	
 	// Finally, destroy the map that was used to save all the data to the save file. Since it was used in tandem with "json_decode",

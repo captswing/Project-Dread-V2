@@ -119,27 +119,27 @@ global.eventFlags = array_create(5, false);
 global.gameplay = {
 	// Stores the overall difficulty setting, which is what is saved to the file instead of all the
 	// struct's data. Upon reloading, this value will be used to fetch the correct difficulty settings.
-	gameplayDifficulty : Difficulty.NotSelected,
+	gameplayDifficulty :	Difficulty.NotSelected,
 	// Determines the overall difficulty of the riddles, puzzles, and general exploration.
-	puzzleDifficulty : PuzzleDifficulty.NotSelected,
+	puzzleDifficulty :		PuzzleDifficulty.NotSelected,
 	// Gameplay variables that effect the player character. They include optional health regeneration, a
 	// toggle to prevent sanity loss, another to start them with a weak infinite ammo pistol, and a modifier
 	// for their overall damage output as well as how effective healing items are.
-	playerHealthRegen : false,
-	playerLosesSanity : false,
-	playerStartingPistol : false,
-	playerDamageMod : 1.0,
-	healingEffectMod : 1.0,
+	playerHealthRegen :		false,
+	playerLosesSanity :		false,
+	playerStartingPistol :	false,
+	playerDamageMod :		1.0,
+	healingEffectMod :		1.0,
 	// Gameplay variables that effect all enemies in the game. This includes just a damage modifier for
 	// now, but could potentially include a hitpoint multiplier and others in the future.
-	enemyDamageMod : 1.0,
+	enemyDamageMod :		1.0,
 	// Gameplay variables that effect things all a global scale; like enabling durability on all weapons,
 	// or limited save files using cassette tapes; preventing saving at all, and even a toggle to disable 
 	// reloading/respawning.
-	weaponDurability : false,
-	preventSaving : false,
-	limitedSaves : false,
-	oneLifeMode : false,
+	weaponDurability :		false,
+	preventSaving :			false,
+	limitedSaves :			false,
+	oneLifeMode :			false,
 }
 
 // FOR TESTING

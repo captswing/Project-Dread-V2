@@ -101,7 +101,7 @@ sanityTimer = 0;
 // can be either an indefinite effect, which is only removed through code that actually removes it from the
 // list, or it can be remove automatically over a set amount of time given to the effect.
 //
-//		effectTimers[i]	= [effectID, timeRemaining, endFunction]
+//		effectTimers[i]	= [effectID, timeRemaining, startFunction, endFunction]
 //
 effectTimers = ds_list_create();
 

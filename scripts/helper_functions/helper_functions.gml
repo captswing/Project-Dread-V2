@@ -11,7 +11,7 @@ function set_game_state(_newState, _highPriority){
 		return; // An invalid OR the same game state was provided, don't change game states
 	}
 	// Toggling the high priority flag allows the game state to overwrite a more prioritized state. The order
-	// of priority in the states is as follows: in-game, in-menu, cutscene, and finally paused.
+	// of priority from least to most is as follows: in-game, in-menu, cutscene, and finally paused.
 	if (_highPriority || global.gameState < _newState){
 		global.prevGameState = global.gameState;
 		global.gameState = _newState;
@@ -163,16 +163,16 @@ function initialize_difficulty(_combatDifficulty, _puzzleDifficulty){
 		case Difficulty.Forgiving:		// Forgiving Difficulty AKA "Easy" Mode
 			with(global.gameplay){
 				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
-				gameplayDifficulty = _combatDifficulty;
-				puzzleDifficulty = _puzzleDifficulty;
+				gameplayDifficulty =	_combatDifficulty;
+				puzzleDifficulty =		_puzzleDifficulty;
 				// Enable player health regeneration; prevent sanity loss; give the player the infinite ammo starting pistol; 
 				// apply a 1.5x damage modifier to the player, and a 2.0x modifier to the effectiveness of healing items.
-				playerHealthRegen = true;
-				playerStartingPistol = true;
-				playerDamageMod = 1.5;
-				healingEffectMod = 2.0;
+				playerHealthRegen =		true;
+				playerStartingPistol =	true;
+				playerDamageMod =		1.5;
+				healingEffectMod =		2.0;
 				// Apply a modifier that causes enemies to only deal out 50% of their potential attack damage.
-				enemyDamageMod = 0.5;
+				enemyDamageMod =		0.5;
 			}
 			// Set the inventory's starting size as well as its maximum possible size
 			global.invSize = 12;
@@ -181,11 +181,11 @@ function initialize_difficulty(_combatDifficulty, _puzzleDifficulty){
 		case Difficulty.Standard:		// Standard Difficulty AKA "Normal" Mode
 			with(global.gameplay){
 				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
-				gameplayDifficulty = _combatDifficulty;
-				puzzleDifficulty = _puzzleDifficulty;
+				gameplayDifficulty =	_combatDifficulty;
+				puzzleDifficulty =		_puzzleDifficulty;
 				// The only variable that needs to be adjusted for standard difficulty is enabling the depletion of the player's
 				// sanity value. Nothing else needs to be changed.
-				playerLosesSanity = true;
+				playerLosesSanity =		true;
 			}
 			// Set the inventory's starting size as well as its maximum possible size
 			global.invSize = 8;
@@ -194,15 +194,15 @@ function initialize_difficulty(_combatDifficulty, _puzzleDifficulty){
 		case Difficulty.Punishing:		// Punishing Difficulty AKA "Hard" Mode
 			with(global.gameplay){
 				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
-				gameplayDifficulty = _combatDifficulty;
-				puzzleDifficulty = _puzzleDifficulty;
+				gameplayDifficulty =	_combatDifficulty;
+				puzzleDifficulty =		_puzzleDifficulty;
 				// Adjust the player's damage modifier to 0.75x their normal damage.
-				playerDamageMod = 0.75;
+				playerDamageMod =		0.75;
 				// Adjust the enemy damage modifier so all enemies deal slightly more damage.
-				enemyDamageMod = 1.5;
+				enemyDamageMod =		1.5;
 				// Enable the gameplay's limited saves flag, which will enable cassette tapes to be scattered around the world.
 				// These tapes are required for saving, so it is heavily limited in this mode.
-				limitedSaves = true;
+				limitedSaves =			true;
 			}
 			// Set the inventory's starting size as well as its maximum possible size
 			global.invSize = 8;
@@ -211,16 +211,16 @@ function initialize_difficulty(_combatDifficulty, _puzzleDifficulty){
 		case Difficulty.Nightmare:		// Nightmare Difficulty AKA "Very Hard" Mode, which is an unlockable difficulty
 			with(global.gameplay){
 				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
-				gameplayDifficulty = _combatDifficulty;
-				puzzleDifficulty = _puzzleDifficulty;
+				gameplayDifficulty =	_combatDifficulty;
+				puzzleDifficulty =		_puzzleDifficulty;
 				// Adjust the player's damage modifier to 0.75x their normal damage.
-				playerDamageMod = 0.75;
+				playerDamageMod =		0.75;
 				// Adjust the enemy damage modifier so all enemies deal double their nromal damage.
-				enemyDamageMod = 2;
+				enemyDamageMod =		2;
 				// Enable limited saves using cassette tapes like in "Punishing" difficulty, but with the added toggle of the
 				// player's weapons degrading over time; lower their daamge as the durability inches closer to zero.
-				weaponDurability = true;
-				limitedSaves = true;
+				weaponDurability =		true;
+				limitedSaves =			true;
 			}
 			// Set the inventory's starting size as well as its maximum possible size
 			global.invSize = 6;
@@ -229,18 +229,18 @@ function initialize_difficulty(_combatDifficulty, _puzzleDifficulty){
 		case Difficulty.OneLifeMode:		// One Life Mode, which is an unlockable difficulty
 			with(global.gameplay){
 				// Store the gameplay difficulty and puzzle difficulty into their respective variables.
-				gameplayDifficulty = _combatDifficulty;
-				puzzleDifficulty = _puzzleDifficulty;
+				gameplayDifficulty =	_combatDifficulty;
+				puzzleDifficulty =		_puzzleDifficulty;
 				// Adjust the player's damage modifier to 0.5x their normal damage.
-				playerDamageMod = 0.5;
+				playerDamageMod =		0.5;
 				// Adjust the enemy damage modifier so all enemies deal double their nromal damage.
-				enemyDamageMod = 2;
+				enemyDamageMod =		2;
 				// Enable the flag that prevents saving the game in its entirety for this difficulty and another flag that causes
 				// a return to title screen when you die, which is the oneLifeMode flag. Also, weapon durability is enabled much 
 				// like the previous difficulty.
-				weaponDurability = true;
-				preventSaving = true;
-				oneLifeMode = true;
+				weaponDurability =		true;
+				preventSaving =			true;
+				oneLifeMode =			true;
 			}
 			// Set the inventory's starting size as well as its maximum possible size
 			global.invSize = 6;
