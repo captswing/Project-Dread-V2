@@ -48,13 +48,13 @@ function player_state_default(){
 			// Reloading the player's currently equipped weapon
 			if (keyReload && global.invItem[_slot][1] < global.itemData[? ITEM_LIST][? _name][? MAX_STACK]){
 				// Only reload if the invenotry contains spare ammunition
-				if (inventory_count(ammoTypes[| curAmmoType]) > 0) {set_cur_state(player_state_weapon_reload);}
+				if (inventory_count(ammoTypes[| curAmmoType[? _name]]) > 0) {set_cur_state(player_state_weapon_reload);}
 				return; // Exit the current state early
 			}
 			
 			// Swapping the player's currently equipped ammunition
 			if (keyAmmoSwap && ds_list_size(ammoTypes) > 1){
-				if (player_swap_current_ammo(curAmmoType)) {set_cur_state(player_state_weapon_reload);}
+				if (player_swap_current_ammo(curAmmoType[? _name])) {set_cur_state(player_state_weapon_reload);}
 				return; // Exit the current state early
 			}
 		}
@@ -99,7 +99,7 @@ function player_state_weapon_ready(){
 		_useAmmo = (global.itemData[? ITEM_LIST][? global.invItem[_slot][0]][? ITEM_TYPE] != WEAPON_INF);
 		if (!_useAmmo || global.invItem[_slot][1] > 0){ // Ammo still remains in the magazine OR the weapon doesn't consume ammo
 			if (player_use_weapon(_useAmmo)) {set_cur_state(player_state_weapon_recoil);}
-		} else if (inventory_count(ammoTypes[| curAmmoType]) > 0) { // The current weapon is out of ammunition; attempt to reload it
+		} else if (inventory_count(ammoTypes[| curAmmoType[? global.invItem[_slot][0]]]) > 0) { // The current weapon is out of ammunition; attempt to reload it
 			set_cur_state(player_state_weapon_reload);
 		}
 		return; // Exit out of the state early

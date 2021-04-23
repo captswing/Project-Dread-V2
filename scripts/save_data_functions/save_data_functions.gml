@@ -104,7 +104,17 @@ function save_game_data(_saveNum){
 		// When the game reloads this data, the equip functions will provide the correct data to the variables.
 		ds_map_add_list(_playerMap, "equipment", array_to_ds_list(equipSlot));
 		ds_map_add(_playerMap, "light_active", isLightActive);
-		ds_map_add(_playerMap, "ammo_type", curAmmoType);
+		
+		// Create a new map that will store all of the copied data from the currently equipped ammunition for each
+		// gun in the game. Since the player should only ever have one of each in their inventory at one time,
+		// the game only saves the 6 current ammo types for the weapons.
+		var _ammoMap = ds_map_create();
+		_key1 = ds_map_find_first(curAmmoType);
+		while(!is_undefined(_key1)){
+			ds_map_add(_ammoMap, _key1, curAmmoType[? _key1]);
+			_key1 = ds_map_find_next(curAmmoType, _key1);
+		}
+		ds_map_add_map(_playerMap, "ammo_data", _ammoMap);
 	}
 	ds_map_add_map(_map, "player_data", _playerMap);
 	
@@ -265,21 +275,20 @@ function load_game_data(_saveNum){
 			player_equip_item(_equipSlot[i]);
 		}
 		
-		// Getting the player's weapon modifier values from the save file and applying any modifier 
-		// values that need to be set for said ammunition.
-		curAmmoType = _playerMap[? "ammo_type"];
+		// Getting the player's equipped ammunition from the saved data, and then get the stats for the
+		// equipped ammunition based on what ammo is currently inside of the equipped weapon.
+		var _ammoMap = _playerMap[? "ammo_data"];
+		_key1 = ds_map_find_first(_ammoMap);
+		while(!is_undefined(_key1)){
+			ds_map_set(curAmmoType, _key1, _ammoMap[? _key1]);
+			_key1 = ds_map_find_next(_ammoMap, _key1);
+		}
+		
+		
 		if (equipSlot[EquipSlot.Weapon] >= 0 && equipSlot[EquipSlot.Weapon] < global.invSize){
 			var _weaponName = global.invItem[equipSlot[EquipSlot.Weapon]][0];
 			ammoTypes = global.itemData[? WEAPON_DATA][? _weaponName][? AMMO_TYPES];
-			// After getting the wepaon's ammunition types again, get the current ammo's modifiers if it has some
-			var _statModifier = global.itemData[? AMMO_DATA][? ammoTypes[| curAmmoType]];
-			if (!is_undefined(_statModifier)){ // If the weapon has a valid ammunition type applied, set its modifier values 
-				damageMod =			_statModifier[? DAMAGE_MOD];
-				accuracyMod =		_statModifier[? ACCURACY_MOD];
-				rangeMod =			_statModifier[? RANGE_MOD];
-				fireRateMod =		_statModifier[? FIRE_RATE_MOD];
-				reloadRateMod =		_statModifier[? RELOAD_RATE_MOD];
-			}
+			player_get_ammo_stats(_weaponName);
 		}
 		
 		// Always makes sure to activate or deactivate the flashlight to match the player's flashlight when they saved. If the light

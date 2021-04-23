@@ -2,19 +2,21 @@
 /// If the entire quantity cannot be added to the inventory, the world item data will be updated to reflect
 /// the remainder of that item for the player's save data.
 function collect_item(){
-	var _num = inventory_add(global.worldItemData[? keyIndex][? NAME], global.worldItemData[? keyIndex][? QUANTITY], global.worldItemData[? keyIndex][? DURABILITY]);
+	var _name, _num;
+	_name = global.worldItemData[? keyIndex][? NAME];
+	_num = inventory_add(_name, global.worldItemData[? keyIndex][? QUANTITY], global.worldItemData[? keyIndex][? DURABILITY]);
 	// Pop up a textbox letting the player know what item they've collected; if they've even collected one
 	if (_num == global.worldItemData[? keyIndex][? QUANTITY]){ // No inventory space
 		create_textbox("Your inventory is full...");
 	} else if (_num > 0){ // The inventory has space, but not enough for the full quantity
-		create_textbox("Picked up only " + string(global.worldItemData[? keyIndex][? QUANTITY] - _num) + " of the " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + global.worldItemData[? keyIndex][? NAME] + ". The inventory is full and cannot fit the rest, so it was left alone.");
+		create_textbox("Picked up only " + string(global.worldItemData[? keyIndex][? QUANTITY] - _num) + " of the " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + _name + ". The inventory is full and cannot fit the rest, so it was left alone.");
 		play_sound_effect(snd_item_pickup, get_audio_group_volume(Settings.Sounds), true);
 	} else{ // Inventory has space for the whole quantity, display what was picked up
-		var _itemData = global.itemData[? ITEM_LIST][? global.worldItemData[? keyIndex][? NAME]];
+		var _itemData = global.itemData[? ITEM_LIST][? _name];
 		if (_itemData[? MAX_STACK] == 1 || (string_count(WEAPON, _itemData[? ITEM_TYPE]) == 1)){ // The item isn't stackable or is a weapon, don't show the quantity
-			create_textbox("Picked up " + global.worldItemData[? keyIndex][? NAME] + ".");
+			create_textbox("Picked up " + _name + ".");
 		} else{ // The item can be stacked, show the player the quantity of what they picked up
-			create_textbox("Picked up " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + global.worldItemData[? keyIndex][? NAME] + ".");
+			create_textbox("Picked up " + string(global.worldItemData[? keyIndex][? QUANTITY]) + " " + _name + ".");
 		}
 		play_sound_effect(snd_item_pickup, get_audio_group_volume(Settings.Sounds), true);
 	}

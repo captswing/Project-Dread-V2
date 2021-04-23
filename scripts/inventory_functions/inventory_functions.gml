@@ -9,6 +9,12 @@ function inventory_add(_name, _quantity, _durability){
 	_maxQuantity = global.itemData[? ITEM_LIST][? _name][? MAX_STACK];
 	_isWeapon = (string_count(WEAPON, global.itemData[? ITEM_LIST][? _name][? ITEM_TYPE]) == 1);
 	
+	// UNIQUE CASE: If the item is a wepaon and that same weapon is already within the inventory, don't
+	// allow the player to put it into their inventory.
+	if (_isWeapon && inventory_count(_name) > 0){
+		return 0; // Makes the function that called this think the item was successfully added to the invntory
+	}
+	
 	// Loop through the entire inventory looking for slots of existing items this one can fit into, or
 	// for an empty slot that it can be added to (Ex. weapons can't be stacked despite having a maxQuantity
 	// greater than one).

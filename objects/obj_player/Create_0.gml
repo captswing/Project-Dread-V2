@@ -138,11 +138,17 @@ damageMultiplier = 1;
 weaponUseSound = -1;
 weaponReloadSound = -1;
 
-// Stores a list of names relating to the valid ammunition used by the currently equipped weapon. The ammo
-// can only be swapped from the 0th ammunition (which is the default ammo type) if said ammo exists in the
-// player's inventory.
+// 
 ammoTypes = -1;
-curAmmoType = 0;
+
+// 
+curAmmoType = ds_map_create();
+ds_map_add(curAmmoType, HANDGUN, 0);
+ds_map_add(curAmmoType, PUMP_SHOTGUN, 0);
+ds_map_add(curAmmoType, HUNTING_RIFLE, 0);
+ds_map_add(curAmmoType, SUBMACHINE_GUN, 0);
+ds_map_add(curAmmoType, HAND_CANNON, 0);
+ds_map_add(curAmmoType, GRENADE_LAUNCHER, 0);
 
 // Two timers that control how long the player is stuck within the reloading and recoiling state, respectively.
 // One second of real-time is equal to a value of 60 in these timers.

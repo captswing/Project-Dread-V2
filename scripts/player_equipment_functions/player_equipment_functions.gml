@@ -66,7 +66,6 @@ function player_equip_weapon(_slot){
 		accuracyMod =		0;
 		fireRateMod =		0;
 		reloadRateMod =		0;
-		curAmmoType =		0;
 		ammoTypes =		   -1;
 	}
 	
@@ -84,6 +83,9 @@ function player_equip_weapon(_slot){
 	startFrame =			_data[? START_FRAME];
 	endFrame =				_data[? END_FRAME];
 	ammoTypes =				_data[? AMMO_TYPES];
+	
+	// Get the stats for the ammo that is currently inside of the weapon
+	player_get_ammo_stats(global.invItem[_slot][0]);
 	
 	// Since the weapon sprite/sound data is stored in lists within the weapon data, we need to pull it out
 	// of the lists and into individual variables.
@@ -113,7 +115,6 @@ function player_unequip_weapon(){
 	bulletSpd =				0;
 	startFrame =			0;
 	endFrame =				0;
-	curAmmoType =			0;
 	ammoTypes =			   -1;
 	
 	// Also, reset the sound variables to -1 and all sprites back to Claire's unarmed sprites. There are
@@ -260,15 +261,17 @@ function player_update_equip_slot(_oldSlot, _newSlot){
 /// ammo can't fit in the inventory it will be placed onto the floor as a collectable item for later.
 /// @param prevAmmoType
 function player_swap_current_ammo(_prevAmmoType){
+	var _name = global.invItem[equipSlot[EquipSlot.Weapon]][0];
+	
 	// Instantly move onto the next ammo type before beginning the loop
-	curAmmoType++;
+	curAmmoType[? _name]++;
 	
 	// Loop until the current ammo type wraps around to the previous OR another ammo type was found
 	var _length, _slot;
 	_length = ds_list_size(ammoTypes);
-	while(curAmmoType != _prevAmmoType){
+	while(curAmmoType[? _name] != _prevAmmoType){
 		// Some ammo was found for the other ammunition type, put it in the weapon and exit the loop
-		if (inventory_count(ammoTypes[| curAmmoType]) > 0){
+		if (inventory_count(ammoTypes[| curAmmoType[? _name]]) > 0){
 			// Attempt to add the previous bullets to the inventory. If they can't be added to the inventory 
 			// because there isn't enough space, add the remainder to an item and place it in the world.
 			_slot = equipSlot[EquipSlot.Weapon];
@@ -283,32 +286,43 @@ function player_swap_current_ammo(_prevAmmoType){
 				global.invItem[_slot][1] = 0;
 			}
 			// Finally, fetch the ammo's modification stats and apply them to their respective stats
-			var _statModifier = global.itemData[? AMMO_DATA][? ammoTypes[| curAmmoType]];
-			if (!is_undefined(_statModifier)){
-				damageMod =		_statModifier[? DAMAGE_MOD];
-				rangeMod =		_statModifier[? RANGE_MOD];
-				accuracyMod =	_statModifier[? ACCURACY_MOD];
-				fireRateMod =	_statModifier[? FIRE_RATE_MOD];
-				reloadRateMod = _statModifier[? RELOAD_RATE_MOD];
-				return true;
-			}
-			// No stat modification data exists for the ammunition; set them all back to 0
-			damageMod =		0;
-			rangeMod =		0;
-			accuracyMod =	0;
-			fireRateMod =	0;
-			reloadRateMod = 0;
+			player_get_ammo_stats(_name);
 			return true;
 		}
 		// Increment the current ammunition type, and wrap it back to the 0 if necessary
-		curAmmoType++;
-		if (curAmmoType >= _length){
-			curAmmoType = 0;
+		curAmmoType[? _name]++;
+		if (curAmmoType[? _name] >= _length){
+			curAmmoType[? _name] = 0;
 		}
 	}
 	
 	// No ammunition could be swapped; return false
 	return false;
+}
+
+/// @description
+/// @param name
+/// @param index
+function player_get_ammo_stats(_name){
+	// Don't bother even executing the code if the provided index value is out of range.
+	if (is_undefined(curAmmoType[? _name])) {return;}
+	// Fetch the ammunition's stat modifying values based on the index provided, but only set the values if
+	// the data returned from the ammunition data is an existing map in the structure.
+	var _statModifier = global.itemData[? AMMO_DATA][? ammoTypes[| curAmmoType[? _name]]];
+	if (!is_undefined(_statModifier)){
+		damageMod =		_statModifier[? DAMAGE_MOD];
+		rangeMod =		_statModifier[? RANGE_MOD];
+		accuracyMod =	_statModifier[? ACCURACY_MOD];
+		fireRateMod =	_statModifier[? FIRE_RATE_MOD];
+		reloadRateMod = _statModifier[? RELOAD_RATE_MOD];
+		return;
+	}
+	// No valid modifier values exist for the ammunition that was provided; set all values to zero.
+	damageMod =		0;
+	rangeMod =		0;
+	accuracyMod =	0;
+	fireRateMod =	0;
+	reloadRateMod = 0;
 }
 
 /// @description Using the player's current weapon. The effect of the weapon can either be a hitscan attack
@@ -389,10 +403,11 @@ function player_use_weapon(_useAmmo){
 /// subtracts that from the maximum magazine size.
 /// @param clipRemainder
 function player_reload_weapon(_clipRemainder){
-	var _slot, _maxQuantity, _remainder;
+	var _slot, _name, _maxQuantity, _remainder;
 	_slot = equipSlot[EquipSlot.Weapon];
-	_maxQuantity = global.itemData[? ITEM_LIST][? global.invItem[_slot][0]][? MAX_STACK];
-	_remainder = inventory_remove(ammoTypes[| curAmmoType], _maxQuantity - _clipRemainder);
+	_name = global.invItem[_slot][0];
+	_maxQuantity = global.itemData[? ITEM_LIST][? _name][? MAX_STACK];
+	_remainder = inventory_remove(ammoTypes[| curAmmoType[? _name]], _maxQuantity - _clipRemainder);
 	global.invItem[_slot][1] = _maxQuantity - _remainder;
 }
 
