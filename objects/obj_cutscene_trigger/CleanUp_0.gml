@@ -1,4 +1,4 @@
 /// @description Cleans Up Data Structure
 
-// Remove the queue's data from memory
-ds_queue_destroy(sceneData);
+// Remove the list data from memory
+if (ds_exists(sceneData, ds_type_list)) {ds_list_destroy(sceneData);}

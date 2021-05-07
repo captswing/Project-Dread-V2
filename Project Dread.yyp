@@ -36,6 +36,7 @@
     {"id":{"name":"spr_notes","path":"sprites/spr_notes/spr_notes.yy",},"order":1,},
     {"id":{"name":"enumerators","path":"scripts/enumerators/enumerators.yy",},"order":1,},
     {"id":{"name":"cutscene_action_functions","path":"scripts/cutscene_action_functions/cutscene_action_functions.yy",},"order":0,},
+    {"id":{"name":"cutscene_helper_functions","path":"scripts/cutscene_helper_functions/cutscene_helper_functions.yy",},"order":1,},
     {"id":{"name":"font_gui_small","path":"fonts/font_gui_small/font_gui_small.yy",},"order":0,},
     {"id":{"name":"drawing_functions","path":"scripts/drawing_functions/drawing_functions.yy",},"order":1,},
     {"id":{"name":"snd_submachine_gun_fire","path":"sounds/snd_submachine_gun_fire/snd_submachine_gun_fire.yy",},"order":2,},

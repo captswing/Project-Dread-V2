@@ -6,7 +6,7 @@ if (curState != NO_SCRIPT) {script_execute(curState);}
 // Don't allow the entity to regenerate their health or count down their invulnerability timer during a 
 // cutscene, a menu being currently opened, or the game itself being completely paused.
 if (global.gameState != GameState.InGame){
-	if (!drawSprite) {drawSprite = true;}
+	if (isHit && !drawSprite) {drawSprite = true;}
 	return;
 }
 

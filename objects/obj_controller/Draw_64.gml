@@ -11,10 +11,8 @@ outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWi
 
 draw_set_halign(fa_right);
 with(obj_cutscene){ // Display information about current cutscene
-	var _head, _size;
-	_head = ds_queue_head(sceneData);
-	_size = ds_queue_size(sceneData);
-	if (_size > 0) {draw_text(WINDOW_WIDTH - 5, WINDOW_HEIGHT - 20, "Queue Size: " + string(_size) + "\nCurrent Action: " + script_get_name(_head[0]));}
+	var _size = ds_list_size(sceneData);
+	draw_text(WINDOW_WIDTH - 5, WINDOW_HEIGHT - 20, "Instruction Index: " + string(sceneIndex) + "/" + string(_size) + "\nCurrent Action: " + script_get_name(sceneData[| sceneIndex][0]));
 }
 
 if (showItems){ // Showing the player's current inventory

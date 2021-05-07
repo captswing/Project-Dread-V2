@@ -10,4 +10,11 @@ entity_set_max_speed(1.25, 1.25, true);
 standSprite = spr_claire_unarmed_stand;
 walkSprite = spr_claire_unarmed_walk;
 
+// The object should be deactivated on startup
+drawSprite = false;
+animateSprite = false;
+
+#endregion
+
+#region UNIQUE VARIABLE INITIALIZATION
 #endregion

@@ -23,8 +23,9 @@ function player_state_default(){
 		with(instance_nearest(_offset[X], _offset[Y], par_interactable)){
 			// Ignores interaction if the object cannot be currently seen by the player. If it can be seen,
 			// the interaction point will be checked against the maximum interaction distance. If the value
-			// is lower than the max distance, an interaction will occur.
-			if (canInteract && point_distance(interactCenter[X], interactCenter[Y], _offset[X], _offset[Y]) <= interactRadius){
+			// is lower than the max distance, an interaction will occur. If draw sprite is false, the
+			// interactible is deactivated and shouldn't be processed for interaction.
+			if (drawSprite && canInteract && point_distance(interactCenter[X], interactCenter[Y], _offset[X], _offset[Y]) <= interactRadius){
 				if (interactScript != NO_SCRIPT) {script_execute(interactScript);}
 				return; // Exit out of the script early
 			}

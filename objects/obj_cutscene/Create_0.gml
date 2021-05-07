@@ -33,24 +33,17 @@ with(par_dynamic_entity){
 // Place the pointer to the grid in the variable that will also handle its deletion process.
 prevEntityStates = _grid;
 
-// A queue containing all the instructions that need to be executed for a given cutscene. The object will
-// remain active and executing these instructions until the queue in emptied. The player should not be able
-// to move during the scene.
-sceneData = ds_queue_create();
-
-// Stores the index for the current script in a seperate variable in order to use it in the script_execute_ext
-// to properly work.
-sceneScript = NO_SCRIPT;
+// A list containing all of the data that the cutscene must execute before ending. The variable just below
+// that is the current action within the list of instructions that the cutscene is currently executing. This
+// index can be freely moved around to whatever index the cutscene desires; allowing for things like branching
+// paths and repeat textboxes, and so on.
+sceneData = ds_list_create();
+sceneIndex = 0;
 
 // Holds the ID for the cutscene trigger that created this object. Once the cutscene has been successfully
-// executed, the trigger will delete itself relative to this object's clean up event.
+// executed, the trigger will delete itself relative to this object's clean up event IF the flag for the
+// trigger has actually been set to the correct state. Otherwise, the trigger will remain active.
 parentTrigger = noone;
-
-// A map and list that are used for handling objects created for the cutscene and only the cutscene. The list
-// exists alongside the map in order to speed up the search when checking for instances that currently exist
-// in the cutscene object map.
-cutsceneObjects = ds_map_create();
-objectsInMap = ds_list_create();
 
 // A timer used during the cutscene_wait action, or for whenever else a simple timer is needed.
 timer = 0;

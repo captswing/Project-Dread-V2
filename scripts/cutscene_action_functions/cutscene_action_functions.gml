@@ -1,16 +1,3 @@
-/// @description Ends the current action and deletes it from the queue of cutscene instruction data. If the
-/// element that was destroyed was the final element in the queue, the object will be destroyed and the
-/// cutscene will be finished executing.
-function cutscene_end_action(){
-	ds_queue_dequeue(sceneData);
-	if (ds_queue_size(sceneData) == 0){
-		instance_destroy(self);
-		return;
-	}
-	var _scriptData = ds_queue_head(sceneData);
-	sceneScript = _scriptData[0];
-}
-
 /// @description Pauses the cutscene for a set duration in seconds. After that, the action ends and the 
 /// cutscene moves onto the next instruction for execution.
 /// @param seconds
@@ -30,26 +17,27 @@ function cutscene_wait(_seconds){
 /// NOTE --- THIS MUST BE PLACED AT THE BEGINNING OF ANY TEXTBOX CHUNKS WITHIN THE CUTSCENE DATA!!!
 ///
 function cutscene_init_textbox(){
-	// First, dequeue this function from the cutscene data queue.
-	ds_queue_dequeue(sceneData);
-	// Next, get the head of the queue and begin looping through the queue, reading each textbox creation
-	// function until either the cutscene queue is emptied (A failsafe) or the function is at the head of
-	// the queue that waits for the textboxes to close.
-	var _queueHead = ds_queue_head(sceneData);
-	while(_queueHead[0] != cutscene_end_textbox){
+	// First, move the scene index forward by one index to ignore the "cutscene_init_textbox" instruction
+	sceneIndex++;
+	// Next, get the script found on the next instruction, which should be a textbox creation function. Read
+	// each textbox function until either the cutscene queue is emptied (A failsafe) or the function at the 
+	// next index of the list is the one that waits for the textbox object to close itself.
+	var _listSize, _script;
+	_listSize = ds_list_size(sceneData);
+	_script = sceneData[| sceneIndex][0];
+	while(_script != cutscene_end_textbox){
 		// Create the textbox with the function data provided from the queue's head
-		script_execute_ext(_queueHead[0], _queueHead, 1);
-		// Dequeue that data and make sure the queue hasn't run dry during this loop. If it does, delete
-		// the textbox object and this cutscene managing object.
-		ds_queue_dequeue(sceneData);
-		if (ds_queue_size(sceneData) == 0){
+		script_execute_ext(_script, sceneData[| sceneIndex], 1);
+		// Increment the scene index onto the next instruction, and check if the list's size hasn't been 
+		// exceeded. If that is the case this loop will end and the cutscene will be ended prematurely.
+		sceneIndex++;
+		if (sceneIndex >= _listSize){
 			instance_destroy(global.singletonID[? TEXTBOX]);
 			instance_destroy(self);
 			break; // Break out of the loop early
 		}
-		// The queue still isn't empty, move onto the next textbox function.
-		_queueHead = ds_queue_head(sceneData);
-		sceneScript = _queueHead[0];
+		// Get the next script if one exists, and start the loop over again.
+		_script = sceneData[| sceneIndex][0];
 	}
 }
 
@@ -268,30 +256,25 @@ function cutscene_set_background_music(_filename){
 	cutscene_end_action();
 }
 
-/// @description Adds objects from the room into the map of cutscene objects. These are objects that will be
-/// automatically destroyed once the cutscene finishes it's list of instructions. Notably, these objects should
-/// be created in the room as long as the event hasn't been completed, and should be located in an area that
-/// can't be seen by the player.
-/// @param objectID
-/// @param key
-function cutscene_add_object(_objectID, _key){
-	// Checks to make sure the object that is being added to the cutscene objects doesn't already exist
-	// within the map of existing cutscene objects.
-	if (ds_list_find_index(objectsInMap, _objectID) == -1){
-		ds_map_add(cutsceneObjects, _key, _objectID);
-		ds_list_add(objectsInMap, _objectID);
+/// @description Activates an entity that's currently in the room and then moves onto the next instruction.
+/// By "Activation" all I mean is it allows the entity to be drawn onto the screen, but it's "invisible"
+/// when deactivated.
+/// @param entityID
+function cutscene_activate_entity(_entityID){
+	with(_entityID){
+		animateSprite = true;
+		drawSprite = true;
 	}
 	cutscene_end_action();
 }
 
-/// @description Destroys an object. This object cannot be a any object found within the singleton map, since
-/// deleting those objects would more than likely crash the game instantly or eventually. This lasts for a 
-/// single frame before moving onto the next instruction.
-/// @param objectID
-/// @param executeDestroyEvent
-function cutscene_destroy_object(_objectID, _executeDestroyEvent){
-	with(_objectID){ // Check if the object isn't a singleton; destroy if it isn't one
-		if (!is_valid_singleton()) {instance_destroy(self, _executeDestroyEvent);}
+/// @description Deactivates an entity that's current in the room and then move onto the next instruction.
+/// It's important to not that deactivating an entity will only make it invisible and stop if from animating.
+/// @param entityID
+function cutscene_deactivate_entity(_entityID){
+	with(_entityID){
+		animateSprite = false;
+		drawSprite = false;
 	}
 	cutscene_end_action();
 }

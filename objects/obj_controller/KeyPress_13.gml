@@ -1,6 +1,7 @@
 /// @description FOR EASY TESTING
 
-save_game_data(1);
+set_event_flag(1, true);
+//save_game_data(1);
 //room_restart();
 
 //if (weather == noone) {set_weather(Weather.Mist);}
