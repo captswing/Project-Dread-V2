@@ -106,7 +106,8 @@ enum Settings{
 // An enumerator for the actor IDs associated with each character
 enum Actor{
 	None,		// No valid actor index
-	Claire		// The main protagonist
+	Claire,		// The main protagonist
+	Unknown,	// An unknown character is speaking
 }
 
 // An enumerator that holds the indexes for the various weather effects that can be toggled in-game

@@ -64,11 +64,22 @@ function get_actor_data(_actor){
 				portraitSprite : spr_claire_portraits
 			}
 			break;
+		case Actor.Unknown: // An unknown/unseen actor's data
+			_data = {
+				firstName : "???",
+				textboxColor : make_color_rgb(110, 110, 110),
+				textboxSprite : spr_textbox0,
+				namespaceSprite : spr_textbox0_namespace,
+				portraitSprite : -1
+			}
+			break;
 		default: // The default actor data (No specified actor)
-			_data = { // NOTE -- Only the name, background color and sprite variables need to exist
+			_data = {
 				firstName : "NoActor",
 				textboxColor : make_color_rgb(0, 0, 188),
 				textboxSprite : spr_textbox0,
+				namespaceSprite : -1,
+				portraitSprite : -1
 			}
 			break;
 	}

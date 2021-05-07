@@ -129,7 +129,10 @@ function get_audio_group_volume(_audioGroup){
 
 /// FUNCTIONS FOR WORLD ITEM DATA ///////////////////////////////////////////////////////////////////////////////////////////////
 
-/// @description
+/// @description Initializes all of the items that should exist within the game world on a fresh file. This 
+/// includes all of items on every difficulty, and won't be loaded from if an existing save file is loaded.
+/// The save file itself will have all of the items in the world that still exist along with the items that
+/// the player has dropped from their inventory.
 function initialize_world_item_data(){
 	// FAILSAFE -- If somehow this function is called before another world item data map isn't cleared from memory, clear out that map beforehand.
 	if (ds_exists(global.worldItemData, ds_type_map)) {clear_world_item_data();}

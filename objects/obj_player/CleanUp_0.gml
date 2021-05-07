@@ -9,7 +9,7 @@ remove_singleton_object();
 // Destroying the ds_lists, and ds_maps found within the player object
 ds_list_destroy(effectTimers);
 ds_list_destroy(ammoTypes);
-ds_map_destroy(lastAmmoType);
+ds_map_destroy(curAmmoType);
 
 // Removes the ambient light source and deletes the entity from the depth sorting list
 event_inherited();

@@ -178,7 +178,7 @@ function load_game_data(_saveNum){
 	// Load in the general global data from the save file; warping to the room index found in the file, getting
 	// the current playtime and setting its respective string value in the "HH:MM:SS" format. Then, set the
 	// position of the camera to its saved position.
-	if (room != _map[? "current_room"]) {room_goto(_map[? "current_room"]);}
+	room_goto(_map[? "current_room"]);
 	global.totalPlaytime = _map[? "total_playtime"];
 	global.playtimeString = number_as_time(global.totalPlaytime);
 	with(global.singletonID[? CONTROLLER]){ // Sets the camera to the correct position
@@ -284,7 +284,7 @@ function load_game_data(_saveNum){
 			_key1 = ds_map_find_next(_ammoMap, _key1);
 		}
 		
-		
+		//
 		if (equipSlot[EquipSlot.Weapon] >= 0 && equipSlot[EquipSlot.Weapon] < global.invSize){
 			var _weaponName = global.invItem[equipSlot[EquipSlot.Weapon]][0];
 			ammoTypes = global.itemData[? WEAPON_DATA][? _weaponName][? AMMO_TYPES];
@@ -294,8 +294,8 @@ function load_game_data(_saveNum){
 		// Always makes sure to activate or deactivate the flashlight to match the player's flashlight when they saved. If the light
 		// isn't active, the player's ambient light is set to the default values, which barely illuminate them in pitch-black.
 		isLightActive = _playerMap[? "light_active"];
-		//if (isLightActive) {update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);}
-		//else {update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);}
+		if (isLightActive) {update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);}
+		else {update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);}
 	}
 	
 	// Finally, destroy the map that was used to save all the data to the save file. Since it was used in tandem with "json_decode",

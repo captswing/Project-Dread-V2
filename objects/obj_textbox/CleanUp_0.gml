@@ -1,15 +1,22 @@
 /// @description Cleaning Up Allocated Memory and Other Data
 
-#region REMOVING SINGLETON ID/RESTORING GAME STATE
+#region REMOVING SINGLETON ID/RESTORING PLAYER STATE
 
 // Don't clean up uninitialized data if the textbox object was a duplicate of the existing singleton
 if (global.singletonID[? TEXTBOX] != id) {return;}
 
+// Restore the player's states from before the textbox was opened and initialized, but don't do that if a
+// cutscene is currently happening.
+if (global.gameState == GameState.InGame){
+	var _state = prevPlayerState;
+	with(global.singletonID[? PLAYER]){
+		curState = _state[0];
+		lastState = _state[1];
+	}
+}
+
 // Remove this id value from the textbox singleton; allowing another instance of obj_textbox to take its place
 remove_singleton_object();
-
-// Restore the game state only if the priority flag allows it.
-set_game_state(GameState.InGame, (global.singletonID[? CUTSCENE] == noone));
 
 #endregion
 

@@ -23,7 +23,7 @@ function obj_fade_screen(_color, _speed, _opaqueTime) constructor{
 		alpha += fadingOut ? -fadeSpeed * global.deltaTime : fadeSpeed * global.deltaTime;
 		if (alpha > 1 && !fadingOut){ // Remain opaque until the timer runs outs
 			opaqueTime -= global.deltaTime;
-			if (opaqueTime <= 0){ // Begin the fade out
+			if (opaqueTime != INDEFINITE_EFFECT && opaqueTime <= 0){ // Begin the fade out
 				fadingOut = true;
 			}
 			alpha = 1; // Prevent the alpha from going above 1

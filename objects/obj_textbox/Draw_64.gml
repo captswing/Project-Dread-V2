@@ -28,20 +28,18 @@ draw_set_color(c_white);
 shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
 outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
 
-// Drawing the actor's name and portrait to the screen if an actor is associated with the current textbox;
-// also offsetting the text that is drawn by 50 pixels to make room for the portrait sprite. Otherwise, the
-// text is drawn at its normal coordinates; giving it the full textbox to work with.
-if (_showName){
-	// Displays the actor's name within the namespace field
+// Displays the actor's name, portrait, and text they are currently saying to the screen. The name and
+// portrait are optional aspects of the textbox, and thus don't need to be drawn all the time.
+if (_showName){// Displays the actor's name within the namespace field
 	draw_text(x + 25, y - 7, _data.firstName);
-	// Only display the portrait if it isn't set to -1, which means no portrait sprite exists
-	if (_data.portraitSprite != -1){
-		draw_text(x + 72, y + 10, visibleText);
-		shader_reset(); // Prevent the outline shader from activating on the portrait sprite
-		// After resetting the shader, draw the portrait sprite to the screen
-		draw_sprite(_data.portraitSprite, textboxData[| 0][2], x + 20, y + 3);
-	}
-} else{
+}
+// Only display the portrait if it isn't set to -1, which means no portrait sprite exists
+if (_data.portraitSprite != -1){
+	draw_text(x + 72, y + 10, visibleText); // Offset the text to fit the character portarit
+	shader_reset();
+	// After resetting the shader, draw the portrait sprite to the screen
+	draw_sprite(_data.portraitSprite, textboxData[| 0][2], x + 20, y + 3);
+} else{ // Draw the text as normal if no portrait exists
 	draw_text(x + 20, y + 10, visibleText);
 	shader_reset();
 }

@@ -17,6 +17,22 @@ visible = false;
 // changes during the cutscene if they somehow occur.
 prevGameState = global.gameState;
 
+// Store the current states and previous states for each dynamic entity that existed during the start of 
+// the cutscene. These state values will be restored once the cutscene concludes. Also, all dynamic entities
+// will have their state set to "NO_STATE" during a cutscene.
+prevEntityStates = -1;
+var _index, _grid;
+_index = 0;
+_grid = ds_grid_create(2, instance_number(par_dynamic_entity));
+with(par_dynamic_entity){
+	_grid[# 0, _index] = id;
+	_grid[# 1, _index] = [curState, lastState];
+	set_cur_state(NO_STATE);
+	_index++;
+}
+// Place the pointer to the grid in the variable that will also handle its deletion process.
+prevEntityStates = _grid;
+
 // A queue containing all the instructions that need to be executed for a given cutscene. The object will
 // remain active and executing these instructions until the queue in emptied. The player should not be able
 // to move during the scene.
@@ -30,12 +46,14 @@ sceneScript = NO_SCRIPT;
 // executed, the trigger will delete itself relative to this object's clean up event.
 parentTrigger = noone;
 
+// A map and list that are used for handling objects created for the cutscene and only the cutscene. The list
+// exists alongside the map in order to speed up the search when checking for instances that currently exist
+// in the cutscene object map.
+cutsceneObjects = ds_map_create();
+objectsInMap = ds_list_create();
+
 // A timer used during the cutscene_wait action, or for whenever else a simple timer is needed.
 timer = 0;
-
-// A flag for determining the direction an entity should be facing when they begin moving during any action
-// that causes movement to a child of par_dynamic_entity.
-directionSet = false;
 
 #endregion
 

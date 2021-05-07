@@ -48,6 +48,13 @@ maxVspd = 0;
 maxHspdConst = 0;
 maxVspdConst = 0;
 
+// An array and a flag that is used when an entity is being moved automatically using the "eneity_move_to_position"
+// state. It stores the position they are moving to and the flag prevents the direction they are facing to be
+// updating on a per-frame basis, which causes weird directional changes the closer the entity is to the target
+// position.
+targetPosition = [0, 0];
+directionSet = false;
+
 // Stores the tilemap ID for the floor tiles. Each floor tile corresponds to a different sound effect for 
 // the entity's footstep.
 collisionTilemap = -1;

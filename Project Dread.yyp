@@ -4,6 +4,7 @@
     {"id":{"name":"spr_claire_unarmed_walk","path":"sprites/spr_claire_unarmed_walk/spr_claire_unarmed_walk.yy",},"order":1,},
     {"id":{"name":"obj_depth_sorter","path":"objects/obj_depth_sorter/obj_depth_sorter.yy",},"order":1,},
     {"id":{"name":"apartment_interior_walls","path":"sprites/apartment_interior_walls/apartment_interior_walls.yy",},"order":1,},
+    {"id":{"name":"obj_test_cutscene_entity","path":"objects/obj_test_cutscene_entity/obj_test_cutscene_entity.yy",},"order":0,},
     {"id":{"name":"player_hitpoint_sanity_functions","path":"scripts/player_hitpoint_sanity_functions/player_hitpoint_sanity_functions.yy",},"order":1,},
     {"id":{"name":"snd_flashlight","path":"sounds/snd_flashlight/snd_flashlight.yy",},"order":0,},
     {"id":{"name":"shd_chromatic_aberration","path":"shaders/shd_chromatic_aberration/shd_chromatic_aberration.yy",},"order":0,},
@@ -234,6 +235,7 @@
     {"folderPath":"folders/Sounds/Objects/Entities/Dynamic/obj_player/Weaponry.yy","order":0,"resourceVersion":"1.0","name":"Weaponry","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sounds/Objects/Entities/Dynamic/obj_player.yy","order":2,"resourceVersion":"1.0","name":"obj_player","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sounds/Objects/Entities/Dynamic/obj_player/Other.yy","order":2,"resourceVersion":"1.0","name":"Other","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Objects/Cutscenes/Cutscene Entities.yy","order":2,"resourceVersion":"1.0","name":"Cutscene Entities","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},

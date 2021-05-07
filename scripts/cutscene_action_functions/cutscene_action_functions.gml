@@ -64,46 +64,25 @@ function cutscene_end_textbox(){
 
 /// @description Moves an entity object to a given destination, which will prevent the cutscene from moving
 /// on to the next action until that condition has been met. Until then, the entity will be moving.
-/// @param destX
-/// @param destY
+/// @param targetX
+/// @param targetY
+/// @param pauseForMovement
 /// @param objectID
-function cutscene_move_entity(_destX, _destY, _objectID){
-	var _endAction, _directionSet;
-	_endAction = false;
-	_directionSet = directionSet;
-	
+function cutscene_move_entity(_targetX, _targetY, _pauseForMovement, _objectID){
+	// Sets the target position and checks if said position has been reached yet. Toggle the flag to end
+	// the cutscene action if the said target position has been reached.
+	var _positionReached = false;
 	with(_objectID){
-		// Sets the direction once at the start of the entity movement, which prevent weird spinning issues
-		// that can occur when the direction is updated on a frame-by-frame basis.
-		if (!_directionSet){
-			direction = point_direction(0, 0, sign(_destX - x), sign(_destY - y));
-			_directionSet = true;
+		if (curState != state_entity_move_to_position){ // Sets the target position and state
+			set_cur_state(state_entity_move_to_position);
+			targetPosition = [_targetX, _targetY];
 		}
-		// Set the entity's movement based on their current maximum movement speed, relative to the
-		// direction they have to move toward in order to reach their destination.
-		var _dir = point_direction(x, y, _destX, _destY);
-		hspd = lengthdir_x(maxHspd, _dir);
-		vspd = lengthdir_y(maxVspd, _dir);
-		// After calculating the movement speed, remove fractional values and apply delta time.
-		remove_movement_fractions();
-		
-		// The entity has reached its destinations, lock them onto the desination position and end the action
-		if (point_distance(0, 0, deltaHspd, deltaHspd) > point_distance(x, y, _destX, _destY)){
-			entity_set_sprite(standSprite, 4);
-			x = floor(_destX);
-			y = floor(_destY);
-			_endAction = true;
-			_directionSet = false; // Reset the set direction flag
-		} else{ // Entity has not reached their destination; move them and set to moving sprite
-			entity_set_sprite(walkSprite, 4);
-			x += deltaHspd;
-			y += deltaVspd;
-		}
+		_positionReached = (x == targetPosition[X] && y == targetPosition[Y]);
 	}
-	directionSet = _directionSet;
 	
-	// The entity has reached its destination, end the current action.
-	if (_endAction) {cutscene_end_action();}
+	// The target position has been reached, or the camera will move to where it needs to be while the 
+	// cutscene moves on with it next instruction.
+	if (!_pauseForMovement || _positionReached) {cutscene_end_action();}
 }
 
 /// @description A simple instruction for the cutscene that teleports an existing entity to the given position.
@@ -208,9 +187,8 @@ function cutscene_set_camera_position(_x, _y){
 /// the next instruction. Otherwise, it'll move onto the next instruction the frame after the fade is created.
 /// @param fadeColor
 /// @param fadeSpeed
-/// @param opaqueTime
 /// @param pauseForFade
-function cutscene_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime, _pauseForFade){
+function cutscene_begin_screen_fade(_fadeColor, _fadeSpeed, _pauseForFade){
 	// If somehow the effect handler object doesn't exist, skip this action
 	if (global.singletonID[? EFFECT_HANDLER] == noone){
 		cutscene_end_action();
@@ -221,8 +199,31 @@ function cutscene_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime, _pauseForFade
 	// instruction in the cutscene queue.
 	var _fadeFinished = false;
 	with(global.singletonID[? EFFECT_HANDLER]){
-		create_screen_fade(_fadeColor, _fadeSpeed, _opaqueTime);
+		create_screen_fade(_fadeColor, _fadeSpeed, INDEFINITE_EFFECT);
 		_fadeFinished = (fade.alpha >= 1);
+	}
+	
+	// Ends the action instantly or when the instruction condition is met
+	if (!_pauseForFade || _fadeFinished) {cutscene_end_action();}
+}
+
+/// @description Tells the active screen fade to begin fading out, which it will not do until this function
+/// has been hit in the instructions. This allows for the cutscene to do whatever it needs to do when the 
+/// screen is completely black without any worry of the screen fading back in before everything is set up.
+/// @param fadeSpeed
+/// @param pauseForFade
+function cutscene_end_screen_fade(_fadeSpeed, _pauseForFade){
+	var _fadeFinished = false;
+	with(global.singletonID[? EFFECT_HANDLER]){
+		with(fade){ // Tell the fade to begin its fading out animation
+			if (opaqueTime == INDEFINITE_EFFECT){
+				fadeSpeed = _fadeSpeed;
+				fadingOut = true;
+			}
+		}
+		// If the fade has completed its fade-in, the pointer will be set to "noone", which signals to this
+		// function that the condition to move onto the next cutscene instruction has been met.
+		if (fade == noone) {_fadeFinished = true;}
 	}
 	
 	// Ends the action instantly or when the instruction condition is met
@@ -256,5 +257,41 @@ function cutscene_change_weather(_type, _intensity){
 /// @param volume
 function cutscene_play_sound(_sound, _volume){
 	play_sound_effect(_sound, _volume, false);
+	cutscene_end_action();
+}
+
+/// @description Changes the background music to another track. This lasts for one in-game frame before 
+/// moving onto the next cutscene instruction. Putting "" will stop the current background track.
+/// @param filename
+function cutscene_set_background_music(_filename){
+	set_background_music(_filename);
+	cutscene_end_action();
+}
+
+/// @description Adds objects from the room into the map of cutscene objects. These are objects that will be
+/// automatically destroyed once the cutscene finishes it's list of instructions. Notably, these objects should
+/// be created in the room as long as the event hasn't been completed, and should be located in an area that
+/// can't be seen by the player.
+/// @param objectID
+/// @param key
+function cutscene_add_object(_objectID, _key){
+	// Checks to make sure the object that is being added to the cutscene objects doesn't already exist
+	// within the map of existing cutscene objects.
+	if (ds_list_find_index(objectsInMap, _objectID) == -1){
+		ds_map_add(cutsceneObjects, _key, _objectID);
+		ds_list_add(objectsInMap, _objectID);
+	}
+	cutscene_end_action();
+}
+
+/// @description Destroys an object. This object cannot be a any object found within the singleton map, since
+/// deleting those objects would more than likely crash the game instantly or eventually. This lasts for a 
+/// single frame before moving onto the next instruction.
+/// @param objectID
+/// @param executeDestroyEvent
+function cutscene_destroy_object(_objectID, _executeDestroyEvent){
+	with(_objectID){ // Check if the object isn't a singleton; destroy if it isn't one
+		if (!is_valid_singleton()) {instance_destroy(self, _executeDestroyEvent);}
+	}
 	cutscene_end_action();
 }

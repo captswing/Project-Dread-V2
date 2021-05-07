@@ -67,10 +67,11 @@ create_camera(160, 90, global.settings[Settings.ResolutionScale]);
 // The five variables responsible for playing the current background track. The first variable stores
 // the audio stream that is responsible for streaming the song into memory during playback. Meanwhile,
 // the next variable stores the song's ID value for easily manipulation during playback. Finally, the
-// last three variables store the song's full length, the length of its looping section, and the time
-// in milliseconds it takes for the song to fade in and out during playback and song changes.
+// last four variables store the song's name, full length, the length of its looping section, and the 
+// time in milliseconds it takes for the song to fade in and out during playback and song changes.
 songStream = noone;
 songID = noone;
+songFilename = "";
 songLength = 0;
 songLoopLength = 0;
 songFadeTime = 900;

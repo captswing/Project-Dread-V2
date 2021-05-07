@@ -1,0 +1,1 @@
+if (get_event_flag(0)) {instance_destroy(self);}

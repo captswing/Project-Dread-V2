@@ -2,19 +2,22 @@
 /// this function unless there was no song playing previously. In that case, this function will change the
 /// background music instantly.
 /// @param filename
-/// @param songLength
-/// @param loopLength
-function set_background_music(_filename, _songLength, _loopLength){
+function set_background_music(_filename){
 	with(global.singletonID[? CONTROLLER]){
+		// The current song is the same as the song that was provided, so don't change it.
+		if (songFilename == _filename) {return;}
+		// Retrieve info for the song's length and the length of its looping section and then see what needs
+		// to be done in order to switch to the next song; should it be instant or a fade-out/fade-in.
+		var _info = get_background_music_info(_filename);
 		if (songID == noone){ // No previous song was playing, instantly start playing the music
-			change_background_music(_filename, _songLength, _loopLength);
+			change_background_music(_filename, _info[0], _info[1]);
 		} else{ // Another song was playing previously, begin the fade-out of the song into the new one
 			audio_sound_gain(songID, 0, songFadeTime);
 			// Keep track of the next song's filepath, song, and loop length for when the song actually changes.
 			changingSong = true; // Enable flag that begins checking for the song to complete its fadeaway
-			nextSongPath = _filename;
-			nextSongLength = _songLength;
-			nextSongLoopLength = _loopLength;
+			nextSongPath =			_filename;
+			nextSongLength =		_info[0];
+			nextSongLoopLength =	_info[1];
 		}
 	}
 }
@@ -28,18 +31,20 @@ function set_background_music(_filename, _songLength, _loopLength){
 function change_background_music(_filename, _songLength, _loopLength){
 	// Make sure the file exists before attempting to create an audio stream from it. If no file with that
 	// name exists in the music folder, simply reset all music-related variables and don't play anything.
-	if (file_exists("music/" + _filename)){
+	if (_filename != "" && file_exists("music/" + _filename)){
 		songStream = audio_create_stream("music/" + _filename);
 		// Begin the next song that will play, storing its ID in a variable for easy manipulation of its playback.
 		songID = audio_play_sound(songStream, 100, false);
 		audio_sound_gain(songID, 0, 0); // Start the song out silent and fade in
 		audio_sound_gain(songID, get_audio_group_volume(Settings.Music), songFadeTime);
-		// After, store the length of the entire song and the length of its looping portion
+		// After, store the filename, length of the entire song and the length of its looping portion
+		songFilename = _filename;
 		songLength = _songLength;
 		songLoopLength = _loopLength;
 	} else{
 		songStream = noone;
 		songID = noone;
+		songFilename = "";
 		songLength = 0;
 		songLoopLength = 0;
 	}
@@ -66,5 +71,16 @@ function update_background_music(){
 		if (_songPosition >= songLength){ // Looping when the song's length is exceeded
 			audio_sound_set_track_position(songID, _songPosition - songLoopLength);
 		}
+	}
+}
+
+/// @description Searches for and returns the length of the song that was provided as well as the length of
+/// the looping section of the music, which is used to seamlessly loop a single audio file as opposed to
+/// cutting the songs into an intro, loop, and whatever else would be needed.
+/// @param filename
+function get_background_music_info(_filename){
+	switch(_filename){	// First Number = Loop Length, Second Number = Song Length
+		case "mus_test.ogg":		return [138.964, 140.896];
+		default:					return [0, 0];
 	}
 }

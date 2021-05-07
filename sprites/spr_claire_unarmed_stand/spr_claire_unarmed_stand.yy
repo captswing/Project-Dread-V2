@@ -79,6 +79,7 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"2749dbd8-d7d7-428e-9639-2c79da94d3bc","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
     "name": "obj_player",
     "path": "folders/Sprites/Entities/Dynamic/Friendly/obj_player.yy",

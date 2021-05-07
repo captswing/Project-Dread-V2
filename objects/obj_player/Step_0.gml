@@ -2,14 +2,16 @@
 
 #region HANDLING CURRENT STATE/MOVEMENT/OPENING INVENTORY
 
-if (global.gameState == GameState.InGame && curState != NO_STATE){
-	// Gets input from the currently active control method (Keyboard/Gamepads supported)
-	if (!global.gamepadActive) {player_get_input_keyboard();}
-	else {player_get_input_gamepad();}
+// Gets input from the currently active control method (Keyboard/Gamepads supported)
+if (!global.gamepadActive) {player_get_input_keyboard();}
+else {player_get_input_gamepad();}
 
-	// Call the parent step event code, which handles the current state, health regen, and invulnerability time
-	event_inherited();
-	
+// Call the parent step event code, which handles the current state, health regen, and invulnerability time
+event_inherited();
+
+// Handling collision with cutscene triggers and hostile objects. Also allows the character to open the pause
+// menu and inventory to be opened; cutscenes also prevent this code from being executed.
+if (global.gameState == GameState.InGame){
 	// Handling collision with cutscene triggers, which begins their respective cutscene
 	var _trigger = instance_place(x, y, obj_cutscene_trigger);
 	if (_trigger != noone){ // If the trigger variable is storing a valid ID

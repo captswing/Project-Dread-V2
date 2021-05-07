@@ -31,7 +31,9 @@ isClosing = false;
 yTarget = WINDOW_HEIGHT - 57;
 alpha = 0;
 
-// 
+// The variables that are responsible for the "typewriter" text effect that the textboxes have. They store the
+// current text that is visible to the player, the next character that is going to be added to that visible text,
+// and the final character in the string, which signifies to the effect that it no longer needs to add characters.
 visibleText = "";
 nextCharacter = 0;
 finalCharacter = 0;
@@ -41,7 +43,9 @@ textboxSoundID = noone;
 textboxSoundTimer = 0;
 textboxSoundSpeed = 4.25;
 
-// 
+// Stores the offset of the textbox's advance indicator, which shows up once all of the text contained in
+// the current textbox is visible to the screen. The speed determines how fast the offset value shifts between
+// 0 and 1, which makes the indicator have a simple bouncing animation.
 indicatorOffset = 0;
 indicatorSpeed = 0.06;
 
@@ -68,11 +72,23 @@ actorData = ds_map_create();
 //			HAPPEN AND IT'S GONNA HAPPEN BAAAAAAAAAAAAD!!!
 //
 
+// Responsible for storing the player's current and last state for the duration of the textbox's existence.
+// Once the textbox is closed, the states will be returned back to the player object.
+prevPlayerState = 0;
+
 #endregion
 
-#region ADJUST THE CURRENT GAME STATE AND PAUSE THE PLAYER
+#region PAUSE THE PLAYER
 
-set_game_state(GameState.InMenu, false);
-with(global.singletonID[? PLAYER]) {entity_set_sprite(standSprite, 4);}
+// Only pause the player's input and store their state if a cutscene isn't currently occurring.
+if (global.gameState == GameState.InGame){
+	var _state = 0; // Get the player's current and previous states; storing them in an array.
+	with(global.singletonID[? PLAYER]){
+		_state = [curState, lastState];
+		entity_set_sprite(standSprite, 4);
+		set_cur_state(NO_SCRIPT);
+	}
+	prevPlayerState = _state;
+}
 
 #endregion
