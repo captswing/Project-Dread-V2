@@ -7,9 +7,9 @@ function player_state_default(){
 	if (keyFlashlight && equipSlot[EquipSlot.Flashlight] != NO_ITEM){
 		isLightActive = !isLightActive;
 		if (isLightActive){ // Turning the flashlight back on with the stored settings
-			update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);
+			light_update_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);
 		} else{ // Turning the flashlight back into the dim ambient light
-			update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);
+			light_update_settings(ambLight, 15, 15, 0.01, c_ltgray);
 		}
 		// Play the flashlight toggle sound effect
 		play_sound_effect(snd_flashlight, get_audio_group_volume(Settings.Sounds), true);

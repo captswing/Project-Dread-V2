@@ -60,6 +60,17 @@ textboxData = ds_list_create();
 //			2	--	portrait image index
 //
 
+// Two important variables for the textbox system to function properly. The first variable stores the index 
+// for the current textbox data that is being displayed to the user. This allows for jumping to previous 
+// points in the textbox without any issue. The second variable stores the last code that was passed into
+// the object. A value of "end" overrides any other code and will cause the textbox to close after the
+// current textbox has been advanced.
+textboxIndex = 0;
+textboxCode = "";
+
+// 
+decisionData = ds_map_create();
+
 // A map of data relating to the actors that have textboxes associated with them. It contains data about the
 // background color of the textbox, the color of their name, (Both inner color and outline color) the sprite
 // index for their character portrait, and their first and last names -- split into separate variables. The

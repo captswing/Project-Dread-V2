@@ -39,3 +39,17 @@ function create_textbox_actor_portrait(_text, _actor, _imageIndex){
 		add_actor_data(_actor);
 	}
 }
+
+/// @description Creates a decision that will occur in the textbox when it reaches the given index. It stores
+/// all possible decisions and their respective outcomes into a map of decision data. The key for this map
+/// value is the index that the decisions occur at.
+/// @param index
+/// @param decisions
+/// @param outcomes
+function create_textbox_decision(_index, _decisions, _outcomes){
+	with(global.singletonID[? TEXTBOX]){ // Only set decisions and outcomes at an index that doesn't exist yet
+		if (is_undefined(ds_map_find_value(decisionData, _index))){
+			ds_map_add(decisionData, _index, [_decisions, _outcomes]);
+		}
+	}
+}

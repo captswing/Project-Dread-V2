@@ -59,3 +59,22 @@ function entity_create_light(_offsetX, _offsetY, _radiusX, _radiusY, _strength, 
 	}
 	lightPosition = [_offsetX, _offsetY];
 }
+
+/// @description Creates an audio emitter that will be attached to an entity at a provided offset. The 
+/// offset values are stored in a 2-index array, and the other arguments are passed into the audio emitter
+/// object themselves.
+/// @param offsetX
+/// @param offsetY
+/// @param sound
+/// @param falloffRefDist
+/// @param falloffMaxDist
+/// @param falloffFactor
+/// @param persistent
+function entity_create_emitter(_offsetX, _offsetY, _sound, _falloffRefDist, _falloffMaxDist, _falloffFactor, _persistent){
+	audioEmitter = instance_create_depth(x + _offsetX, y + _offsetY, ENTITY_DEPTH, obj_emitter);
+	with(audioEmitter){ // Apply all the settings to the emitter object
+		emitter_create(_sound, _falloffRefDist, _falloffMaxDist, _falloffFactor);
+		persistent = _persistent;
+	}
+	emitterPosition = [_offsetX, _offsetY];
+}

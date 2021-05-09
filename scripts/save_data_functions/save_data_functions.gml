@@ -294,8 +294,8 @@ function load_game_data(_saveNum){
 		// Always makes sure to activate or deactivate the flashlight to match the player's flashlight when they saved. If the light
 		// isn't active, the player's ambient light is set to the default values, which barely illuminate them in pitch-black.
 		isLightActive = _playerMap[? "light_active"];
-		if (isLightActive) {update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);}
-		else {update_light_settings(ambLight, 15, 15, 0.01, c_ltgray);}
+		if (isLightActive) {light_update_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);}
+		else {light_update_settings(ambLight, 15, 15, 0.01, c_ltgray);}
 	}
 	
 	// Finally, destroy the map that was used to save all the data to the save file. Since it was used in tandem with "json_decode",

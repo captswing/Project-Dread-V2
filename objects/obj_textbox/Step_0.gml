@@ -20,7 +20,8 @@ if (!isClosing){ // Fades the textbox into visiblity
 } else{ // Fades the textbox out
 	alpha -= 0.1 * global.deltaTime;
 	if (alpha < 0){ // Switching from the currently visible textbox to the next one
-		open_next_textbox();
+		if (textboxCode != "end") {open_next_textbox();}
+		else {instance_destroy(self);}
 		// Finally, reset the flag for the animation and the position of the textbox
 		y = WINDOW_HEIGHT + 10;
 		isClosing = false;
@@ -37,10 +38,11 @@ if (!isClosing){ // Fades the textbox into visiblity
 if (keyAdvance){
 	if (nextCharacter > 4 && nextCharacter < finalCharacter){ // Display the entire string at once, skipping the animation
 		nextCharacter = finalCharacter;
-	} else{ // Starts the "closing" transition to move onto the next textbox if the actor is different
-		if (ds_list_size(textboxData) > 1 && textboxData[| 0][1] == textboxData[| 1][1]){
+	} else{ // Starts the "closing" transition to move onto the next textbox if the actor is different; changes to next chunk of data if not
+		var _nextActor = ds_list_find_value(textboxData, textboxIndex + 1);
+		if (is_undefined(_nextActor) || textboxData[| textboxIndex][1] != _nextActor){
 			open_next_textbox();
-			return; // Exit out of the event early
+			return; // Exit the event early
 		}
 		// The actor isn't the same; start the transition to the next textbox
 		isClosing = true;
@@ -54,7 +56,7 @@ if (indicatorOffset >= 2) {indicatorOffset = 0;}
 // Updating the currently visible portion of the text based on current set text speed
 if (nextCharacter <= finalCharacter){
 	nextCharacter += global.settings[Settings.TextSpeed] * global.deltaTime;
-	visibleText = string_copy(textboxData[| 0][0], 1, nextCharacter);
+	visibleText = string_copy(textboxData[| textboxIndex][0], 1, nextCharacter);
 	// Play the text crawl's sound effect at a set speed interval
 	textboxSoundTimer -= global.deltaTime;
 	if (textboxSoundTimer < 0){

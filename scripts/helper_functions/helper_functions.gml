@@ -111,6 +111,28 @@ function play_sound_effect(_sound, _volume, _stopPrevious){
 	return _soundID;
 }
 
+/// @description An extension of the standard sound effect function that allows the sound to be slowly faded
+/// away relative to the distance it is from the audio listener. (player or controller depending on if the
+/// player object exists or not) Gives a 3D effect to the audio which is nice.
+/// @param sound
+/// @param volume
+/// @param loopSound
+/// @param x
+/// @param y
+/// @param falloffModel
+/// @param falloffRef
+/// @param falloffDist
+/// @param falloffFactor
+function play_sound_effect_ext(_sound, _volume, _loopSound, _x, _y, _falloffModel, _falloffRef, _falloffDist, _falloffFactor){
+	if (_sound == -1) {return _sound;} // No sound effect was provided; exit the script
+	// Plays the sound with the set parameters for its falloff, how the falloff is calculated, and position
+	// for the sound to be emitted from. Also sets the sound's volume based on the game's audio settings.
+	audio_falloff_set_model(_falloffModel); // Sets how the sound will falloff relative to its emitting position
+	var _soundID = audio_play_sound_at(_sound, _x, _y, 0, _falloffRef, _falloffDist, _falloffFactor, _loopSound, 0);
+	audio_sound_gain(_soundID, _volume * get_audio_group_volume(Settings.Sounds), 0);
+	return _soundID;
+}
+
 /// @description Gets the volume for a group of sounds, which is the ratio of the master volume (Ranges from 
 /// 0 to 1) and the ratio of that times the respective sound volume also divided by 100 to make it a range 
 /// between 0 and 1, like the master volume above.

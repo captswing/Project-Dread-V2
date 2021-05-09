@@ -118,6 +118,12 @@ animateSprite = true;
 ambLight = noone;
 lightPosition = [0, 0];
 
+// A variable that keeps track of the audio emitter that can be attached to an entity. It can allow entities
+// to play sound effects and have those sound effects placed properly in "3D" audio space; hopefully adding
+// to the game's immersiveness.
+audioEmitter = noone;
+emitterPosition = [0, 0];
+
 #endregion
 
 // Adds the object to the grid for rendering using the depth sorting system.

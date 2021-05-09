@@ -144,7 +144,7 @@ function player_equip_flashlight(_slot){
 	lightColor =		make_color_rgb(_data[? COLOR][| 0], _data[? COLOR][| 0], _data[? COLOR][| 2]);
 	isLightActive =		true;
 	// Update the light and set the lightActive variable to true, to let the game know it is on.
-	update_light_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);
+	light_update_settings(ambLight, lightSize, lightSize, lightStrength, lightColor);
 	
 	// Finally, set the equipped item's slot to the flashlight's current slot
 	equipSlot[EquipSlot.Flashlight] = _slot;
@@ -152,7 +152,7 @@ function player_equip_flashlight(_slot){
 
 /// @description 
 function player_unequip_flashlight(){
-	update_light_settings(ambLight, 15, 15, 0.05, c_ltgray);
+	light_update_settings(ambLight, 15, 15, 0.05, c_ltgray);
 	
 	// Finally, reset the flashlight's equipped slot value
 	equipSlot[EquipSlot.Flashlight] = -1;

@@ -73,6 +73,17 @@ function cutscene_move_entity(_targetX, _targetY, _pauseForMovement, _objectID){
 	if (!_pauseForMovement || _positionReached) {cutscene_end_action();}
 }
 
+/// @description A function that waits for an entity to reach a certain position before moving onto the next
+/// instruction. This prevents anything from happening too fast during an entities movement to a position 
+/// when the cutscene hasn't been set to wait for said movement to complete.
+/// @param objectID
+function cutscene_wait_for_entity_movement(_objectID){
+	var _positionReached = false; // Waits for the target position to be reached by the entity.
+	with(_objectID) {_positionReached = (x == targetPosition[X] && y == targetPosition[Y]);}
+	// If the target position was reached, the next instruction can be executed.
+	if (_positionReached) {cutscene_end_action();}
+}
+
 /// @description A simple instruction for the cutscene that teleports an existing entity to the given position.
 /// This action will only execute for 1 frame before moving onto the next instructions.
 /// @param x

@@ -18,7 +18,7 @@ function light_create_circle(_radiusX, _radiusY, _strength, _color, _trueLight){
 /// @param lightID
 /// @param xPos
 /// @param yPos
-function update_light_position(_lightID, _xPos, _yPos){
+function light_update_position(_lightID, _xPos, _yPos){
 	with(_lightID){
 		x = _xPos;
 		y = _yPos;
@@ -32,7 +32,7 @@ function update_light_position(_lightID, _xPos, _yPos){
 /// @param ySize
 /// @param strength
 /// @param color
-function update_light_settings(_lightID, _xSize, _ySize, _strength, _color){
+function light_update_settings(_lightID, _xSize, _ySize, _strength, _color){
 	with(_lightID){
 		size = [_xSize, _ySize];
 		strength = _strength;

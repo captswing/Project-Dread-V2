@@ -5,22 +5,49 @@
 /// @param imageIndex
 function add_textbox_data(_text, _actor, _imageIndex){
 	ds_list_add(textboxData, [_text, _actor, _imageIndex]);
-	if (ds_list_size(textboxData) == 1) {finalCharacter = string_length(textboxData[| 0][0]);}
+	if (ds_list_size(textboxData) == 1){ // Sets the final character to take into account the code in the text.
+		var _index = string_last_pos("~", textboxData[| 0][0]);
+		finalCharacter = _index == 0 ? string_length(textboxData[| 0][0]) : _index - 1;
+	}
 }
 
-/// @description Removes the textbox data from the 0th position of the list. If no more textbox data exists
-/// in the data list, the textbox handler object will be deleted. Also resets the typewriter effect variables.
+/// @description Attempts to parse the data found at the end of the textbox's text data. This data is formatted
+/// by typing a "~" character, and anything after that will be checked as a code or numerical index value. It
+/// allows a textbox to jump to whatever index necessary for the event/dialog.
 function open_next_textbox(){
-	ds_list_delete(textboxData, 0);
-	// No more data remains in the struct list; delete the entire object
-	if (ds_list_size(textboxData) == 0){
-		instance_destroy(self);
-		return;
+	// Before moving onto the next index, the code that points to said index needs to be found inside of
+	// the current text's string data, and than parsed based on the resulting code/number.
+	var _codeIndex = string_last_pos("~", textboxData[| textboxIndex][0]);
+	if (_codeIndex == 0){ // No code for the next textbox index could be found; move onto the next available index
+		textboxIndex++;
+	} else{
+		// If the code was found (The test after the "~" character) it will be parsed and move to the desired
+		// index. If no valid index was found, the textbox object will be deleted -- signifying an error.
+		textboxCode = string_copy(textboxData[| textboxIndex][0], _codeIndex + 1, 10);
+		if (textboxCode == "next"){ // Moves to the next available textbox
+			textboxIndex++;
+		} else if (textboxCode == "end"){ // Causes the textbox to close after the textbox
+			isClosing = true;
+			return; // Exit the script early
+		} else{ // It must be a numerical index, attempt to parse that number from the remaining string.
+			var _index = real(string_digits(textboxCode));
+			textboxIndex = clamp(_index, 0, ds_list_size(textboxData) - 1);
+		}
 	}
-	// If more textboxes still remain in the list, reset variables for the next textbox
-	finalCharacter = string_length(textboxData[| 0][0]);
-	nextCharacter = 0;
+	// If the next index is at the end of the list of data; set the textbox to close and delete itself.
+	if (textboxIndex >= ds_list_size(textboxData)){
+		textboxIndex = ds_list_size(textboxData) - 1;
+		textboxCode = "end";
+		isClosing = true;
+		return; // Exit the script early
+	}
+	// Check if a code exists for the next textbox. If so, the final character will be set the character
+	// right before that character index. Otherwise, it sets it to the last string in the text.
+	var _index = string_last_pos("~", textboxData[| textboxIndex][0]);
+	finalCharacter = _index == 0 ? string_length(textboxData[| textboxIndex][0]) : _index - 1;
+	// Finally, reset the variables needed for the typewriter effect to function.
 	visibleText = "";
+	nextCharacter = 0;
 	textboxSoundTimer = 0;
 }
 

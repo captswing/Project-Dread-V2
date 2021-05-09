@@ -6,7 +6,7 @@ draw_set_alpha(alpha);
 // Get a reference to the struct stored within the list for the current actor. Also, find out if the
 // namespace section of the textbox needs to be displayed for the speaker's name.
 var _data, _showName;
-_data = actorData[? textboxData[| 0][1]];
+_data = actorData[? textboxData[| textboxIndex][1]];
 _showName = (_data.firstName != "NoActor");
 
 // Drawing the textbox's background and the currently visible text right after that
@@ -38,7 +38,7 @@ if (_data.portraitSprite != -1){
 	draw_text(x + 72, y + 10, visibleText); // Offset the text to fit the character portarit
 	shader_reset();
 	// After resetting the shader, draw the portrait sprite to the screen
-	draw_sprite(_data.portraitSprite, textboxData[| 0][2], x + 20, y + 3);
+	draw_sprite(_data.portraitSprite, textboxData[| textboxIndex][2], x + 20, y + 3);
 } else{ // Draw the text as normal if no portrait exists
 	draw_text(x + 20, y + 10, visibleText);
 	shader_reset();

@@ -35,7 +35,10 @@ while(_actor != _lastIndex){ // Loop through all the actor data and delete each 
 ds_map_clear(actorData);
 ds_map_destroy(actorData);
 
-// Finally, remove the textbox list from memory
+// Next, remove the textbox list from memory
 ds_list_destroy(textboxData);
+
+// Finally, remove the decision and event data map from memory
+ds_map_destroy(decisionData);
 
 #endregion
