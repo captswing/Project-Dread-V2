@@ -39,6 +39,11 @@ ds_map_add(global.singletonID, PLAYER,				noone);
 ds_map_add(global.singletonID, TEXTBOX,				noone);
 ds_map_add(global.singletonID, CUTSCENE,			noone);
 
+// Stores the position of the current audio listener, which goes between the controller object/camera and 
+// the player character. During any cutscenes the camera will be the listener since the player will be where
+// the camera is, and vice versa.
+global.listenerPosition = [0, 0];
+
 // Holds the game's current state. This state determines the functionality of certain objects. Also, the 
 // previous game state is held in memory in a second variable.
 global.gameState = GameState.InGame;

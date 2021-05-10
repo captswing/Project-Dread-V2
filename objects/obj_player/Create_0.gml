@@ -22,6 +22,19 @@ timeToRecover = 60;
 standSprite = spr_claire_unarmed_stand;
 walkSprite = spr_claire_unarmed_walk;
 
+// Setting up the player's footstep effect information
+rightFootIndex = 0;
+leftFootIndex = 2;
+footstepSounds = [
+	snd_player_step_wood,
+	snd_player_step_gravel,
+	snd_player_step_tile,
+	snd_player_step_mud,
+	snd_player_step_grass,
+	snd_player_step_water,
+	snd_player_step_snow
+];
+
 #endregion
 
 #region UNIQUE VARIABLE INITIALIZATION

@@ -55,9 +55,27 @@ maxVspdConst = 0;
 targetPosition = [0, 0];
 directionSet = false;
 
-// Stores the tilemap ID for the floor tiles. Each floor tile corresponds to a different sound effect for 
-// the entity's footstep.
-collisionTilemap = -1;
+// Variables for the Footstep effects. The first stores the tilemap ID for the floor tiles; with Each floor 
+// tile corresponding to a different sound effect for the entity's footstep. The next two variables are the
+// frames of animation where the entity's right foot hits the ground, and their left foot hits the ground, 
+// respectively. The final variable is the array of floor sounds to choose from; each index matching the 
+// tile's index in the foorstep collision map.
+collisionTilemap = layer_tilemap_get_id(layer_get_id("Footstep_Tiles"));
+rightFootIndex = -1;
+leftFootIndex = -1;
+footstepSounds = 0;
+// Footstep sound indexes are ordered as follows:
+//			0	=	Wood
+//			1	=	Gravel
+//			2	=	Concrete
+//			3	=	Mud
+//			4	=	Grass
+//			5	=	Water
+//			6	=	Snow
+
+// A flag that prevents the footstep sounds from playing on every available in-game frame that a footstep 
+// frame of the entity's animation is present. Resets on the next available frame to allow playback again.
+playStepSound = false;
 
 // The variables that keep track of the current hitpoints, maximum hitpoints, as well as damage resistance
 // from attacks. The damage resistance is multiplied with recieved damage to calculte the total damage. A
