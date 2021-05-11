@@ -66,6 +66,7 @@ function create_item(_x, _y, _name, _quantity, _durability){
 	ds_map_add(_mapData, ROOM, room);
 	// Finally, add the item's data to the ds_map and create an instance of the item at the supplied position
 	var _item = instance_create_depth(_x, _y, ENTITY_DEPTH, obj_item);
-	_item.keyIndex = string(ds_map_size(global.worldItemData));
+	_item.keyIndex = string(global.dynamicItemIndex);
 	ds_map_add(global.worldItemData, _item.keyIndex, _mapData);
+	global.dynamicItemIndex++; // Increment to the next available index
 }

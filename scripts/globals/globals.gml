@@ -20,6 +20,11 @@ global.itemData = encrypted_json_load("item_data", "5v8x/A?D(G+KbPeShVmYq3t6w9z$
 //
 global.worldItemData = -1; // No data is loaded until a game is actually started (NEVER SET A DATA STRUCTURE TO 0 AFTER DELETING IT)
 
+// A number that starts at 100000 and is incremented by one for each item that is created during the game's
+// runtime. This is required since it becomes the key value for the item in the world_item_data map, and 
+// allows for a unique index for each.
+global.dynamicItemIndex = 100000;
+
 // A map that stores all the texture data for the game's available fonts. The key is the number given to the 
 // font given by GML itself, which is a constant given by referencing the font resource itself.
 global.fontTextures = ds_map_create();
