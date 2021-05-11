@@ -4,7 +4,7 @@
 
 // Gets input from the currently active control method (Keyboard/Gamepads supported)
 if (!global.gamepadActive) {keyAdvance = keyboard_check_pressed(global.settings[Settings.Interact]);}
-else {keyAdvance = gamepad_button_check_pressed(global.gamepadID, global.settings[Settings.Interact]);}
+else {keyAdvance = gamepad_button_check_pressed(global.gamepadID, global.settings[Settings.InteractGP]);}
 
 #endregion
 

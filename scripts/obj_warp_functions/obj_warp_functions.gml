@@ -34,7 +34,21 @@ function interact_room_warp(){
 			}
 		}
 		// Remove the keys from the inventory after they've been used, since they're no longer needed.
-		for (var i = 0; i < _length; i++) {inventory_remove(requiredKeys[| i], 1);}
+		var _textboxString = "";
+		for (var i = 0; i < _length; i++){
+			inventory_remove(requiredKeys[| i], 1);
+			// Add a comma or "and" before each key name if there was more than one key used
+			if (_length > 1 && i != 0){
+				if (i == _length - 1) {_textboxString += " and ";}
+				else {_textboxString += ", ";}
+			}
+			_textboxString += requiredKeys[| i];
+		}
+		create_textbox("Used the " + _textboxString + " to open the door.");
+		// Clear out the warp's ds_list, which turns this into a truly open door, and set its event flag.
+		set_event_flag(eventFlagIndex, true);
+		ds_list_clear(requiredKeys);
+		return; // Exits before the warp actually happens.
 	}
 	// The check for the required keys has passed OR there wasn't a check needed to begin with, since the 
 	// door is unlocked by default. Begins the fade that will result in the door warp being triggered.

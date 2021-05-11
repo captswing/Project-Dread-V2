@@ -6,6 +6,9 @@
 if (!global.gamepadActive) {player_get_input_keyboard();}
 else {player_get_input_gamepad();}
 
+// Prevent any functionality from the player if the game state is set to Paused
+if (global.gameState == GameState.Paused) {return;}
+
 // Call the parent step event code, which handles the current state, health regen, and invulnerability time
 event_inherited();
 
