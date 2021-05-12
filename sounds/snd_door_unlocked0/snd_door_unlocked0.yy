@@ -1,5 +1,5 @@
 {
-  "compression": 1,
+  "compression": 0,
   "volume": 1.0,
   "preload": false,
   "bitRate": 128,
@@ -10,14 +10,14 @@
     "name": "audiogroup_default",
     "path": "audiogroups/audiogroup_default",
   },
-  "soundFile": "snd_player_step_wood.wav",
-  "duration": 0.205583,
+  "soundFile": "snd_door_unlocked0.wav",
+  "duration": 0.15675,
   "parent": {
-    "name": "Footsteps",
-    "path": "folders/Sounds/Objects/Entities/Dynamic/obj_player/Footsteps.yy",
+    "name": "obj_warp",
+    "path": "folders/Sounds/Objects/Entities/Static/Interactables/obj_warp.yy",
   },
   "resourceVersion": "1.0",
-  "name": "snd_player_step_wood",
+  "name": "snd_door_unlocked0",
   "tags": [],
   "resourceType": "GMSound",
 }

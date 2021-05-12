@@ -81,6 +81,7 @@
     {"id":{"name":"obj_light","path":"objects/obj_light/obj_light.yy",},"order":0,},
     {"id":{"name":"entity_hitpoint_functions","path":"scripts/entity_hitpoint_functions/entity_hitpoint_functions.yy",},"order":3,},
     {"id":{"name":"obj_player_projectile","path":"objects/obj_player_projectile/obj_player_projectile.yy",},"order":1,},
+    {"id":{"name":"rm_template","path":"rooms/rm_template/rm_template.yy",},"order":2,},
     {"id":{"name":"snd_door_locked0","path":"sounds/snd_door_locked0/snd_door_locked0.yy",},"order":0,},
     {"id":{"name":"obj_effect_handler","path":"objects/obj_effect_handler/obj_effect_handler.yy",},"order":2,},
     {"id":{"name":"par_enemy","path":"objects/par_enemy/par_enemy.yy",},"order":0,},
@@ -95,6 +96,7 @@
     {"id":{"name":"shd_heat_haze","path":"shaders/shd_heat_haze/shd_heat_haze.yy",},"order":0,},
     {"id":{"name":"player_attack_collision_functions","path":"scripts/player_attack_collision_functions/player_attack_collision_functions.yy",},"order":7,},
     {"id":{"name":"ts_footstep_materials","path":"tilesets/ts_footstep_materials/ts_footstep_materials.yy",},"order":0,},
+    {"id":{"name":"snd_door_unlocked0","path":"sounds/snd_door_unlocked0/snd_door_unlocked0.yy",},"order":1,},
     {"id":{"name":"spr_maps","path":"sprites/spr_maps/spr_maps.yy",},"order":2,},
     {"id":{"name":"spr_heat_haze","path":"sprites/spr_heat_haze/spr_heat_haze.yy",},"order":1,},
     {"id":{"name":"array_functions","path":"scripts/array_functions/array_functions.yy",},"order":0,},
@@ -148,7 +150,10 @@
   },
   "RoomOrderNodes": [
     {"roomId":{"name":"rm_init","path":"rooms/rm_init/rm_init.yy",},},
-    {"roomId":{"name":"rm_test0","path":"rooms/rm_test0/rm_test0.yy",},},
+    {"groupName":"Test Rooms","children":[
+        {"roomId":{"name":"rm_test0","path":"rooms/rm_test0/rm_test0.yy",},},
+      ],},
+    {"roomId":{"name":"rm_template","path":"rooms/rm_template/rm_template.yy",},},
   ],
   "Folders": [
     {"folderPath":"folders/Sprites.yy","order":0,"resourceVersion":"1.0","name":"Sprites","tags":[],"resourceType":"GMFolder",},

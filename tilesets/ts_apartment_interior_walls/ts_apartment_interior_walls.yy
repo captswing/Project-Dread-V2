@@ -1,5 +1,4 @@
 {
-  "name": "ts_apartment_interior_walls",
   "spriteId": {
     "name": "apartment_interior_walls",
     "path": "sprites/apartment_interior_walls/apartment_interior_walls.yy",
@@ -55,6 +54,7 @@
     "path": "folders/Tile Sets/Interior/Apartments/Walls.yy",
   },
   "resourceVersion": "1.0",
+  "name": "ts_apartment_interior_walls",
   "tags": [],
   "resourceType": "GMTileSet",
 }

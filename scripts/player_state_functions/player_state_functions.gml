@@ -17,9 +17,10 @@ function player_state_default(){
 		with(par_interactable) {checkForLights = true;}
 	}
 	
-	// Interacting with certain objects in the world
-	if (keyInteract){
-		var _offset = [x + lengthdir_x(8, direction), y + lengthdir_y(8, direction) - 4];
+	// Interacting with certain objects in the world and updating the player's interaction point
+	interactOffset = [x + lengthdir_x(8, direction), y + lengthdir_y(8, direction) - 4];
+	if (keyInteract){ // Attempt to interact when the key for doing so is pressed
+		var _offset = [interactOffset[X], interactOffset[Y]]; // Copy into a temporary array
 		with(instance_nearest(_offset[X], _offset[Y], par_interactable)){
 			// Ignores interaction if the object cannot be currently seen by the player. If it can be seen,
 			// the interaction point will be checked against the maximum interaction distance. If the value

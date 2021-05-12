@@ -16,7 +16,7 @@ with(par_dynamic_entity){
 			draw_rect_outline(bbox_left, bbox_top, 1 + (bbox_right - bbox_left), 1 + (bbox_bottom - bbox_top), c_gray, c_gray, 0.5, 1);
 			// Also, draw the player's interaction point
 			draw_set_alpha(0.5);
-			draw_point_color(x + lengthdir_x(8, direction), y + lengthdir_y(8, direction) - 4, c_white);
+			draw_point_color(interactOffset[X], interactOffset[Y], c_white);
 			break;
 	}
 }

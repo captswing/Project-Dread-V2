@@ -1,5 +1,4 @@
 {
-  "name": "ts_apartment_interior_ceilings",
   "spriteId": {
     "name": "apartment_interior_ceilings",
     "path": "sprites/apartment_interior_ceilings/apartment_interior_ceilings.yy",
@@ -82,6 +81,7 @@
     "path": "folders/Tile Sets/Interior/Apartments/Ceilings.yy",
   },
   "resourceVersion": "1.0",
+  "name": "ts_apartment_interior_ceilings",
   "tags": [],
   "resourceType": "GMTileSet",
 }

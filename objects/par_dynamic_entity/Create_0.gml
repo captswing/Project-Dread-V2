@@ -60,7 +60,7 @@ directionSet = false;
 // frames of animation where the entity's right foot hits the ground, and their left foot hits the ground, 
 // respectively. The final variable is the array of floor sounds to choose from; each index matching the 
 // tile's index in the foorstep collision map.
-collisionTilemap = layer_tilemap_get_id(layer_get_id("Footstep_Tiles"));
+collisionTilemap = -1;
 rightFootIndex = -1;
 leftFootIndex = -1;
 footstepSounds = 0;

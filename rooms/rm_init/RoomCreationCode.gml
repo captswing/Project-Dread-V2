@@ -4,7 +4,7 @@ randomize();
 // Enable the GPU alpha test to discard transparent pixels in the render pipeline
 gpu_set_alphatestenable(true);
 
-// Sets the position of the audio listener that allows for audio to be percieved as 3-dimensional in the game.
+// Sets the position of the audio listener that allows for audio to be perceived as 3-dimensional in the game.
 audio_listener_orientation(0, -1, 0, 0, 0, -1);
 
 // Load in the player's settings

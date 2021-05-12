@@ -4,6 +4,9 @@
 
 // Initialize all variables from the static entity parent object, which include state stuff.
 event_inherited();
+// Makes the object sit lower toward the ground than objects like the player; simulating that the item is
+// below the player instead of at the same height as them.
+zOffset = -4;
 // Set the script to add an item to the inventory
 interactScript = collect_item;
 

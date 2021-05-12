@@ -29,9 +29,10 @@ targetX = 0;
 targetY = 0;
 targetRoom = -1;
 
-// The three sounds that can be unique to each warp object by way of their creation code. Each of these 
-// variables stores a sound for the door being locked, opening, and closing, respectively.
+// The four sounds that can be unique to each warp object by way of their creation code. Each of these 
+// variables stores a sound for the door being locked, unlocked, opening, and closing, respectively.
 doorLockedSound = -1;
+doorUnlockSound = -1;
 doorOpenSound = -1;
 doorCloseSound = -1;
 

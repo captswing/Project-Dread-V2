@@ -1,4 +1,7 @@
-/// @description
+/// @description The state that the warp will be in when it's set to warp the player to the room and position
+/// assigned in said warp's room creation code. It waits until the fading effect is fully opaque, and after
+/// the sound for opening the door has completed. Then, the door's closing sound will play and the player
+/// will be warped to the next room.
 function warp_state_warping(){
 	// Checks every frame for the effect handler's fade to see if it's begun its fade out, which will trigger
 	// the actual code that warps the player to the next room, relative to the _warpSuccess flag.
@@ -18,7 +21,10 @@ function warp_state_warping(){
 	}
 }
 
-/// @description 
+/// @description The function for interacting with a warp. It first checks if keys are required for unlocking
+/// the door, and then removes them for the inventory if the player has all of the required keys. If no keys
+/// are required or the door has been unlocked, the warp will begin its state to fade the screen and warp
+/// the player object to the designated position and room.
 function interact_room_warp(){
 	// Checks through all the required keys to see if the player's doesn't have one of them; in which case
 	// the warp to the next room will not occur, and a textbox message will pop up letting the player know
@@ -46,6 +52,8 @@ function interact_room_warp(){
 		}
 		create_textbox("Used the " + _textboxString + " to open the door.");
 		// Clear out the warp's ds_list, which turns this into a truly open door, and set its event flag.
+		// Also play the door's unlock sound effect if one has been assigned.
+		play_sound_effect(doorUnlockSound, 1, false);
 		set_event_flag(eventFlagIndex, true);
 		ds_list_clear(requiredKeys);
 		return; // Exits before the warp actually happens.
@@ -57,7 +65,9 @@ function interact_room_warp(){
 	set_cur_state(warp_state_warping);
 }
 
-/// @description
+/// @description The code that will actually warp an object (Doesn't have to be the player, but must be a
+/// persistent object in order to actually work) to another room at a designated position. Doesn't actually
+/// execute the code if an invalid object or invalid room was provided to the function.
 /// @param warpedObject
 /// @param x
 /// @param y

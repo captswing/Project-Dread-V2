@@ -57,6 +57,10 @@ keyItems = false;
 keyNotes = false;
 keyMaps = false;
 
+// A 2D vector that stores the x and y positions for the player's interaction point, which is a position
+// that is around 8 pixels in front of whatever direction that player's sprite is currently facing.
+interactOffset = [0, 0];
+
 // These variables correspond with a sprite/animation for the player during the task specified within the
 // variables name. This allows for easy hot-swapping of sprites based on current equipped weapon and things
 // like that without much code needed for updating the player's current sprite to meet those demands.

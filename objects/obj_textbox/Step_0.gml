@@ -15,8 +15,12 @@ y += ((yTarget - y) / 5) * global.deltaTime;
 // Handling the visiblity of the textbox
 if (!isClosing){ // Fades the textbox into visiblity
 	alpha += 0.1 * global.deltaTime;
-	if (alpha > 1) {alpha = 1;}
-	else {keyAdvance = false;} // Don't allow input until the textbox is fully visible
+	if (alpha > 1){
+		alpha = 1;
+	} else{ // Don't allow input or textbox scrolling until the textbox is fully visible
+		keyAdvance = false;
+		return;
+	} 
 } else{ // Fades the textbox out
 	alpha -= 0.1 * global.deltaTime;
 	if (alpha < 0){ // Switching from the currently visible textbox to the next one
