@@ -20,8 +20,11 @@ function collect_item(){
 		}
 		play_sound_effect(snd_item_pickup, get_audio_group_volume(Settings.Sounds), true);
 	}
-	// Remove the data from the item list map if the entire quantity was picked up
+	// Remove the data from the item list map if the entire quantity was picked up. Also removes the key data
+	// from the list that store dynamic item indices if this was a dynamically dropped item.
 	if (_num <= 0){
+		var _pos = ds_list_find_index(global.dynamicItemKeys, keyIndex);
+		if (_pos != -1) {ds_list_delete(global.dynamicItemKeys, _pos);}
 		ds_map_delete(global.worldItemData, keyIndex);
 		instance_destroy(self);
 		return;
@@ -64,9 +67,11 @@ function create_item(_x, _y, _name, _quantity, _durability){
 	ds_map_add(_mapData, X_POSITION, _x);
 	ds_map_add(_mapData, Y_POSITION, _y);
 	ds_map_add(_mapData, ROOM, room);
-	// Finally, add the item's data to the ds_map and create an instance of the item at the supplied position
+	// Next, add the item's data to the ds_map and create an instance of the item at the supplied position
 	var _item = instance_create_depth(_x, _y, ENTITY_DEPTH, obj_item);
 	_item.keyIndex = string(global.dynamicItemIndex);
 	ds_map_add(global.worldItemData, _item.keyIndex, _mapData);
 	global.dynamicItemIndex++; // Increment to the next available index
+	// Finally, add the item's key index to the list of item keys for easy reference.
+	ds_list_add(global.dynamicItemKeys, _item.keyIndex);
 }

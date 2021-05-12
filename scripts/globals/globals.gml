@@ -25,6 +25,11 @@ global.worldItemData = -1; // No data is loaded until a game is actually started
 // allows for a unique index for each.
 global.dynamicItemIndex = 100000;
 
+// A list that stores data alongside the world item data's dynamically placed items. It stores all the key
+// values that link to said dropped items, but it can also be for items created by cutscenes, events, and
+// other non-static means like that.
+global.dynamicItemKeys = ds_list_create();
+
 // A map that stores all the texture data for the game's available fonts. The key is the number given to the 
 // font given by GML itself, which is a constant given by referencing the font resource itself.
 global.fontTextures = ds_map_create();

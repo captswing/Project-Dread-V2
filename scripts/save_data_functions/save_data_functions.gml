@@ -33,6 +33,19 @@ function save_game_data(_saveNum){
 	}
 	ds_map_add_map(_map, "world_item_data", _worldItemMap);
 	
+	// Add the current variables that handle dynamically dropped items, which are the variable for the next
+	// index that will be given to said item; starting from 100000 and counting up by one for every new item
+	// created through dynamic means. Also saves the list detailing all the dynamically dropped items that
+	// currently exist in the world item data map.
+	var _dynamicItemKeys, _length;
+	_dynamicItemKeys = ds_list_create();
+	_length = ds_list_size(global.dynamicItemKeys);
+	for (var i = 0; i < _length; i++){
+		ds_list_add(_dynamicItemKeys, global.dynamicItemKeys[| i]);
+	}
+	ds_map_add_list(_map, "dynamic_item_keys", _dynamicItemKeys);
+	ds_map_add(_map, "dynamic_item_index", global.dynamicItemIndex);
+	
 	// Only the current gameplay difficulty and puzzle difficulty values need to be saved; not the entire struct
 	// that contains these values and the other gameplay flags and modifiers. This is because reloading using just
 	// these two values will yield the same result as saving and loading all the data, and it saves spaces in the file.
@@ -52,8 +65,7 @@ function save_game_data(_saveNum){
 	
 	// Save all the event flags into a map relating to each flags state. This map is then saved into the overall map
 	// before its encoded as a JSON and saved into its respective file.
-	var _eventMap, _length;
-	_eventMap = ds_map_create();
+	var _eventMap = ds_map_create();
 	_length = array_length(global.eventFlags);
 	for (var i = 0; i < _length; i++) {ds_map_add(_eventMap, string(i), global.eventFlags[i]);}
 	ds_map_add_map(_map, "event_flags", _eventMap);
@@ -91,8 +103,7 @@ function save_game_data(_saveNum){
 		// Create a new list that will store the copied data from the current temporary effect that are 
 		// active on the player object currently, This is needed because simply "copying" over the list
 		// in game maker marks it to be deleted once it's encoded to a JSON file.
-		var _effectTimers, _length;
-		_effectTimers = ds_list_create();
+		var _effectTimers = ds_list_create();
 		_length = ds_list_size(effectTimers);
 		for (var i = 0; i < _length; i++){
 			ds_list_add(_effectTimers, effectTimers[| i]);
@@ -201,6 +212,15 @@ function load_game_data(_saveNum){
 		_key1 = ds_map_find_next(_map[? "world_item_data"], _key1);
 	}
 	
+	// Copy the list containing keys that pair with dynamically dropped items in the world item data map
+	// into the empty global.dynamicItemKeys and also set the value for the next dynamically dropped item's 
+	// key in the global.dynamicItemIndex variable, which prevents dublicates in the key values.
+	ds_list_clear(global.dynamicItemKeys); // Empty the list before beginning
+	var _length = ds_list_size(_map[? "dynamic_item_keys"]);
+	for (var i = 0; i < _length; i++) {ds_list_add(global.dynamicItemKeys, _map[? "dynamic_item_keys"][| i]);}
+	// After looping; add back the next index variable's value
+	global.dynamicItemIndex = _map[? "dynamic_item_index"];
+	
 	// Initialize the difficulty with the gameplay difficulty and puzzle difficulty that was saved. This will
 	// set all the gameplay modifiers and flags to what they are supposed to be.
 	initialize_difficulty(_map[? "gameplay_difficulty"], _map[? "puzzle_difficulty"]);
@@ -221,7 +241,7 @@ function load_game_data(_saveNum){
 	// Load in all the event flags from the save file. These are saved as a ds_map and must be converted into
 	// an array before copying that array over into the global.eventFlags variable. Otherwise, crashes will happen
 	// when event flags are referenced in-game.
-	var _length = ds_map_size(_map[? "event_flags"]);
+	_length = ds_map_size(_map[? "event_flags"]);
 	for (var i = 0; i < _length; i++) {global.eventFlags[i] = _map[? "event_flags"][? string(i)];}
 	
 	// Load the saved weather effect into the effect handler object. This will overwrite whatever previous weather
@@ -261,7 +281,7 @@ function load_game_data(_saveNum){
 		
 		// Restores the temporary effects that were affecting the player when they last saved; reapplying
 		// them and executing any required starting functions for a given effect.
-		var _effectTimers, _length, _data;
+		var _effectTimers, _data;
 		_effectTimers = _playerMap[? "effect_timers"];
 		_length = ds_list_size(_effectTimers);
 		for (var i = 0; i < _length; i++){

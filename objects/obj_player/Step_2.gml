@@ -27,7 +27,7 @@ if (_distanceFromListener > _falloffDist){
 var _localFrame = floor(localFrame);
 if (playStepSound && collisionTilemap != -1 && (_localFrame == rightFootIndex || _localFrame == leftFootIndex)){
 	var _tileID = tilemap_get_at_pixel(collisionTilemap, x, y);
-	if (_tileID != -1){ // If a valid tile exists beneath the player's current position
+	if (_tileID > 0){ // If a valid tile exists beneath the player's current position
 		playStepSound = false; // Prevents the sound for playing every frame that the animation is on the footstep frame
 		var _volume, _pitch, _sound;
 		_volume = random_range(0.15, 0.75);
