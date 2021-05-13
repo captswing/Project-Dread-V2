@@ -1,7 +1,8 @@
-// Set the position and room the player will be warped to
-targetX = 120;
-targetY = 300;
+// Set the position the play will be sent to, the room they will be warped to, and the indicator image
+targetX = 136;
+targetY = 54;
 targetRoom = rm_test0;
+indicatorIndex = INDEX_SOUTH;
 
 // Set the sound effects to be played when the door is locked, opened, or closed
 doorLockedSound = snd_door_locked0;

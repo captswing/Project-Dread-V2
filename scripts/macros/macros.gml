@@ -26,6 +26,12 @@
 #macro	X							0
 #macro	Y							1
 
+// Cardinal constants, but indexed from 0 to 3
+#macro	INDEX_EAST					0
+#macro	INDEX_NORTH					1
+#macro	INDEX_WEST					2
+#macro	INDEX_SOUTH					3
+
 // Animation constants
 #macro	ANIMATION_FPS				60
 

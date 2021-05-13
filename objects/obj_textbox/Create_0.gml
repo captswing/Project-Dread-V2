@@ -8,7 +8,6 @@ if (!add_singleton_object()) {return;}
 image_index = 0;
 image_alpha = 0;
 image_speed = 0;
-visible = true;
 
 #endregion
 

@@ -98,6 +98,8 @@ enum Settings{
 	TextSpeed,
 	ObjectiveHints,
 	ItemHighlighting,
+	InteractionPrompt,
+	DoorIndicatorRange,
 	AimAssist,
 	// Holds Total Number of Settings //
 	Length,

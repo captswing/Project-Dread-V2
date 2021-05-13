@@ -1,4 +1,59 @@
-/// @description  Screen Space Effects and Display General Debug Info
+/// @description Drawing In-Game HUD
+
+#region DRAWING THE IN-GAME HUD ELEMENTS
+
+// Everything below these two lines should be used to display text onto the in-game HUD
+shader_set(outlineShader);
+shader_set_uniform_i(sDrawOutline, 1);
+
+// If the accessibility setting is toggled to show a control prompt for interacting with objects, this code
+// to check if the player's interaction point is on an interactable in order to show the control prompt.
+if (global.settings[Settings.InteractionPrompt]){
+	// Setting the color of the interaction prompt, and the font used for said prompt
+	draw_set_color(c_white);
+	shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
+	outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
+	// Jump over to the player object and checks the interaction point for a collision with an interactable
+	// object. If an interactable exists at that point, display the prompt.
+	with(global.singletonID[? PLAYER]){
+		var _interactOffset = [interactOffset[X], interactOffset[Y]];
+		with(instance_nearest(x, y, par_interactable)){ // Jump over to the nearest interactable to see if the player can interact
+			if (canInteract && point_distance(_interactOffset[X], _interactOffset[Y], interactCenter[X], interactCenter[Y]) <= interactRadius){
+				draw_set_halign(fa_center);
+				// TODO -- Add gamepad support here and draw sprite for control binding here instead of just text
+				draw_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 30, "Interact");
+				draw_set_halign(fa_left);
+			}
+		}
+	}
+}
+
+shader_reset();
+
+#endregion
+
+#region DRAWING ALL OTHER GUI ELEMENTS AFTER THE IN-GAME HUD
+
+// Loop through each object in the entity list and execute their draw GUI event
+var _screenX, _screenY, _screenW, _screenH, _length;
+_screenX = camera_get_x();
+_screenY = camera_get_y();
+_screenW = _screenX + WINDOW_WIDTH;
+_screenH = _screenY + WINDOW_HEIGHT;
+_length = ds_grid_height(global.worldObjects);
+for (var i = 0; i < _length; i++){
+	with(global.worldObjects[# 0, i]){
+		if (!drawSprite || x <= _screenX - sprite_width || x >= _screenW + sprite_width || y <= _screenY - sprite_height || y >= _screenH + sprite_height){
+			continue;	// The object isn't currently on screen or isn't supposed to be drawn
+		}
+		event_perform(ev_draw, ev_gui);
+	}
+}
+
+// Display the textbox after any HUD drawing
+with(global.singletonID[? TEXTBOX]) {event_perform(ev_draw, ev_gui);}
+
+#endregion
 
 // DEBUGGING STUFF BELOW HERE (WILL BE DELETED EVENTUALLY)
 
@@ -8,12 +63,6 @@ shader_set_uniform_i(sDrawOutline, 1);
 draw_set_color(c_white);
 shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
 outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
-
-draw_set_halign(fa_right);
-with(obj_cutscene){ // Display information about current cutscene
-	var _size = ds_list_size(sceneData);
-	draw_text(WINDOW_WIDTH - 5, WINDOW_HEIGHT - 20, "Instruction Index: " + string(sceneIndex) + "/" + string(_size) + "\nCurrent Action: " + script_get_name(sceneData[| sceneIndex][0]));
-}
 
 if (showItems){ // Showing the player's current inventory
 	draw_text(WINDOW_WIDTH - 5, 5, "-- Inventory Data --");

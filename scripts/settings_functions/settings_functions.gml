@@ -78,6 +78,8 @@ function load_settings(){
 	global.settings[Settings.TextSpeed] =			ini_read_real(_access, "text_speed",			1.25);
 	global.settings[Settings.ObjectiveHints] =		ini_read_real(_access, "objective_hints",		false);
 	global.settings[Settings.ItemHighlighting] =	ini_read_real(_access, "item_highlighting",		false);
+	global.settings[Settings.InteractionPrompt] =	ini_read_real(_access, "interaction_prompt",	false);
+	global.settings[Settings.DoorIndicatorRange] =	ini_read_real(_access, "door_indicator_range",	40);
 	global.settings[Settings.AimAssist] =			ini_read_real(_access, "aim_assist",			false);
 	
 	ini_close();
@@ -163,13 +165,15 @@ function save_settings(){
 	ini_write_real(_access, "text_speed",			global.settings[Settings.TextSpeed]);
 	ini_write_real(_access, "objective_hints",		global.settings[Settings.ObjectiveHints]);
 	ini_write_real(_access, "item_highlighting",	global.settings[Settings.ItemHighlighting]);
+	ini_write_real(_access, "interaction_prompt",	global.settings[Settings.InteractionPrompt]);
+	ini_write_real(_access, "door_indicator_range", global.settings[Settings.DoorIndicatorRange]);
 	ini_write_real(_access, "aim_assist",			global.settings[Settings.AimAssist]);
 	
 	ini_close();
 }
 
 /// @description Adjusts the player's non-control mapping setting values.
-function adjust_setting(_index, _adjustValue){
+/*function adjust_setting(_index, _adjustValue){
 	if (_index >= Settings.GameRight && _index <= Settings.FileDelete){
 		return;
 	}
@@ -233,4 +237,4 @@ function adjust_setting(_index, _adjustValue){
 			global.settings[_index] = !global.settings[_index];
 			break;
 	}
-}
+}*/

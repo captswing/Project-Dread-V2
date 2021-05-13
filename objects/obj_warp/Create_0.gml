@@ -36,4 +36,12 @@ doorUnlockSound = -1;
 doorOpenSound = -1;
 doorCloseSound = -1;
 
+// Three simple variables. One holds a constant for the door's direction, which can be one of the four cardinal
+// directions: north, east, south, and west, respectively. This constant referes to the sprite used for the
+// arrow, which will be facing in said direction. Meanwhile, the second variable stores a positional offset
+// that makes the arrow animate subtly. Finally, the third determines how fast it animates.
+indicatorIndex = -1;
+indicatorOffset = 0;
+indicatorSpeed = 0.05;
+
 #endregion

@@ -21,7 +21,6 @@ timeToRecover = 60;
 // Initialize the inherited sprite variables with claire's default sprites
 standSprite = spr_claire_unarmed_stand;
 walkSprite = spr_claire_unarmed_walk;
-
 // Setting up the player's footstep effect information
 rightFootIndex = 0;
 leftFootIndex = 2;
