@@ -28,13 +28,12 @@ if (global.gameState == GameState.InGame){
 	
 	// Handling collision with enemies and any projectiles they might use on the player
 	if (!isHit){ // Only check these collisions when the player isn't invulnerable
-		var _hostile, _damage, _isHit;
-		_hostile = noone;
+		var _damage, _isHit;
 		_damage = 0;
 		_isHit = false;
 		
 		// Colliding with an enemy object
-		_hostile = instance_place(x, y, par_enemy);
+		var _hostile = instance_place(x, y, par_enemy);
 		if (_hostile != noone){ // If the hostile contains a valid ID, set how much damage will be dealt
 			_damage = _hostile.damage * global.gameplay.enemyDamageMod;
 			_isHit = true;

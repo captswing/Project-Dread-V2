@@ -14,6 +14,7 @@ visible = false;
 // deleted since the pointer to this list is passed into the actual cutscene object, where it will be
 // deleted come any error or a successful execution.
 sceneData = ds_list_create();
+ds_list_add(sceneData, [cutscene_open, 0.1]); // Adds the initialization instruction to the beginning
 
 // Three variables that tie into the event flags that will be crucial for disabling/enabling certain cutscene
 // triggers, cutscene objects, and so on. The first variable points to a list that stores all of the requied 

@@ -84,6 +84,7 @@ function is_valid_singleton(){
 		case obj_textbox:			return TEXTBOX;
 		case obj_cutscene:			return CUTSCENE;
 		case obj_player:			return PLAYER;
+		case obj_control_info:		return CONTROL_INFO;
 		default:					return undefined;
 	}
 }

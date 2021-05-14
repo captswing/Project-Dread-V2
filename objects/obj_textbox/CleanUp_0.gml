@@ -5,6 +5,12 @@
 // Don't clean up uninitialized data if the textbox object was a duplicate of the existing singleton
 if (global.singletonID[? TEXTBOX] != id) {return;}
 
+// Set the control information to invisible if the textbox is in control of how the control info object
+// displays its information, which will stop if from wasting time rendering.
+if (commandControlInfoObject){
+	with(global.singletonID[? CONTROL_INFO]) {alpha = 0;}
+}
+
 // Restore the player's states from before the textbox was opened and initialized, but don't do that if a
 // cutscene is currently happening.
 if (global.gameState == GameState.InGame){

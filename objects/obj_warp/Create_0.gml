@@ -4,11 +4,12 @@
 
 // Initialize all variables from the static entity parent object, which include state stuff.
 event_inherited();
-// Adjust some of the interaction variables to fit the warp better
+// Set up the interaction information for the object
 interactRadius = 10;
 interactCenter = [x + 8, y + 4];
-// Set the interation script to be the script involving room warping/key checking.
 interactScript = interact_room_warp;
+// Set the optional interaction text to be specific to doors
+interactionText = "Open Door";
 
 #endregion
 

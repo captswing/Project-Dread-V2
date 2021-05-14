@@ -29,4 +29,8 @@ interactScript = NO_SCRIPT;
 // set to false and whatever it calculated with determine if the object can be interacted with by the player.
 checkForLights = true;
 
+// Flavor text for the interation prompt that can be enabled or disabled from the game's accessibility settings.
+// It shows up next to the binding for the game's controls; specifically the keybinding for interaction.
+interactionText = "Inspect";
+
 #endregion

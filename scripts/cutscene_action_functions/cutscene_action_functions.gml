@@ -9,6 +9,40 @@ function cutscene_wait(_seconds){
 	}
 }
 
+/// @description An innitialization action that occurs at the 0th index of the cutscene, and it's added to 
+/// the scene list upon the trigger object's creation. This means it's not necessary to add this instruction 
+/// anywhere in the instructions for the respective cutscene's instructions.
+/// @param fadeSpeed
+function cutscene_open(_fadeSpeed){
+	// Increases the alpha for the control information that should be visible on the screen. Once that
+	// value has surpassed 1 it will be clipped back to a maximum of 1 and the cutscene will begin.
+	var _endAction = false;
+	with(global.singletonID[? CONTROL_INFO]){
+		alpha += _fadeSpeed * global.deltaTime;
+		if (alpha >= 1){ // Info has finished fading in, move onto rest of cutscene
+			alpha = 1;
+			_endAction = true;
+		}
+	}
+	
+	// The cutscene can begin, as the control information has full faded in.
+	if (_endAction) {cutscene_end_action();}
+}
+
+/// @description Much like the instruction above, this one is automatically placed into the list of cutscene
+/// instructions, but placed at the ending instead of the beginning of said instructions. One the alpha for
+/// the controls has gone below 0 and the cutscene object will be destroyed.
+/// @param fadeSpeed
+function cutscene_close(_fadeSpeed){
+	with(global.singletonID[? CONTROL_INFO]){
+		alpha -= _fadeSpeed * global.deltaTime;
+		if (alpha <= 0){ // Set alpha to zero and destroy the cutscene object
+			alpha = 0;
+			instance_destroy(other);
+		}
+	}
+}
+
 /// @description Executes the chunk of textbox functions located in the queue after this function's queue
 /// position until the cutscene_end_textbox is at the queue head, or if the queue runs out of data before
 /// said function has been reached within the queue. The cutscene and textbox object will be deleted if

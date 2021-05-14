@@ -11,8 +11,7 @@ colliderHeight = 8;
 // Adjust the z-offset to prevent sprites overlapping improperly
 zOffset = 4;
 // Set up the interaction information for the object
-interactCenter = [x + 8, y + 10];
-interactRadius = 10;
+interactCenter = [x + 8, y + 8];
 interactScript = interact_apartment_general;
 
 #endregion

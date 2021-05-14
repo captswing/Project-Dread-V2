@@ -9,6 +9,8 @@ event_inherited();
 zOffset = -4;
 // Set the script to add an item to the inventory
 interactScript = collect_item;
+// Set the optional interaction text to be specific to items
+interactionText = "Pick Up Item";
 
 #endregion
 

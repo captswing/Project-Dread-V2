@@ -48,6 +48,7 @@ ds_map_add(global.singletonID, DEPTH_SORTER,		noone);
 ds_map_add(global.singletonID, PLAYER,				noone);
 ds_map_add(global.singletonID, TEXTBOX,				noone);
 ds_map_add(global.singletonID, CUTSCENE,			noone);
+ds_map_add(global.singletonID, CONTROL_INFO,		noone);
 
 // Stores the position of the current audio listener, which goes between the controller object/camera and 
 // the player character. During any cutscenes the camera will be the listener since the player will be where
@@ -81,6 +82,9 @@ global.settings = array_create(Settings.Length, 0);
 // from either a gamepad or keyboard.
 global.gamepadID = -1;
 global.gamepadActive = false;
+
+// 
+global.controlIcons = ds_map_create();
 
 // A boolean that determines if the player is currently in a room that is considered safe or not. It only affects
 // how the player's sanity modifier will set to as a standard value -- a value of one for when the room is considered

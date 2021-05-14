@@ -2,11 +2,11 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "obj_textbox",
-    "path": "folders/Scripts/Objects/GUI/obj_textbox.yy",
+    "name": "Utilities",
+    "path": "folders/Scripts/Utilities.yy",
   },
   "resourceVersion": "1.0",
-  "name": "textbox_helper_functions",
+  "name": "control_icon_functions",
   "tags": [],
   "resourceType": "GMScript",
 }

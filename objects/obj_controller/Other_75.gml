@@ -16,3 +16,6 @@ switch(async_load[? "event_type"]){
 		global.gamepadActive = false;
 		break;
 }
+
+// Initialize the correct images for the control icons
+initialize_control_icons(global.gamepadActive);

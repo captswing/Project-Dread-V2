@@ -50,9 +50,15 @@ timer = 0;
 
 #endregion
 
-#region SETTING GAME STATE AND LOCKING PLAYER MOVEMENT
+#region SETTING GAME STATE, LOCKING PLAYER MOVEMENT, AND SETTING CONTROL INFORMATION
 
 set_game_state(GameState.Cutscene, true); // Always prioritize the cutscene's state
 with(global.singletonID[? PLAYER]) {entity_set_sprite(standSprite, 4);}
+
+with(global.singletonID[? CONTROL_INFO]){
+	if (ds_list_size(controlData) > 0) {control_info_clear_all();}
+	control_info_add_control_data(ICON_SELECT, RIGHT_ANCHOR, "Next", false);
+	control_info_add_control_data(ICON_RETURN, RIGHT_ANCHOR, "Log", true);
+}
 
 #endregion

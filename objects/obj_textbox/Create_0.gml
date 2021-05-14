@@ -25,9 +25,12 @@ sPixelHeight = shader_get_uniform(outlineShader, "pixelHeight");
 sOutlineColor = shader_get_uniform(outlineShader, "outlineColor");
 sDrawOutline = shader_get_uniform(outlineShader, "drawOutline");
 
-// 
+// Variables that handle the animation for the textbox when it opens and closes, respectively. The opening
+// animation uses both the yTarget and alpha variables to slide the textbox into its final position while
+// smoothly fading it into visibilily. Meanwhile, closing just fades the textbox out of visibility.
 isClosing = false;
-yTarget = WINDOW_HEIGHT - 57;
+yTarget = WINDOW_HEIGHT - 66;
+alphaSpeed = 0.075;
 alpha = 0;
 
 // The variables that are responsible for the "typewriter" text effect that the textboxes have. They store the
@@ -37,7 +40,9 @@ visibleText = "";
 nextCharacter = 0;
 finalCharacter = 0;
 
-// 
+// Variables that determine the sound of the textbox when it's scrolling text and the frequency at which the
+// sound is playing during that time. For now, it's only one sound and a set speed for the sound, but I plan
+// on hopefully implementing actor specific textbox sounds; for a little more detail.
 textboxSoundID = noone;
 textboxSoundTimer = 0;
 textboxSoundSpeed = 4.25;
@@ -86,9 +91,14 @@ actorData = ds_map_create();
 // Once the textbox is closed, the states will be returned back to the player object.
 prevPlayerState = 0;
 
+// A flag that enables whether or not the textbox is in control of the control information object and the
+// information that it's currently displaying. This is useful for during cutscenes, where the control 
+// information is shown regardless of a textbox being on screen or not.
+commandControlInfoObject = false;
+
 #endregion
 
-#region PAUSE THE PLAYER
+#region PAUSE THE PLAYER AND INITIALIZE CONTROL PROMPT INFO
 
 // Only pause the player's input and store their state if a cutscene isn't currently occurring.
 if (global.gameState == GameState.InGame){
@@ -99,6 +109,15 @@ if (global.gameState == GameState.InGame){
 		set_cur_state(NO_SCRIPT);
 	}
 	prevPlayerState = _state;
+	
+	// Clear out the current control information if any exists and add the textbox's controls to it.
+	// Note that if a cutscene is currently happening, the control information will remain on screen
+	// for ites entire duration; meaning this is already initialized.
+	with(global.singletonID[? CONTROL_INFO]){
+		if (ds_list_size(controlData) > 0) {control_info_clear_all();}
+		control_info_add_control_data(ICON_INTERACT, RIGHT_ANCHOR, "Next", true);
+	}
+	commandControlInfoObject = true;
 }
 
 #endregion

@@ -14,7 +14,7 @@ draw_sprite_stretched_ext(_data.textboxSprite, 0, x + 5, y, WINDOW_WIDTH - 10, 5
 // Optionally, display the namespace when required to display the speaker's name
 if (_showName) {draw_sprite_stretched_ext(_data.namespaceSprite, 0, x + 18, y - 11, 70, 13, _data.textboxColor, alpha);}
 
-// Show an indicator that the text is fully visible and the player can move on
+// Show an indicator that the text is fully visible and the player can move on.
 if (nextCharacter >= finalCharacter) {draw_sprite(spr_textbox_indicator, 0, x + WINDOW_WIDTH - 20, y + 42 + floor(indicatorOffset));}
 
 // Set the shader for drawing outlines around the visible text

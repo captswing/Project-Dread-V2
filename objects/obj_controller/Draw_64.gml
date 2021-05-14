@@ -16,19 +16,27 @@ if (global.settings[Settings.InteractionPrompt]){
 	// Jump over to the player object and checks the interaction point for a collision with an interactable
 	// object. If an interactable exists at that point, display the prompt.
 	with(global.singletonID[? PLAYER]){
-		var _interactOffset = [interactOffset[X], interactOffset[Y]];
-		with(instance_nearest(x, y, par_interactable)){ // Jump over to the nearest interactable to see if the player can interact
-			if (canInteract && point_distance(_interactOffset[X], _interactOffset[Y], interactCenter[X], interactCenter[Y]) <= interactRadius){
-				draw_set_halign(fa_center);
-				// TODO -- Add gamepad support here and draw sprite for control binding here instead of just text
-				draw_text(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 30, "Interact");
-				draw_set_halign(fa_left);
+		if (curState != NO_STATE){ // Don't show the interaction prompt if the player is locked in place
+			var _interactOffset = [interactOffset[X], interactOffset[Y]];
+			with(instance_nearest(x, y, par_interactable)){ // Jump over to the nearest interactable to see if the player can interact
+				if (canInteract && point_distance(_interactOffset[X], _interactOffset[Y], interactCenter[X], interactCenter[Y]) <= interactRadius){
+					// Get the offset for the sprite based off the center of the screen to correctly position the sprite and text
+					var _controlIcon, _spriteWidth, _stringWidth, _promptPosition;
+					_controlIcon = global.controlIcons[? ICON_SELECT];
+					_spriteWidth = sprite_get_width(_controlIcon[0]) + 3;
+					_stringWidth = string_width(interactionText) + 2;
+					_promptPosition = (WINDOW_WIDTH / 2) - ((_spriteWidth + _stringWidth) / 2);
+					draw_text(_promptPosition + _spriteWidth, WINDOW_HEIGHT - 30, interactionText);
+					shader_reset(); // Prevent an outline from surrounding the prompt's sprite
+					draw_sprite(_controlIcon[0], _controlIcon[1], _promptPosition, WINDOW_HEIGHT - 32);
+				}
 			}
 		}
 	}
 }
 
-shader_reset();
+// Resets the shaders if it wasn't reset by the interaction prompt above
+if (shader_current() == outlineShader) {shader_reset();}
 
 #endregion
 
@@ -36,8 +44,8 @@ shader_reset();
 
 // Loop through each object in the entity list and execute their draw GUI event
 var _screenX, _screenY, _screenW, _screenH, _length;
-_screenX = camera_get_x();
-_screenY = camera_get_y();
+_screenX = x - (WINDOW_WIDTH / 2);
+_screenY = y - (WINDOW_HEIGHT / 2);
 _screenW = _screenX + WINDOW_WIDTH;
 _screenH = _screenY + WINDOW_HEIGHT;
 _length = ds_grid_height(global.worldObjects);
@@ -53,6 +61,9 @@ for (var i = 0; i < _length; i++){
 // Display the textbox after any HUD drawing
 with(global.singletonID[? TEXTBOX]) {event_perform(ev_draw, ev_gui);}
 
+// Finally, display the current control information to the screen
+with(global.singletonID[? CONTROL_INFO]) {event_perform(ev_draw, ev_gui);}
+
 #endregion
 
 // DEBUGGING STUFF BELOW HERE (WILL BE DELETED EVENTUALLY)
@@ -65,14 +76,16 @@ shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
 outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
 
 if (showItems){ // Showing the player's current inventory
+	draw_set_halign(fa_right);
 	draw_text(WINDOW_WIDTH - 5, 5, "-- Inventory Data --");
 	for(var i = 0; i < global.invSize; i++){
 		draw_text(WINDOW_WIDTH - 5, 15 + (i * 10), global.invItem[i][0] + " x" + string(global.invItem[i][1]));
 	}
+	draw_set_halign(fa_left);
 }
-draw_set_halign(fa_left);
 
 if (!showDebugInfo){
+	shader_reset();
 	return;
 }
 

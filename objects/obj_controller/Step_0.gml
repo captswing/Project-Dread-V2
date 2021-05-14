@@ -20,7 +20,9 @@ if (!global.freezeTimer && global.totalPlaytime < MAX_TIME_VALUE){
 if (global.gamepadID != -1){
 	if (!global.gamepadActive && gamepad_any_button(true)){
 		global.gamepadActive = true; // Activates the gamepad for use
+		initialize_control_icons(true); // Update to gamepad icons
 	} else if (keyboard_check_pressed(vk_anykey)){
 		global.gamepadActive = false; // Activates the keyboard for use
+		initialize_control_icons(false);  // Update to keyboard icons
 	}
 }

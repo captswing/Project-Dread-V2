@@ -47,6 +47,10 @@
 #macro	NO_ANIMATE					0
 #macro	FORWARD_ANIMATE				1
 
+// Anchor position constants for GUI elements
+#macro	LEFT_ANCHOR				   -1
+#macro	RIGHT_ANCHOR				1
+
 // Singleton key indexes
 #macro	CONTROLLER					"Controller"
 #macro	EFFECT_HANDLER				"Effect Handler"
@@ -54,6 +58,33 @@
 #macro	PLAYER						"Player"
 #macro	TEXTBOX						"Textbox"
 #macro	CUTSCENE					"Cutscene"
+#macro	CONTROL_INFO				"Control Info"
+
+// Control icon key values for in-game controls
+#macro	ICON_GAME_RIGHT				"Game Right"
+#macro	ICON_GAME_LEFT				"Game Left"
+#macro	ICON_GAME_UP				"Game Up"
+#macro	ICON_GAME_DOWN				"Game Down"
+#macro	ICON_RUN					"Run"
+#macro	ICON_FLASHLIGHT				"Flashlight"
+#macro	ICON_INTERACT				"Interact"
+#macro	ICON_AMMO_SWAP				"Ammo Swap"
+#macro	ICON_RELOAD					"Reload"
+#macro	ICON_READY_WEAPON			"Ready Weapon"
+#macro	ICON_USE_WEAPON				"Use Weapon"
+#macro	ICON_PAUSE					"Pause"
+#macro	ICON_NOTES					"Notes"
+#macro	ICON_MAPS					"Maps"
+#macro	ICON_ITEMS					"Items"
+
+// Control icon key values for menu controls
+#macro	ICON_MENU_RIGHT				"Menu Right"
+#macro	ICON_MENU_LEFT				"Menu Left"
+#macro	ICON_MENU_UP				"Menu Up"
+#macro	ICON_MENU_DOWN				"Menu Down"
+#macro	ICON_SELECT					"Select"
+#macro	ICON_RETURN					"Return"
+#macro	ICON_FILE_DELETE			"File Delete"
 
 // Inventory item option values
 #macro	USE_ITEM					"Use"

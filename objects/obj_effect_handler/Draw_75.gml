@@ -13,7 +13,7 @@ if (global.settings[Settings.FilmGrain]){ // Activate the film grain effect if t
 }
 
 if (global.settings[Settings.Scanlines]){ // Activate the scanline effect if currently toggled
-	scanline_effect(0.1);
+	scanline_effect(0.15);
 }
 
 if (fade != noone){ // Display the screen fade if the object exists

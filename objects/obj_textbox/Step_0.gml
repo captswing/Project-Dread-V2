@@ -10,19 +10,22 @@ else {keyAdvance = gamepad_button_check_pressed(global.gamepadID, global.setting
 
 #region OPENING AND CLOSING ANIMATION
 
+// Set the alpha for the control information to match the textbox's current alpha if the textbox is in
+// control of the control info object.
+if (commandControlInfoObject){
+	var _alpha = alpha;
+	with(global.singletonID[? CONTROL_INFO]) {alpha = _alpha;}
+}
+
 // Moves the textbox towards its target; which is faster the further away it is from the target
 y += ((yTarget - y) / 5) * global.deltaTime;
 // Handling the visiblity of the textbox
 if (!isClosing){ // Fades the textbox into visiblity
-	alpha += 0.1 * global.deltaTime;
-	if (alpha > 1){
-		alpha = 1;
-	} else{ // Don't allow input or textbox scrolling until the textbox is fully visible
-		keyAdvance = false;
-		return;
-	} 
+	alpha += alphaSpeed * global.deltaTime;
+	if (alpha > 1) {alpha = 1;}
+	else {return;} // Doesn't allow text scrolling until fade is completed
 } else{ // Fades the textbox out
-	alpha -= 0.1 * global.deltaTime;
+	alpha -= alphaSpeed * global.deltaTime;
 	if (alpha < 0){ // Switching from the currently visible textbox to the next one
 		if (textboxCode != "end") {open_next_textbox();}
 		else {instance_destroy(self);}
@@ -42,14 +45,13 @@ if (!isClosing){ // Fades the textbox into visiblity
 if (keyAdvance){
 	if (nextCharacter > 4 && nextCharacter < finalCharacter){ // Display the entire string at once, skipping the animation
 		nextCharacter = finalCharacter;
-	} else{ // Starts the "closing" transition to move onto the next textbox if the actor is different; changes to next chunk of data if not
+	} else if (nextCharacter >= finalCharacter){ // Starts the "closing" transition to move onto the next textbox if the actor is different; changes to next chunk of data if not
 		var _nextActor = ds_list_find_value(textboxData, textboxIndex + 1);
 		if (is_undefined(_nextActor) || textboxData[| textboxIndex][1] != _nextActor){
 			open_next_textbox();
-			return; // Exit the event early
+		} else{ // The actor isn't the same; start the transition to the next textbox
+			isClosing = true;
 		}
-		// The actor isn't the same; start the transition to the next textbox
-		isClosing = true;
 	}
 }
 
