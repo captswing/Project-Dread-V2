@@ -21,8 +21,8 @@
     "path": "texturegroups/Default",
   },
   "swatchColours": null,
-  "gridX": 0,
-  "gridY": 0,
+  "gridX": 2,
+  "gridY": 2,
   "frames": [
     {"compositeImage":{"FrameId":{"name":"b131d0f3-41a0-4d39-a2be-ac5371e992ea","path":"sprites/spr_keyboard_icons_large/spr_keyboard_icons_large.yy",},"LayerId":null,"resourceVersion":"1.0","name":"imported","tags":[],"resourceType":"GMSpriteBitmap",},"images":[
         {"FrameId":{"name":"b131d0f3-41a0-4d39-a2be-ac5371e992ea","path":"sprites/spr_keyboard_icons_large/spr_keyboard_icons_large.yy",},"LayerId":{"name":"33b0e67b-313e-402c-81b1-2ff5224e92ac","path":"sprites/spr_keyboard_icons_large/spr_keyboard_icons_large.yy",},"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMSpriteBitmap",},

@@ -71,7 +71,7 @@
     "spriteId": {"name":"spr_xbox_one_icons","path":"sprites/spr_xbox_one_icons/spr_xbox_one_icons.yy",},
     "timeUnits": 1,
     "playback": 1,
-    "playbackSpeed": 30.0,
+    "playbackSpeed": 29.0,
     "playbackSpeedType": 0,
     "autoRecord": true,
     "volume": 1.0,
