@@ -165,21 +165,28 @@ function keyboard_get_sprite(_keyCode){
 /// cannot be rebinded and don't need sprites for their "bindings."
 /// @param keyCode
 function gamepad_get_sprite(_keyCode){
+	// Check what kind of gamepad was connected in order to get the correct sprites for it
+	var _sprite = -1;
+	switch(gamepad_get_description(global.gamepadID)){
+		case "XInput STANDARD GAMEPAD":		_sprite = spr_xbox_one_icons;			break;
+		case "Sony DualShock 4":			_sprite = spr_dualshock_four_icons;		break;
+	}
+	
 	switch(_keyCode){ // Returns an array in the form of [sprite_index, image_index]
-		case gp_face1:			return [spr_gamepad_icons, 0];		// A / Cross
-		case gp_face2:			return [spr_gamepad_icons, 1];		// B / Circle
-		case gp_face3:			return [spr_gamepad_icons, 2];		// X / Square
-		case gp_face4:			return [spr_gamepad_icons, 3];		// Y / Triangle
-		case gp_shoulderl:		return [spr_gamepad_icons, 10];		// LB / L1
-		case gp_shoulderlb:		return [spr_gamepad_icons, 11];		// LT / L2
-		case gp_shoulderr:		return [spr_gamepad_icons, 12];		// RB / R1
-		case gp_shoulderrb:		return [spr_gamepad_icons, 13];		// RT / R2
-		case gp_select:			return [spr_gamepad_icons, 9];		// Select / PS Button
-		case gp_start:			return [spr_gamepad_icons, 8];		// Start / Options
-		case gp_padu:			return [spr_gamepad_icons, 4];		// D-Pad Up
-		case gp_padd:			return [spr_gamepad_icons, 6];		// D-Pad Down
-		case gp_padl:			return [spr_gamepad_icons, 5];		// D-Pad Left
-		case gp_padr:			return [spr_gamepad_icons, 7];		// D-Pad Right
+		case gp_face1:			return [_sprite, 0];		// A / Cross
+		case gp_face2:			return [_sprite, 1];		// B / Circle
+		case gp_face3:			return [_sprite, 2];		// X / Square
+		case gp_face4:			return [_sprite, 3];		// Y / Triangle
+		case gp_shoulderl:		return [_sprite, 10];		// LB / L1
+		case gp_shoulderlb:		return [_sprite, 11];		// LT / L2
+		case gp_shoulderr:		return [_sprite, 12];		// RB / R1
+		case gp_shoulderrb:		return [_sprite, 13];		// RT / R2
+		case gp_select:			return [_sprite, 9];		// Select / PS Button
+		case gp_start:			return [_sprite, 8];		// Start / Options
+		case gp_padu:			return [_sprite, 4];		// D-Pad Up
+		case gp_padd:			return [_sprite, 6];		// D-Pad Down
+		case gp_padl:			return [_sprite, 5];		// D-Pad Left
+		case gp_padr:			return [_sprite, 7];		// D-Pad Right
 		default:				return [-1, -1];					// Invalid gamepad button
 	}
 }
