@@ -89,6 +89,7 @@ if (!showDebugInfo){
 	return;
 }
 
+draw_set_alpha(1);
 draw_text(5, 5, "In-Game Playtime:\nDelta Time:\nRoom Size:\nInstances:\nDynamic Entities:\nStatic Entities:\nEntities Drawn:\nLights Drawn:\n\n-- Camera Data --\nPosition:\nFollowing:\n\n-- Player Data --\nCurrent State:\nLast State:\nPosition:\nMax Speed:\nHitpoints:\nCurrent Sanity:\nSanity Modifier:");
 
 // Getting the number of objects drawn by the depth sorter
@@ -104,7 +105,18 @@ var _objectIndex = noone;
 with(curObject) {_objectIndex = object_index;}
 
 // Getting player information for the debug HUD
-var _baseSanityMod, _x, _y, _maxHspd, _maxVspd, _hitpoints, _maxHitpoints, _sanity, _maxSanity, _sanityModifier, _curState, _lastState;
+var _x, _y, _maxHspd, _maxVspd, _hitpoints, _maxHitpoints, _sanity, _maxSanity, _sanityModifier, _curState, _lastState, _baseSanityMod;
+_x = 0;
+_y = 0;
+_maxHspd = 0;
+_maxVspd = 0;
+_hitpoints = 0;
+_maxHitpoints = 0;
+_sanity = 0;
+_maxSanity = 0;
+_sanityModifier = 0;
+_curState = 0;
+_lastState = 0;
 _baseSanityMod = global.isRoomSafe ? SANITY_MOD_SAFE : SANITY_MOD_UNSAFE;
 with(global.singletonID[? PLAYER]){
 	_x = x;

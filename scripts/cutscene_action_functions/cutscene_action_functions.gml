@@ -9,8 +9,8 @@ function cutscene_wait(_seconds){
 	}
 }
 
-/// @description An innitialization action that occurs at the 0th index of the cutscene, and it's added to 
-/// the scene list upon the trigger object's creation. This means it's not necessary to add this instruction 
+/// @description An initialization action that occurs at the 0th index of the cutscene, and it's added to the 
+/// scene list upon the trigger object's creation. This means it's not necessary to add this instruction 
 /// anywhere in the instructions for the respective cutscene's instructions.
 /// @param fadeSpeed
 function cutscene_open(_fadeSpeed){

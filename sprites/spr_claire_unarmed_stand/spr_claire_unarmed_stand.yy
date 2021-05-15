@@ -81,8 +81,8 @@
   ],
   "nineSlice": null,
   "parent": {
-    "name": "obj_player",
-    "path": "folders/Sprites/Entities/Dynamic/Friendly/obj_player.yy",
+    "name": "Base Sprites",
+    "path": "folders/Sprites/Entities/Dynamic/Friendly/obj_player/Base Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_claire_unarmed_stand",

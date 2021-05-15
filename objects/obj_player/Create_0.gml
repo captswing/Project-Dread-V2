@@ -10,7 +10,7 @@ event_inherited();
 // Assign the player to their default state upon creation
 set_cur_state(player_state_default);
 // Sets the player's maximum hspd and vspd
-entity_set_max_speed(1.25, 1.25, true);
+entity_set_max_speed(1.1, 1.1, true);
 // Create a dim light source so the player is semi-visible even in complete darkness
 entity_create_light(0, -8, 15, 15, 0.1, c_ltgray, false, true);
 // Assign the player's starting amount of hitpoints, which can be upgraded over time
@@ -155,16 +155,22 @@ weaponUseSound = -1;
 weaponReloadSound = -1;
 
 // 
+curWeaponSprite = -1;
+weaponStandSprite = -1;
+weaponWalkSprite = -1;
+weaponAimSprite = -1;
+
+// 
 ammoTypes = -1;
 
 // 
 curAmmoType = ds_map_create();
-ds_map_add(curAmmoType, HANDGUN, 0);
-ds_map_add(curAmmoType, PUMP_SHOTGUN, 0);
-ds_map_add(curAmmoType, HUNTING_RIFLE, 0);
-ds_map_add(curAmmoType, SUBMACHINE_GUN, 0);
-ds_map_add(curAmmoType, HAND_CANNON, 0);
-ds_map_add(curAmmoType, GRENADE_LAUNCHER, 0);
+ds_map_add(curAmmoType, HANDGUN,			0);
+ds_map_add(curAmmoType, PUMP_SHOTGUN,		0);
+ds_map_add(curAmmoType, HUNTING_RIFLE,		0);
+ds_map_add(curAmmoType, SUBMACHINE_GUN,		0);
+ds_map_add(curAmmoType, HAND_CANNON,		0);
+ds_map_add(curAmmoType, GRENADE_LAUNCHER,	0);
 
 // Two timers that control how long the player is stuck within the reloading and recoiling state, respectively.
 // One second of real-time is equal to a value of 60 in these timers.
@@ -191,7 +197,7 @@ inventory_add(IMMUNITY_AMULET, 1, 0);
 
 player_equip_item(0);
 player_equip_item(1);
-player_equip_item(3);
+//player_equip_item(3);
 player_equip_item(4);
 player_equip_item(5);
 

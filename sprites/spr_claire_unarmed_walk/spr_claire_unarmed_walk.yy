@@ -127,9 +127,10 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"58adf8a1-87c0-4328-b86b-09b6ae9f3eea","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
-    "name": "obj_player",
-    "path": "folders/Sprites/Entities/Dynamic/Friendly/obj_player.yy",
+    "name": "Base Sprites",
+    "path": "folders/Sprites/Entities/Dynamic/Friendly/obj_player/Base Sprites.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_claire_unarmed_walk",

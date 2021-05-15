@@ -54,7 +54,10 @@ function player_unequip_item(_slot){
 	}
 }
 
-/// @description 
+/// @description Attempts to equip a weapon onto the player with the item found inside the inventory slot
+/// provided in the argument space. If another weapon was already equipped, its ammo modifier data will be
+/// reset to its default values before equipped the weapon. Otherwise, all the stats are pulled in from the
+/// weapon data section of the item_data.json file based on the wepaon itself.
 /// @param slot
 function player_equip_weapon(_slot){
 	// If another weapon was currently equipped to the player, reset all the modifier values back to 0 and
@@ -92,18 +95,26 @@ function player_equip_weapon(_slot){
 	var _sounds = _data[? SOUNDS]; // Gathering the sound data
 	weaponUseSound =		asset_get_index(_sounds[| 0]);
 	weaponReloadSound =		asset_get_index(_sounds[| 1]);
-	var _sprites = global.itemData[? WEAPON_DATA][? INF_CHAINSAW][? SPRITES]; // Gathering the sprite data
+	var _sprites = global.itemData[? WEAPON_DATA][? global.invItem[_slot][0]][? SPRITES]; // Gathering the sprite data
 	standSprite =			asset_get_index(_sprites[| 0]);
 	walkSprite =			asset_get_index(_sprites[| 1]);
 	aimingSprite =			asset_get_index(_sprites[| 2]);
 	recoilSprite =			asset_get_index(_sprites[| 3]);
 	reloadSprite =			asset_get_index(_sprites[| 4]);
+	// Assign the correct weapon sprites to the player character
+	_sprites = global.itemData[? WEAPON_DATA][? global.invItem[_slot][0]][? WEAPON_SPRITES]; // Gathering the weapon's sprites
+	weaponStandSprite =		asset_get_index(_sprites[| 0]);
+	weaponWalkSprite =		asset_get_index(_sprites[| 1]);
+	weaponAimSprite =		asset_get_index(_sprites[| 2]);
 	
 	// Finally, set the equipped item's slot to the weapon's current slot
 	equipSlot[EquipSlot.Weapon] = _slot;
 }
 
-/// @description 
+/// @description Unequips the currently equipped weapon from the player character. This causes all of the
+/// variables associated with an equipped weapon to be reset to their default states, and the ammo types
+/// that is currently inside of the gun will be stored in the player's data; allowing it to know what ammo
+/// is in the weapon upon requipping the weapon.
 function player_unequip_weapon(){
 	// Reset all the main weapon variables, which store the initial stats and ammunition types.
 	damage =				0;
@@ -127,12 +138,18 @@ function player_unequip_weapon(){
 	aimingSprite =		   -1;
 	recoilSprite =		   -1;
 	reloadSprite =		   -1;
+	curWeaponSprite =	   -1;
+	weaponStandSprite =	   -1;
+	weaponWalkSprite =	   -1;
+	weaponAimSprite =	   -1;
 	
 	// Finally, reset the weapon's equipped slot value
 	equipSlot[EquipSlot.Weapon] = -1;
 }
 
-/// @description 
+/// @description Attempts to equip a flashlight to the player using the slot provided in the argument space.
+/// If a non-flashlight item was found in the slot, nothing will occur and a flashlight will not be equipped.
+/// Otherwise, the flashlight will overwrite the player's default ambient light stats with its own stats.
 /// @param slot
 function player_equip_flashlight(_slot){
 	// Set the player variables for the flashlight's characteristics, for when it's toggled on from off
@@ -150,7 +167,9 @@ function player_equip_flashlight(_slot){
 	equipSlot[EquipSlot.Flashlight] = _slot;
 }
 
-/// @description 
+/// @description Unequips the current flashlight from the player, which will return its ambient light source,
+/// which also doubles as the flashlights light source, back to the radius and settings it has when there
+/// is no light on the player. The default light barely illuminates their face in pitch-black darkness.
 function player_unequip_flashlight(){
 	light_update_settings(ambLight, 15, 15, 0.05, c_ltgray);
 	
@@ -158,7 +177,10 @@ function player_unequip_flashlight(){
 	equipSlot[EquipSlot.Flashlight] = -1;
 }
 
-/// @description 
+/// @description Attempts to equip a piece of armor to the player based on the slot that was provided in the
+/// argument space. It will modify the player's overall resistance to damage, and apply a speed penalty to
+/// them if the piece of armor has one. If a piece of armor was already equipped, it will be unequipped and
+/// have its effects removed before this one becomes equipped.
 /// @param slot
 function player_equip_armor(_slot){
 	// Unequip the previous armor if one is currently equipped by the player
@@ -178,7 +200,8 @@ function player_equip_armor(_slot){
 	equipSlot[EquipSlot.Armor] = _slot;
 }
 
-/// @description 
+/// @description Unequips a piece of armor from the player, which will remove all its effects on the player's
+/// speed and damage resistance by reversing the calculations done when the piece of armor was first equipped.
 function player_unequip_armor(){
 	// Exit the function if no armor is currently equipped in the provided slot
 	if (equipSlot[EquipSlot.Armor] == -1) {return;}
@@ -194,7 +217,9 @@ function player_unequip_armor(){
 	equipSlot[EquipSlot.Armor] = -1;
 }
 
-/// @description 
+/// @description Attempts to equip an amulet to the first available slot on the player. This will always cause
+/// a conveyor belt effect for equipped amulets; the first one moving to the second slot, and the second slot
+/// having its amulet unequipped.
 /// @param slot
 /// @param data
 function player_equip_amulet(_slot, _data){
@@ -221,7 +246,9 @@ function player_equip_amulet(_slot, _data){
 	equipSlot[EquipSlot.AmuletOne] = _slot;
 }
 
-/// @description 
+/// @description Attempts to unequip an amulet from one of the two slots that the player can equip them in.
+/// Doing so willd eactivate the effect of that amulet, and if it was in the first slot, the second amulet
+/// will be placed into the first slot.
 /// @param slot
 /// @param data
 function player_unequip_amulet(_slot, _data){
@@ -300,7 +327,9 @@ function player_swap_current_ammo(_prevAmmoType){
 	return false;
 }
 
-/// @description
+/// @description Gets the modifier stats for the ammunition based on the name that was provided in the argument
+/// space. If an invalid ammunition name was provided, no stats will be acquired as they will be considered
+/// "undefined." Otherwise, the stats will be retrieved and stored in the player's stat mod variables.
 /// @param name
 /// @param index
 function player_get_ammo_stats(_name){
@@ -344,22 +373,29 @@ function player_use_weapon(_useAmmo){
 	
 	// Each of the three weapon possibilities: hitscan, projectile, and melee. They each cause a different 
 	// thing to occur when the respective weapon is used.
+	var _sprDirection = 90 * floor(image_index / sprFrames); // Locks the gun to only be shot in four directions
 	if (startFrame == endFrame && bulletSpd == 0){ // Using a hitscan weapon (All ranged attacks excluding grenade launcher)
 		// Create as many bullets that are necessary for the equipped weapon
+		var _muzzlePosition, _zOffset, _direction, _endX, _endY;
+		_muzzlePosition = [x + lengthdir_x(8, _sprDirection), y + lengthdir_y(8, _sprDirection)];
+		_zOffset = 12; // Offset in the y-axis that the hitscan will occur at.
 		for (var i = 0; i < numBullets; i++){
-			var _direction, _endX, _endY; // Calculate the bullet's trajectory
-			_direction = direction + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
+			// Calculate the bullet's trajectory based on its accuracy
+			_direction = _sprDirection + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
 			_endX = x + lengthdir_x(range + rangeMod, _direction);
 			_endY = y + lengthdir_y(range + rangeMod, _direction);
 			// Next, take the information and handle the collisions found by the hitscan
-			player_attack_hitscan_collision(x, y, _endX, _endY, 8);
+			player_attack_hitscan_collision(_muzzlePosition[X], _muzzlePosition[Y], _endX, _endY, _zOffset);
 		}
+		// Finally, create a temporary light for the muzzle flash taht lasts 3 frames
+		var _light = instance_create_depth(_muzzlePosition[X], _muzzlePosition[Y] - _zOffset, ENTITY_DEPTH, obj_light);
+		with(_light) {light_create_circle_temporary(150, 150, 1, make_color_rgb(255, 215, 85), 3, false);}
 	} else if (startFrame < endFrame && startFrame >= 0){ // Using a melee weapon (All melee weapons including the chainsaw)
 		// TODO -- Add melee hitbox stuff here
 	} else if (bulletSpd > 0){ // Using a projectile weapon (Basically, only the grenade launcher's ammo)
 		var _direction, _object, _weaponData;
-		_direction = direction + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
-		_object = instance_create_depth(x + lengthdir_x(6, direction), y + lengthdir_y(10, direction), ENTITY_DEPTH, obj_player_projectile);
+		_direction = _sprDirection + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
+		_object = instance_create_depth(x + lengthdir_x(6, _sprDirection), y + lengthdir_y(10, _sprDirection), ENTITY_DEPTH, obj_player_projectile);
 		_weaponData = [global.invItem[_slot][0], player_get_weapon_damage(), range + rangeMod, bulletSpd];
 		
 		// Pull all the necessary data in from the weapon to the projectile, which basically means

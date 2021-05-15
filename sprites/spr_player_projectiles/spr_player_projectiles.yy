@@ -67,9 +67,10 @@
   "layers": [
     {"visible":true,"isLocked":false,"blendMode":0,"opacity":100.0,"displayName":"default","resourceVersion":"1.0","name":"26a87a46-eb9c-4954-bfc3-332cb067f78c","tags":[],"resourceType":"GMImageLayer",},
   ],
+  "nineSlice": null,
   "parent": {
-    "name": "obj_player",
-    "path": "folders/Sprites/Entities/Dynamic/Friendly/obj_player.yy",
+    "name": "Weapons",
+    "path": "folders/Sprites/Entities/Dynamic/Friendly/obj_player/Weapons.yy",
   },
   "resourceVersion": "1.0",
   "name": "spr_player_projectiles",

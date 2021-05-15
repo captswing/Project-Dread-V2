@@ -78,7 +78,7 @@ function load_settings(){
 	global.settings[Settings.TextSpeed] =			ini_read_real(_access, "text_speed",			1.25);
 	global.settings[Settings.ObjectiveHints] =		ini_read_real(_access, "objective_hints",		false);
 	global.settings[Settings.ItemHighlighting] =	ini_read_real(_access, "item_highlighting",		false);
-	global.settings[Settings.InteractionPrompt] =	ini_read_real(_access, "interaction_prompt",	false);
+	global.settings[Settings.InteractionPrompt] =	ini_read_real(_access, "interaction_prompt",	true);
 	global.settings[Settings.DoorIndicatorRange] =	ini_read_real(_access, "door_indicator_range",	40);
 	global.settings[Settings.AimAssist] =			ini_read_real(_access, "aim_assist",			false);
 	

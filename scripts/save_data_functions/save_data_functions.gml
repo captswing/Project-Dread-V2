@@ -304,7 +304,7 @@ function load_game_data(_saveNum){
 			_key1 = ds_map_find_next(_ammoMap, _key1);
 		}
 		
-		//
+		// 
 		if (equipSlot[EquipSlot.Weapon] >= 0 && equipSlot[EquipSlot.Weapon] < global.invSize){
 			var _weaponName = global.invItem[equipSlot[EquipSlot.Weapon]][0];
 			ammoTypes = global.itemData[? WEAPON_DATA][? _weaponName][? AMMO_TYPES];

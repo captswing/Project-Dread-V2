@@ -142,6 +142,7 @@
 #macro	AMMO_TYPES					"Ammo Types"
 #macro	SOUNDS						"Sounds"
 #macro	SPRITES						"Sprites"
+#macro	WEAPON_SPRITES				"Weapon Sprites"
 
 // Ammo data map values
 #macro	DAMAGE_MOD					"Dmg Mod"

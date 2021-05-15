@@ -109,7 +109,7 @@ function player_state_weapon_ready(){
 	
 	// Setting the sprite for the entity -- relative to direction that they are facing.
 	if (inputMagnitude != 0) {direction = inputDirection;}
-	entity_set_sprite(standSprite, 4); // TODO -- SWAP WITH WEAPON'S READY SPRITE
+	entity_set_sprite(aimingSprite, 4);
 }
 
 /// @description The state that the player is in whenever they are reloading their current weapon OR are
@@ -123,6 +123,7 @@ function player_state_weapon_reload(){
 	reloadTimer += global.deltaTime;
 	if (reloadTimer >= _reloadRate){
 		reloadTimer = 0; // Reset the reload timer
+		image_index = floor(direction / sprDirections);
 		player_reload_weapon(global.invItem[equipSlot[EquipSlot.Weapon]][1]);
 		// Finally, revert the player back to their previous state
 		if (keyReadyWeapon) {set_cur_state(player_state_weapon_ready);}
@@ -131,7 +132,7 @@ function player_state_weapon_reload(){
 	}
 	
 	// Overwrite the sprite's index with a index relative to the remaining reload time
-	if (entity_set_sprite(walkSprite, 4)) {sprSpeed = 0;}
+	if (entity_set_sprite(reloadSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_reloadRate - reloadTimer) / _reloadRate)) * sprFrames, sprFrames - 1);
 }
 
@@ -145,11 +146,12 @@ function player_state_weapon_recoil(){
 	fireRateTimer += global.deltaTime;
 	if (fireRateTimer >= _fireRate){
 		fireRateTimer = 0; // Reset the fire rate timer
+		image_index = floor(direction / sprDirections);
 		set_cur_state(player_state_weapon_ready);
 		return; // Exit out of the state early
 	}
 	
 	// Overwrite the sprite's index with a index relative to the remaining recoil time
-	if (entity_set_sprite(walkSprite, 4)) {sprSpeed = 0;}
+	if (entity_set_sprite(recoilSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_fireRate - fireRateTimer) / _fireRate)) * sprFrames, sprFrames - 1);
 }

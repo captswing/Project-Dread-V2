@@ -26,6 +26,12 @@ function player_attack_hitscan_collision(_startX, _startY, _endX, _endY, _zOffse
 				break;
 		}
 	}
+	// FOR DEBUGGING HITSCAN STUFF
+	var _debug = instance_create_depth(_startX, _startY - _zOffset, GLOBAL_DEPTH, obj_debug_line);
+	with(_debug){
+		endX = _endX;
+		endY = _endY - _zOffset;
+	}
 	// Finally, remove the ds_list from memory; preventing any memory leaks
 	ds_list_destroy(_collisions);
 }

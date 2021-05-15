@@ -22,4 +22,14 @@ color = c_white;
 // ambient light that surrounds them in complete darkness.
 trueLight = false;
 
+// 
+lifespan = -1;
+
+// 
+flickerIntensityMin = 0;
+flickerIntensityMax = 0;
+flickerMinRate = -1;
+flickerMaxRate = -1;
+flickerTimer = 0;
+
 #endregion
