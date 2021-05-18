@@ -1,5 +1,4 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description Drawing the Line
 
 lifespan -= global.deltaTime;
 if (lifespan <= 0 || (endX == x && endY == y)){
@@ -8,5 +7,5 @@ if (lifespan <= 0 || (endX == x && endY == y)){
 }
 
 draw_set_color(c_white);
-draw_set_alpha(lifespan / 500);
+draw_set_alpha(lifespan / initialLifespan);
 draw_line(x, y, endX, endY);

@@ -29,5 +29,4 @@ for (var i = 0; i < _length; i++){
 }
 
 // Disable visibility of collision layer if debug mode isn't enabled
-var _isVisible = showDebugInfo;
-with(obj_collider_solid) {visible = _isVisible;}
+layer_set_visible(layer_get_id("Collision"), showDebugInfo);

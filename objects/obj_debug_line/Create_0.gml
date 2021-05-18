@@ -1,7 +1,7 @@
-/// @description Insert description here
-// You can write your code in this editor
+/// @description Variable Initialization
 
-lifespan = 240;
+initialLifespan = 300;
+lifespan = initialLifespan;
 
 endX = x;
 endY = y;

@@ -160,10 +160,14 @@ weaponStandSprite = -1;
 weaponWalkSprite = -1;
 weaponAimSprite = -1;
 
-// 
+// Stores all of the possible types of ammunition that can be accepted by the currently equipped weapon. The
+// ammunition has the ability to alter the base stats of the weapon; improving things like damage, reload
+// speed, fire rate, range, and even accuracy.
 ammoTypes = -1;
 
-// 
+// Stores the current ammo that the player is holding in each of the unique weapon's in the game that consume
+// ammunition. This is to ensure that the inventory doesn't need to store data for the weapon's ammunition,
+// and that the correct ammunition will always be in the gun regardless of if they unequipped it.
 curAmmoType = ds_map_create();
 ds_map_add(curAmmoType, HANDGUN,			0);
 ds_map_add(curAmmoType, PUMP_SHOTGUN,		0);
@@ -173,7 +177,8 @@ ds_map_add(curAmmoType, HAND_CANNON,		0);
 ds_map_add(curAmmoType, GRENADE_LAUNCHER,	0);
 
 // Two timers that control how long the player is stuck within the reloading and recoiling state, respectively.
-// One second of real-time is equal to a value of 60 in these timers.
+// One second of real-time is equal to a value of 60 in these timers, sine that is the game's targeted frame 
+// rate.
 fireRateTimer = 0;
 reloadTimer = 0;
 
@@ -184,6 +189,15 @@ isLightActive = false;
 lightSize = 0;
 lightStrength = 0;
 lightColor = c_white;
+
+// 
+pushDirection = 0;
+pushedObjectID = noone;
+pushedObjectWeight = 1;
+
+// 
+pushAnimateTimer = 0;
+pushAnimateTime = 20;
 
 #endregion
 

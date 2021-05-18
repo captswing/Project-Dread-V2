@@ -16,7 +16,7 @@ if (global.settings[Settings.InteractionPrompt]){
 	// Jump over to the player object and checks the interaction point for a collision with an interactable
 	// object. If an interactable exists at that point, display the prompt.
 	with(global.singletonID[? PLAYER]){
-		if (curState != NO_STATE){ // Don't show the interaction prompt if the player is locked in place
+		if (curState == player_state_default){ // Don't show the interaction prompt if the player isn't in their default state
 			var _interactOffset = [interactOffset[X], interactOffset[Y]];
 			with(instance_nearest(x, y, par_interactable)){ // Jump over to the nearest interactable to see if the player can interact
 				if (canInteract && point_distance(_interactOffset[X], _interactOffset[Y], interactCenter[X], interactCenter[Y]) <= interactRadius){

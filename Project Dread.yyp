@@ -1,6 +1,7 @@
 {
   "resources": [
     {"id":{"name":"spr_table_small_1","path":"sprites/spr_table_small_1/spr_table_small_1.yy",},"order":0,},
+    {"id":{"name":"snd_empty_clip","path":"sounds/snd_empty_clip/snd_empty_clip.yy",},"order":5,},
     {"id":{"name":"spr_claire_unarmed_walk","path":"sprites/spr_claire_unarmed_walk/spr_claire_unarmed_walk.yy",},"order":1,},
     {"id":{"name":"obj_depth_sorter","path":"objects/obj_depth_sorter/obj_depth_sorter.yy",},"order":1,},
     {"id":{"name":"apartment_interior_walls","path":"sprites/apartment_interior_walls/apartment_interior_walls.yy",},"order":1,},
@@ -63,6 +64,7 @@
     {"id":{"name":"obj_test_enemy","path":"objects/obj_test_enemy/obj_test_enemy.yy",},"order":1,},
     {"id":{"name":"entity_state_function","path":"scripts/entity_state_function/entity_state_function.yy",},"order":0,},
     {"id":{"name":"player_amulet_functions","path":"scripts/player_amulet_functions/player_amulet_functions.yy",},"order":4,},
+    {"id":{"name":"spr_movable_block","path":"sprites/spr_movable_block/spr_movable_block.yy",},"order":0,},
     {"id":{"name":"spr_table_small_2","path":"sprites/spr_table_small_2/spr_table_small_2.yy",},"order":1,},
     {"id":{"name":"helper_functions","path":"scripts/helper_functions/helper_functions.yy",},"order":2,},
     {"id":{"name":"spr_player_projectiles","path":"sprites/spr_player_projectiles/spr_player_projectiles.yy",},"order":6,},
@@ -72,6 +74,7 @@
     {"id":{"name":"shd_bloom_luminence","path":"shaders/shd_bloom_luminence/shd_bloom_luminence.yy",},"order":1,},
     {"id":{"name":"spr_collider_warp","path":"sprites/spr_collider_warp/spr_collider_warp.yy",},"order":2,},
     {"id":{"name":"footstep_materials","path":"sprites/footstep_materials/footstep_materials.yy",},"order":1,},
+    {"id":{"name":"par_movable_object","path":"objects/par_movable_object/par_movable_object.yy",},"order":0,},
     {"id":{"name":"spr_items","path":"sprites/spr_items/spr_items.yy",},"order":0,},
     {"id":{"name":"spr_textbox0_namespace","path":"sprites/spr_textbox0_namespace/spr_textbox0_namespace.yy",},"order":1,},
     {"id":{"name":"shd_blur","path":"shaders/shd_blur/shd_blur.yy",},"order":0,},
@@ -221,7 +224,7 @@
     {"folderPath":"folders/Scripts/Objects/Entities/Static.yy","order":3,"resourceVersion":"1.0","name":"Static","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/Objects/Entities/Dynamic/par_dynamic_entity.yy","order":0,"resourceVersion":"1.0","name":"par_dynamic_entity","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/Entities/Static/Movable.yy","order":1,"resourceVersion":"1.0","name":"Movable","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Sprites/Entities/Static/Decoration.yy","order":2,"resourceVersion":"1.0","name":"Decoration","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Sprites/Entities/Static/Decoration.yy","order":3,"resourceVersion":"1.0","name":"Decoration","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/Entities/Dynamic/Friendly.yy","order":3,"resourceVersion":"1.0","name":"Friendly","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/Entities/Dynamic/Hostile.yy","order":4,"resourceVersion":"1.0","name":"Hostile","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/Objects/Entities/Dynamic/Friendly/obj_player.yy","order":0,"resourceVersion":"1.0","name":"obj_player","tags":[],"resourceType":"GMFolder",},
@@ -285,6 +288,7 @@
     {"folderPath":"folders/Sprites/Entities/Dynamic/Friendly/obj_player/Weapons/Grenade Launcher.yy","order":5,"resourceVersion":"1.0","name":"Grenade Launcher","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Sprites/Entities/Dynamic/Friendly/obj_player/Base Sprites.yy","order":2,"resourceVersion":"1.0","name":"Base Sprites","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Objects/Global/Debug.yy","order":4,"resourceVersion":"1.0","name":"Debug","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Sprites/Entities/Static/Destructible.yy","order":2,"resourceVersion":"1.0","name":"Destructible","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},

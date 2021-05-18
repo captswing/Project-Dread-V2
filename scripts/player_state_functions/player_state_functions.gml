@@ -62,6 +62,32 @@ function player_state_default(){
 		}
 	}
 	
+	// Making the player collide with and push objects that are a weight taht is equal to or beneath what
+	// the player character is actually able to push.
+	if (inputMagnitude != 0){
+		var _object = instance_place(x + sign(hspd), y + sign(vspd), par_movable_object);
+		if (_object != noone){
+			// Only begin pushing the object if the player is within 20 degress of one of the main cardinal 
+			// directions. This means that movable objects can only be pushed in 4 total directions.
+			var _pushDirection = 90 * floor(image_index / sprFrames);
+			// Next, the player's bounding box position will be checked with the border of the pushable block's
+			// bounding box to see if the player is within those bounds. This ensures weird collision mishaps
+			// won't occur where the player gets stuck on a wall, but the block keeps moving since it hasn't
+			// has a collision itself.
+			var _canPushObject = false;
+			if (_pushDirection == 0 || _pushDirection == 180) {_canPushObject = (bbox_top > _object.bbox_top && bbox_bottom < _object.bbox_bottom);}
+			else if (_pushDirection == 90 || _pushDirection == 270) {_canPushObject = (bbox_left > _object.bbox_left && bbox_right < _object.bbox_right);}
+			// If all the conditions are met, the player will begin pushing the object around
+			if (_canPushObject && inputDirection >= _pushDirection - 20 && inputDirection <= _pushDirection + 20){
+				set_cur_state(player_state_activate_push);
+				pushDirection = _pushDirection;
+				pushedObjectWeight = max(_object.weight, 1);
+				pushedObjectID = _object; // Stores the ID to check if it's been destroyed or not
+				return; // Exit the state early
+			}
+		}
+	}
+	
 	// Making the player run; the lower their health, the slower they'll move while they're running.
 	if (keyRun) {inputMagnitude *= 1.1 + ((hitpoints / maxHitpoints) * 0.25);}
 	
@@ -94,17 +120,32 @@ function player_state_weapon_ready(){
 		return; // Exit out of the state early
 	}
 	
+	// Store the slot for the weapon and its name into temporary variables for better readibility
+	var _slot, _name;
+	_slot = equipSlot[EquipSlot.Weapon];
+	_name = global.invItem[_slot][0];
+	
 	// Using the player's current weapon
 	if (keyUseWeapon){
-		var _slot, _useAmmo;
-		_slot = equipSlot[EquipSlot.Weapon];
-		_useAmmo = (global.itemData[? ITEM_LIST][? global.invItem[_slot][0]][? ITEM_TYPE] != WEAPON_INF);
+		var _useAmmo = (global.itemData[? ITEM_LIST][? _name][? ITEM_TYPE] != WEAPON_INF);
 		if (!_useAmmo || global.invItem[_slot][1] > 0){ // Ammo still remains in the magazine OR the weapon doesn't consume ammo
 			if (player_use_weapon(_useAmmo)) {set_cur_state(player_state_weapon_recoil);}
-		} else if (inventory_count(ammoTypes[| curAmmoType[? global.invItem[_slot][0]]]) > 0) { // The current weapon is out of ammunition; attempt to reload it
+		} else if (inventory_count(ammoTypes[| curAmmoType[? _name]]) > 0) { // The current weapon is out of ammunition; attempt to reload it
 			set_cur_state(player_state_weapon_reload);
+		} else{ // The weapon can't be reloaded; play the empty clip sound on first key/button click
+			var _keyUseWeapon = false;
+			if (!global.gamepadActive) {_keyUseWeapon = keyboard_check_pressed(global.settings[Settings.UseWeapon]);}
+			else {_keyUseWeapon = keyboard_check_pressed(global.settings[Settings.UseWeaponGP]);}
+			// Prevents playing the audio again despite not clicking the use weapon key again
+			if (_keyUseWeapon) {play_sound_effect(snd_empty_clip, 1, false);}
 		}
 		return; // Exit out of the state early
+	}
+	
+	// Reloading the readied weapon if it uses ammunition and isn't infinite
+	if (keyReload && global.invItem[_slot][1] < global.itemData[? ITEM_LIST][? _name][? MAX_STACK]){
+		if (inventory_count(ammoTypes[| curAmmoType[? _name]]) > 0) {set_cur_state(player_state_weapon_reload);}
+		return; // Exit the current state early
 	}
 	
 	// Setting the sprite for the entity -- relative to direction that they are facing.
@@ -151,7 +192,84 @@ function player_state_weapon_recoil(){
 		return; // Exit out of the state early
 	}
 	
-	// Overwrite the sprite's index with a index relative to the remaining recoil time
+	// Overwrite the sprite's image index with one relative to the remaining recoil time
 	if (entity_set_sprite(recoilSprite, 4)) {sprSpeed = 0;}
 	localFrame = min((1 - ((_fireRate - fireRateTimer) / _fireRate)) * sprFrames, sprFrames - 1);
+}
+
+/// @description A simple state that will play an animation of the player entering their object pushing 
+/// animation. This also allows the player to pull out of pushing the object before actually fully committing
+/// to that state. It switches states once the counter hits the designated value set in the code.
+function player_state_activate_push(){
+	// Increment or decrement the timer depending on how if the player is holding the correct movement keys
+	var _directionInRange = (inputDirection >= pushDirection - 20 && inputDirection <= pushDirection + 20);
+	if (pushedObjectID != noone && inputMagnitude != 0 && _directionInRange) {pushAnimateTimer += global.deltaTime;}
+	else {pushAnimateTimer -= global.deltaTime;}
+	
+	// The timer will be checked for its value going below 0 or above the number required to enter the pushing state
+	if (pushAnimateTimer >= pushAnimateTime){ // The push state will be entered and the object will begin getting pushed
+		set_cur_state(player_state_push_object);
+		pushAnimateTimer = pushAnimateTime; // Max out the timer
+	} else if (pushAnimateTimer <= 0){ // The player will not push the object and return to their default state
+		set_cur_state(player_state_default);
+		pushAnimateTimer = 0; // Ensure the timer doesn't end up below 0
+	}
+	
+	// Overwrite the sprite's image index with one relative to how far along the animation timer is
+	if (entity_set_sprite(walkSprite, 4)) {sprSpeed = 0;}
+	localFrame = min((1 - ((pushAnimateTime - pushAnimateTimer) / pushAnimateTime)) * sprFrames, sprFrames - 1);
+}
+
+/// @description The state the player is in whenever they are pushing an object around. They will remain in
+/// this state until the release the direction key that they held in order to activate the pushing state.
+/// They will be unable to push more than one object at time, and they will also not be able to to push objects
+/// that are coonsidered too heavy for them.
+function player_state_push_object(){
+	// Exiting the state by releasing the movement key for pushing the object. This returns it to the activate
+	// push animation script, but it will work in reverse because of the conditions needed to return to it.
+	var _directionInRange = (inputDirection >= pushDirection - 20 && inputDirection <= pushDirection + 20);
+	if (inputMagnitude == 0 || !_directionInRange){
+		set_cur_state(player_state_activate_push);
+		pushedObjectID = noone;
+		return; // Exit the state early
+	}
+	
+	// Move the player and the object based on the weight of the object -- the heavier it is, the slower the
+	// player will push it. This means every object can be pushed, but if its weight is too height it will
+	// almost never move a pixel.
+	hspd = lengthdir_x(maxHspd / pushedObjectWeight, pushDirection);
+	vspd = lengthdir_y(maxVspd / pushedObjectWeight, pushDirection);
+	remove_movement_fractions();
+	
+	// Move the block by the same amount as the player moves in a frame.
+	var _objectExists, _velocity, _deltaVelocity;
+	_objectExists = false;
+	_velocity = [hspd, vspd];
+	_deltaVelocity = [deltaHspd, deltaVspd];
+	with(pushedObjectID){
+		_objectExists = true; // Let's the player know the object still exists
+		// Check for collision between this movable block and a wall at its next set position
+		if (place_meeting(x + _deltaVelocity[X], y + _deltaVelocity[Y], par_collider)){
+			hspd = sign(_velocity[X]);
+			vspd = sign(_velocity[Y]);
+			// Move pixel by pixel until the object reaches the wall
+			while(!place_meeting(x + hspd, y + vspd, par_collider)){
+				x += hspd;
+				y += vspd;
+			}
+		} else{ // No collision occurred; update position
+			x += _deltaVelocity[X];
+			y += _deltaVelocity[Y];
+		}
+	}
+	
+	// If for some reason the object being pushed doesn't exists anymore, exit the pushing state
+	if (!_objectExists){
+		set_cur_state(player_state_activate_push);
+		pushedObjectID = noone;
+		return; // Exit the state early
+	}
+	
+	// Finally, handle collision with the world's colliders
+	entity_world_collision(false);
 }

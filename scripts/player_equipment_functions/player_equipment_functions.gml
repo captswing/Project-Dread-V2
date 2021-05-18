@@ -347,11 +347,11 @@ function player_get_ammo_stats(_name){
 		return;
 	}
 	// No valid modifier values exist for the ammunition that was provided; set all values to zero.
-	damageMod =		0;
-	rangeMod =		0;
-	accuracyMod =	0;
-	fireRateMod =	0;
-	reloadRateMod = 0;
+	damageMod =			0;
+	rangeMod =			0;
+	accuracyMod =		0;
+	fireRateMod =		0;
+	reloadRateMod =		0;
 }
 
 /// @description Using the player's current weapon. The effect of the weapon can either be a hitscan attack
@@ -379,6 +379,10 @@ function player_use_weapon(_useAmmo){
 		var _muzzlePosition, _zOffset, _direction, _endX, _endY;
 		_muzzlePosition = [x + lengthdir_x(8, _sprDirection), y + lengthdir_y(8, _sprDirection)];
 		_zOffset = 12; // Offset in the y-axis that the hitscan will occur at.
+		// UNIQUE CASE -- Offset the position of the projectile for when the character is facing up or down
+		if (_sprDirection == 90)		{_muzzlePosition[X] += 3;}
+		else if (_sprDirection == 270)	{_muzzlePosition[X] -= 3;}
+		// Loop for all bullets necessary for the weapon (Shotguns create multiple bullets)
 		for (var i = 0; i < numBullets; i++){
 			// Calculate the bullet's trajectory based on its accuracy
 			_direction = _sprDirection + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
