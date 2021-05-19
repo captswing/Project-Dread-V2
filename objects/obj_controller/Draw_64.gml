@@ -35,6 +35,13 @@ if (global.settings[Settings.InteractionPrompt]){
 	}
 }
 
+// FOR TESTING
+with(global.singletonID[? PLAYER]){
+	draw_set_halign(fa_right);
+	draw_text(WINDOW_WIDTH - 5, WINDOW_HEIGHT - 12, "Accuracy Penalty: " + string(accuracyPenalty));
+	draw_set_halign(fa_left);
+}
+
 // Resets the shaders if it wasn't reset by the interaction prompt above
 if (shader_current() == outlineShader) {shader_reset();}
 

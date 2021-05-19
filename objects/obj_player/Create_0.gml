@@ -176,6 +176,11 @@ ds_map_add(curAmmoType, SUBMACHINE_GUN,		0);
 ds_map_add(curAmmoType, HAND_CANNON,		0);
 ds_map_add(curAmmoType, GRENADE_LAUNCHER,	0);
 
+// Stores the penalty that is applied to the weapon's accuracy when the player is firing their equipped gun.
+// It increments by a set amount for each bullet fired, and the amount is unique to each weapon. For example,
+// the standard pistol only has a 0.5 accuracy penalty; meanwhile the hand cannon has a 2.5 accuracy penalty.
+accuracyPenalty = 0;
+
 // Two timers that control how long the player is stuck within the reloading and recoiling state, respectively.
 // One second of real-time is equal to a value of 60 in these timers, sine that is the game's targeted frame 
 // rate.

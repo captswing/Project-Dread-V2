@@ -376,7 +376,7 @@ function player_use_weapon(_useAmmo){
 	var _sprDirection = 90 * floor(image_index / sprFrames); // Locks the gun to only be shot in four directions
 	if (startFrame == endFrame && bulletSpd == 0){ // Using a hitscan weapon (All ranged attacks excluding grenade launcher)
 		// Create as many bullets that are necessary for the equipped weapon
-		var _muzzlePosition, _zOffset, _direction, _endX, _endY;
+		var _muzzlePosition, _zOffset, _accuracy, _direction, _endX, _endY;
 		_muzzlePosition = [x + lengthdir_x(8, _sprDirection), y + lengthdir_y(8, _sprDirection)];
 		_zOffset = 12; // Offset in the y-axis that the hitscan will occur at.
 		// UNIQUE CASE -- Offset the position of the projectile for when the character is facing up or down
@@ -385,7 +385,8 @@ function player_use_weapon(_useAmmo){
 		// Loop for all bullets necessary for the weapon (Shotguns create multiple bullets)
 		for (var i = 0; i < numBullets; i++){
 			// Calculate the bullet's trajectory based on its accuracy
-			_direction = _sprDirection + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
+			_accuracy = (accuracy - accuracyMod) + accuracyPenalty;
+			_direction = _sprDirection + random_range(-_accuracy, _accuracy);
 			_endX = x + lengthdir_x(range + rangeMod, _direction);
 			_endY = y + lengthdir_y(range + rangeMod, _direction);
 			// Next, take the information and handle the collisions found by the hitscan
@@ -397,8 +398,9 @@ function player_use_weapon(_useAmmo){
 	} else if (startFrame < endFrame && startFrame >= 0){ // Using a melee weapon (All melee weapons including the chainsaw)
 		// TODO -- Add melee hitbox stuff here
 	} else if (bulletSpd > 0){ // Using a projectile weapon (Basically, only the grenade launcher's ammo)
-		var _direction, _object, _weaponData;
-		_direction = _sprDirection + random_range(-(accuracy - accuracyMod), accuracy - accuracyMod);
+		var _accuracy, _direction, _object, _weaponData;
+		_accuracy = (accuracy - accuracyMod) + accuracyPenalty;
+		_direction = _sprDirection + random_range(-_accuracy, _accuracy);
 		_object = instance_create_depth(x + lengthdir_x(6, _sprDirection), y + lengthdir_y(10, _sprDirection), ENTITY_DEPTH, obj_player_projectile);
 		_weaponData = [global.invItem[_slot][0], player_get_weapon_damage(), range + rangeMod, bulletSpd];
 		
@@ -423,14 +425,19 @@ function player_use_weapon(_useAmmo){
 	// Play the weapon's use sound effect. Nothing will play if the provided sound doesn't exist
 	play_sound_effect(weaponUseSound, get_audio_group_volume(Settings.Sounds), true);
 	
-	// Finally, subtract one from the weapon's current magazine amount if it consumes ammo. The only exception
-	// to this is when the player has the refund amulet equipped, which has a 33% chance of not consuming ammo.
+	// Finally, subtract one from the weapon's current magazine amount if it consumes ammo. The only 
+	// exception to this is when the player has the refund amulet equipped, which has a 33% chance of not 
+	// consuming ammo. Also, an accuracy penalty will be applied that makes the weapon more inaccurate the 
+	// longer the fire button is held.
 	if (_useAmmo){
 		global.invItem[_slot][1]--;
 		if (player_is_amulet_equipped(REFUND_AMULET)){
 			var _refundChance = irandom_range(1, 100); // Choses a number between 1 and 100 for refund chance
 			if (_refundChance <= 33) {global.invItem[_slot][1]++;}
 		}
+		// Apply said accuracy penalty, which will be worse relative to the gun being used and the faster 
+		// the gun is actually being fired.
+		accuracyPenalty += global.itemData[? WEAPON_DATA][? global.invItem[_slot][0]][? PENALTY];
 	}
 	
 	// Return that the weapon was successfully used by the player

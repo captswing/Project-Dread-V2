@@ -136,6 +136,7 @@
 #macro	FIRE_RATE					"Fire Rate"
 #macro	RELOAD_RATE					"Reload Rate"
 #macro	DURABILITY					"Durability"
+#macro	PENALTY						"Penalty"
 #macro	START_FRAME					"Start Frame"
 #macro	END_FRAME					"End Frame"
 #macro	BULLET_SPEED				"Speed"
