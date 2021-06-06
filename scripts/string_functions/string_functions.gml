@@ -41,8 +41,10 @@ function string_split_lines(_string, _width, _font){
 	// Add the remaining data to the string, as it isn't picked up by the loop
 	if (string_width(" " + _curWord) + string_width(_curLine) > _width){ // Final word goes onto its own line
 		_newString += _curLine + "\n" + _curWord;
-	} else{ // Final word is added onto together with the current line and put into the string
+	} else if (_curLine != ""){ // Final word is added onto together with the current line and put into the string
 		_newString += _curLine + " " + _curWord;
+	} else{ // Final word is just added to the string since no other text exists.
+		_newString += _curWord;
 	}
 	
 	// Finally, return the formatted string back to wherever called this function

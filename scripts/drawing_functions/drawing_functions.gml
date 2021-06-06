@@ -4,10 +4,27 @@
 /// @param textureID
 /// @param sPixelWidth
 /// @param sPixelHeight
-function outline_set_font(_font, _textureID, _sPixelWidth, _sPixelHeight){
-	draw_set_font(_font);
-	shader_set_uniform_f(_sPixelWidth, texture_get_texel_width(_textureID));
-	shader_set_uniform_f(_sPixelHeight, texture_get_texel_height(_textureID));
+/// @param currentFont
+function outline_set_font(_font, _textureID, _sPixelWidth, _sPixelHeight, _currentFont){
+	if (_currentFont == -1 || _currentFont != draw_get_font()){
+		draw_set_font(_font);
+		shader_set_uniform_f(_sPixelWidth, texture_get_texel_width(_textureID));
+		shader_set_uniform_f(_sPixelHeight, texture_get_texel_height(_textureID));
+	}
+	return _font;
+}
+
+/// @description
+/// @param innerColor
+/// @param outlineColor[r/g/b]
+/// @param sOutlineColor
+/// @param currentOutlineColor
+function outline_set_color(_innerColor, _outlineColor, _sOutlineColor, _currentOutlineColor){
+	if (_currentOutlineColor == -1 || !array_equals(_currentOutlineColor, _outlineColor)){
+		draw_set_color(_innerColor);
+		shader_set_uniform_f_array(_sOutlineColor, _outlineColor);
+	}
+	return _outlineColor;
 }
 
 /// @description Draws a rectangle with a nice one-pixel outline around it. Drawing rectangles using 

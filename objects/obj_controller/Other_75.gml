@@ -14,8 +14,6 @@ switch(async_load[? "event_type"]){
 	case "gamepad lost": // A gamepad was disconnected from the computer
 		global.gamepadID = -1;
 		global.gamepadActive = false;
+		initialize_control_icons(false);
 		break;
 }
-
-// Initialize the correct images for the control icons
-initialize_control_icons(global.gamepadActive);

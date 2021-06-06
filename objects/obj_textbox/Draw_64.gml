@@ -22,9 +22,8 @@ shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);
 
 // Set the font, and color of the text; outline included
-draw_set_color(c_white);
-shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
-outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
+outline_set_color(c_white, [0.5, 0.5, 0.5], sOutlineColor, -1);
+currentFont = outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight, currentFont);
 
 // Displays the actor's name, portrait, and text they are currently saying to the screen. The name and
 // portrait are optional aspects of the textbox, and thus don't need to be drawn all the time.

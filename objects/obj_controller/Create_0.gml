@@ -23,6 +23,11 @@ sPixelHeight = shader_get_uniform(outlineShader, "pixelHeight");
 sOutlineColor = shader_get_uniform(outlineShader, "outlineColor");
 sDrawOutline = shader_get_uniform(outlineShader, "drawOutline");
 
+// Stores the currently used font for this object and the last outline color used, which prevents unnecessary
+// batch breaks whenever the outline shader is being utilized.
+currentFont = -1;
+currentOutlineColor = -1;
+
 ////////////////////////////////////////////////////////////////////////////////////
 
 // VARIABLES FOR THE CAMERA ////////////////////////////////////////////////////////

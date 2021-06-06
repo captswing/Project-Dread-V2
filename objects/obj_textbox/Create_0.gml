@@ -8,6 +8,7 @@ if (!add_singleton_object()) {return;}
 image_index = 0;
 image_alpha = 0;
 image_speed = 0;
+visible = false;
 
 #endregion
 
@@ -15,7 +16,6 @@ image_speed = 0;
 
 // Keyboard input variables
 keyAdvance = false;
-// TODO -- Add a potential log of textboxes here
 
 // Holds the index for the shader used for outlining the text
 outlineShader = shd_outline;
@@ -24,6 +24,10 @@ sPixelWidth = shader_get_uniform(outlineShader, "pixelWidth");
 sPixelHeight = shader_get_uniform(outlineShader, "pixelHeight");
 sOutlineColor = shader_get_uniform(outlineShader, "outlineColor");
 sDrawOutline = shader_get_uniform(outlineShader, "drawOutline");
+
+// Stores the currently used font for this object, which prevents unnecessary batch breaks whenever the 
+// outline shader is being utilized.
+currentFont = -1;
 
 // Variables that handle the animation for the textbox when it opens and closes, respectively. The opening
 // animation uses both the yTarget and alpha variables to slide the textbox into its final position while
@@ -98,7 +102,7 @@ commandControlInfoObject = false;
 
 #endregion
 
-#region PAUSE THE PLAYER AND INITIALIZE CONTROL PROMPT INFO
+#region PAUSE THE PLAYER AND INITIALIZE CONTROL PROMPT INFO IF NEEDED
 
 // Only pause the player's input and store their state if a cutscene isn't currently occurring.
 if (global.gameState == GameState.InGame){

@@ -10,9 +10,8 @@ shader_set_uniform_i(sDrawOutline, 1);
 // to check if the player's interaction point is on an interactable in order to show the control prompt.
 if (global.settings[Settings.InteractionPrompt]){
 	// Setting the color of the interaction prompt, and the font used for said prompt
-	draw_set_color(c_white);
-	shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
-	outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
+	currentOutlineColor = outline_set_color(c_white, [0.5, 0.5, 0.5], sOutlineColor, currentOutlineColor);
+	currentFont = outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight, currentFont);
 	// Jump over to the player object and checks the interaction point for a collision with an interactable
 	// object. If an interactable exists at that point, display the prompt.
 	with(global.singletonID[? PLAYER]){
@@ -35,14 +34,8 @@ if (global.settings[Settings.InteractionPrompt]){
 	}
 }
 
-// FOR TESTING
-with(global.singletonID[? PLAYER]){
-	draw_set_halign(fa_right);
-	draw_text(WINDOW_WIDTH - 5, WINDOW_HEIGHT - 12, "Accuracy Penalty: " + string(accuracyPenalty));
-	draw_set_halign(fa_left);
-}
-
-// Resets the shaders if it wasn't reset by the interaction prompt above
+// Reset both the outline color that's being used and the outline shader if that is also necessary
+currentOutlineColor = [0, 0, 0];
 if (shader_current() == outlineShader) {shader_reset();}
 
 #endregion
@@ -78,9 +71,8 @@ with(global.singletonID[? CONTROL_INFO]) {event_perform(ev_draw, ev_gui);}
 shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);
 
-draw_set_color(c_white);
-shader_set_uniform_f_array(sOutlineColor, [0.5, 0.5, 0.5]);
-outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight);
+currentOutlineColor = outline_set_color(c_white, [0.5, 0.5, 0.5], sOutlineColor, currentOutlineColor);
+currentFont = outline_set_font(font_gui_small, global.fontTextures[? font_gui_small], sPixelWidth, sPixelHeight, currentFont);
 
 if (showItems){ // Showing the player's current inventory
 	draw_set_halign(fa_right);
@@ -92,6 +84,7 @@ if (showItems){ // Showing the player's current inventory
 }
 
 if (!showDebugInfo){
+	currentOutlineColor = [0, 0, 0];
 	shader_reset();
 	return;
 }
@@ -143,9 +136,8 @@ with(global.singletonID[? PLAYER]){
 	_lastState = lastState;
 }
 
-shader_set_uniform_f_array(sOutlineColor, [0.5, 0, 0]);
+currentOutlineColor = outline_set_color(c_red, [0.5, 0, 0], sOutlineColor, currentOutlineColor);
 draw_set_halign(fa_right);
-draw_set_color(c_red);
 draw_text(136, 5, global.playtimeString + "\n" +
 				  string(global.deltaTime) + "\n" +
 				  "[" + string(room_width) + ", " + string(room_height) + "]\n" + 
@@ -167,4 +159,6 @@ draw_text(70, 5, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n" +
 				  script_get_name(_curState) + "\n" +
 				  script_get_name(_lastState));
 
+// Reset both the outline color that's being used and the outline shader
+currentOutlineColor = [0, 0, 0];
 shader_reset();

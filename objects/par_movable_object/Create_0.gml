@@ -11,11 +11,11 @@ zOffset = 8;
 
 #region UNIQUE VARIABLE INITIALIZATION
 
-//
+// 
 hspd = 0;
 vspd = 0;
 
-//
+// 
 weight = 3;
 
 #endregion
