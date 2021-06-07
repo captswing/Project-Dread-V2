@@ -1,16 +1,37 @@
-/// @description 
+/// @description A default method for drawing a menu's title. It uses the font, colors, alignment, and 
+/// position that was set in the title's initialization function.
 function menu_draw_title(){
+	// First, the font and colors for the title needs to be set.
+	currentFont = outline_set_font(infoFont, global.fontTextures[? infoFont], sPixelWidth, sPixelHeight, currentFont);
+	currentOutlineColor = outline_set_color(titleColor, titleOutlineColor, sOutlineColor, currentOutlineColor);
+
+	// Before drawing the title text, set the text alignment to reflect the title's alignment.
+	draw_set_halign(titleAlign[X]);
+	draw_set_valign(titleAlign[Y]);
 	
+	// Finally, draw the title to the screen using the correct colors.
+	draw_text(titlePos[X], titlePos[Y], title);
+	
+	// Reset the alignment of the text when its drawn to avoid any odd issues in other drawing events.
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
 }
 
-/// @description 
+/// @description A default method for drawing a menu's currently visible options. All it does is loop through
+/// the grid that's size is determined by how many visible columns and rows are set in the menu. Through that
+/// loop it will automatically space the options correctly based on said spacing vector, and also color the
+/// options according to the highlighted option, selected options, normal, and inactive options.
 function menu_draw_options(){
 	// First, the font for the options needs to be set.
 	currentFont = outline_set_font(optionFont, global.fontTextures[? optionFont], sPixelWidth, sPixelHeight, currentFont);
 	
-	// After the font has been correctly set by the function above, loop through and display the visible
-	// section of the menu to the player, which is a grid (depending on width of the menu) of a set number
-	// of rows and columns that can be viewed at once by the player.
+	// Next, set the alignment of the options to what was specified in the initialization function.
+	draw_set_halign(optionAlign[X]);
+	draw_set_valign(optionAlign[Y]);
+	
+	// After that, loop through and display the visible section of the menu to the player, which is a grid 
+	// (depending on width of the menu) of a set number of rows and columns that can be viewed at once by 
+	// the player.
 	var _indexX, _indexY, _optionPos, _optionSpacing, _curOption;
 	_indexX = 0;
 	_indexY = 0;
@@ -50,12 +71,19 @@ function menu_draw_options(){
 		_indexY++;
 		_indexX = 0;
 	}
+	
+	// Reset the alignment of the text when its drawn to avoid any odd issues in other drawing events.
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
 }
 
-/// @description 
+/// @description Draws the information for the currently highlighted option. If the option that is attempting
+/// to be highlighted by the user is inactive, the menu's default inactive option message will be shown instead
+/// of the option's information.
 function menu_draw_option_info(){
-	// First, the font for the option information needs to be set.
+	// First, the font and colors for the option information needs to be set.
 	currentFont = outline_set_font(infoFont, global.fontTextures[? infoFont], sPixelWidth, sPixelHeight, currentFont);
+	currentOutlineColor = outline_set_color(infoColor, infoOutlineColor, sOutlineColor, currentOutlineColor);
 	
 	// Next, set the color of the text and what the visible text will actually be depending on a few factors.
 	var _visibleText = visibleText;
@@ -67,6 +95,14 @@ function menu_draw_option_info(){
 		if (!scrollingInfoText) {_visibleText = infoInactiveText;}
 	}
 	
+	// Before drawing the information text, set the text alignment to reflect the information's alignment.
+	draw_set_halign(infoAlign[X]);
+	draw_set_valign(infoAlign[Y]);
+	
 	// Finally, draw the highlighted option's information to the screen using the correct colors.
 	draw_text(infoPos[X], infoPos[Y], _visibleText);
+	
+	// Reset the alignment of the text when its drawn to avoid any odd issues in other drawing events.
+	draw_set_halign(fa_left);
+	draw_set_valign(fa_top);
 }
