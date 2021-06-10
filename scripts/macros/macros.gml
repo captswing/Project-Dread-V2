@@ -51,6 +51,11 @@
 #macro	LEFT_ANCHOR				   -1
 #macro	RIGHT_ANCHOR				1
 
+// Macros that correspond to a section in the ivnentory section
+#macro	ITEM_SECTION				0
+#macro	NOTE_SECTION				1
+#macro	MAP_SECTION					2
+
 // Singleton key indexes
 #macro	CONTROLLER					"Controller"
 #macro	EFFECT_HANDLER				"Effect Handler"

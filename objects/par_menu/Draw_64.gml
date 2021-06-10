@@ -1,6 +1,6 @@
 /// @description Testing Menu Movement
 
-draw_set_alpha(1);
+/*draw_set_alpha(image_alpha);
 
 shader_set(outlineShader);
 shader_set_uniform_i(sDrawOutline, 1);

@@ -58,6 +58,9 @@ for (var i = 0; i < _length; i++){
 	}
 }
 
+// Display each active menu after any HUD drawing
+with(par_menu) {event_perform(ev_draw, ev_gui);}
+
 // Display the textbox after any HUD drawing
 with(global.singletonID[? TEXTBOX]) {event_perform(ev_draw, ev_gui);}
 

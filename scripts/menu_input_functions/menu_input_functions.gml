@@ -8,6 +8,10 @@ function menu_get_input_keyboard(){
 	keyUp =				keyboard_check(global.settings[Settings.MenuUp]);
 	keyDown =			keyboard_check(global.settings[Settings.MenuDown]);
 	
+	// The auxillary movement keys for navigating through entire sections of a given menu.
+	keyAuxRight =		keyboard_check_pressed(global.settings[Settings.MenuAuxRight]);
+	keyAuxLeft =		keyboard_check_pressed(global.settings[Settings.MenuAuxLeft]);
+	
 	// Inputs that can select highlight options, change menu states, and other things like that.
 	keySelect =			keyboard_check_pressed(global.settings[Settings.Select]);
 	keyReturn =			keyboard_check_pressed(global.settings[Settings.Return]);
@@ -26,10 +30,14 @@ function menu_get_input_gamepad(){
 	_stickV = gamepad_axis_value(global.gamepadID, gp_axislv);
 	
 	// The directional-movement keys for navigating through a given menu.
-	keyRight =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameRightGP]) ||	_stickH >= _deadzone;
-	keyLeft =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameLeftGP]) ||		_stickH <= -_deadzone;
-	keyUp =				gamepad_button_check(global.gamepadID, global.settings[Settings.GameUpGP]) ||		_stickV <= -_deadzone;
-	keyDown =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameDownGP]) ||		_stickV >= _deadzone;
+	keyRight =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameRightGP])	||	_stickH >= _deadzone;
+	keyLeft =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameLeftGP])	||	_stickH <= -_deadzone;
+	keyUp =				gamepad_button_check(global.gamepadID, global.settings[Settings.GameUpGP])		||	_stickV <= -_deadzone;
+	keyDown =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameDownGP])	||	_stickV >= _deadzone;
+	
+	// The auxillary movement keys for navigating through entire sections of a given menu.
+	keyAuxRight =		gamepad_button_check(global.gamepadID, global.settings[Settings.MenuAuxRightGP]);
+	keyAuxLeft =		gamepad_button_check(global.gamepadID, global.settings[Settings.MenuAuxLeftGP]);
 	
 	// Inputs that can select highlight options, change menu states, and other things like that.
 	keySelect =			gamepad_button_check(global.gamepadID, global.settings[Settings.SelectGP]);

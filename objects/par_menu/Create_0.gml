@@ -4,7 +4,7 @@
 
 image_index = 0;
 image_speed = 0;
-image_alpha = 0;
+image_alpha = 1;
 visible = false;
 
 #endregion
@@ -17,6 +17,8 @@ keyRight = false;
 keyLeft = false;
 keyUp = false;
 keyDown = false;
+keyAuxRight = false;
+keyAuxLeft = false;
 keySelect = false;
 keyReturn = false;
 keyDeleteFile = false;
@@ -26,6 +28,15 @@ keyDeleteFile = false;
 curState = NO_STATE;
 lastState = NO_STATE;
 // Menus can use the entity's set_cur_state to change state, much like an entity object
+
+// Creates the next menu upon deleting of the current menu. Useful for doing things like having menus within
+// menus; like a main menu/pause menu type structure.
+nextMenu = noone;
+
+// A flag that determines how the menu will react upon closing. A primary menu will return the game state and
+// all exiting entities back to their original states, while a secondary menu will merely move onto the next
+// menu and let that one handle whatever it needs to do.
+primaryMenu = false;
 
 // Variables relating to the options that the user has currently highlighted, selected, and a previous 
 // auxillary option that they have selected -- one that is needed for certain tasks. (Ex. Combining Items, 
@@ -169,7 +180,28 @@ finalCharacter = 0;
 
 #endregion
 
-menu_general_initialize(6, 3, 7, 1, 2, 25, 0.4);
+#region CHANGING GAME STATE AND FREEZING ALL ENTITIES
+
+// This map will store the curState and lastState variables for each of the active entities in the room. This
+// ensures that their entire state is preserved and not just the current one, but the last one as well in case.
+entityStates = ds_map_create();
+
+// Only attempt to change the game state if it isn't already considered to be in a menu. Otherwise, a lot of
+// bugs will occur and a lot of other issues including state stuff with entities will get messed up.
+if (global.gameState == GameState.InGame){
+	set_game_state(GameState.InMenu, true);
+	
+	// Store all the entity's previous and current states in a map; changing the states to NO_STATE after.
+	var _entityStates = entityStates;
+	with(par_dynamic_entity){
+		ds_map_add(_entityStates, id, [curState, lastState]);
+		set_cur_state(NO_STATE);
+	}
+}
+
+#endregion
+
+/*menu_general_initialize(true, 6, 3, 7, 1, 2, 25, 0.4);
 menu_options_initialize(5, 55, fa_left, fa_top, 40, 12, font_gui_small);
 menu_option_info_initialize(5, 155, fa_left, fa_top, 120, true, font_gui_small);
 
@@ -178,5 +210,3 @@ menu_option_set_active(15, false);
 
 menu_option_set_cur_option(curOption);
 menu_option_info_set_inactive_text("This is a test for the menu's inactive option text.");
-
-set_game_state(GameState.InMenu, true);

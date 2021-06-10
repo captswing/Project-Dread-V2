@@ -1,6 +1,18 @@
 /// @description Initializes all of the basic elements that are required for the menu to function properly.
 /// Otherwise, input will not be allowed and the menu object itself will more than likely crash the game.
-function menu_general_initialize(_menuWidth, _numVisibleColumns, _numVisibleRows, _scrollOffsetX, _scrollOffsetY, _timeToHold, _autoScrollSpeed){
+/// @param primaryMenu
+/// @param menuWidth
+/// @param numVisibleColumns
+/// @param numVisibleRows
+/// @param scrollOffsetX
+/// @param scrollOffsetY
+/// @param timeToHold
+/// @param autoScrollSpeed
+function menu_general_initialize(_primaryMenu, _menuWidth, _numVisibleColumns, _numVisibleRows, _scrollOffsetX, _scrollOffsetY, _timeToHold, _autoScrollSpeed){
+	// Set the flag for whether or not this is a primary menu that handles re-instating the game's previous
+	// state or not. Very useful for sub-menu menus and the like.
+	primaryMenu = bool(_primaryMenu);
+	
 	// The width of the menu allows for both 2-dimensional and 1-dimensional menus; depending on the total
 	// width that was provided. Otherwise, input will not be allowed and it'll more than likely crash the game.
 	menuDimensions = [max(1, _menuWidth), 0];
@@ -44,7 +56,7 @@ function menu_title_initialize(_title, _xPos, _yPos, _hAlign, _vAlign, _font){
 /// @param ySpacing
 /// @param font
 function menu_options_initialize(_xPos, _yPos, _hAlign, _vAlign, _xSpacing, _ySpacing, _font){
-	optionPos = [_xPos, _yPos];
+	optionPos = [_xPos, _yPos]; 
 	optionAlign = [_hAlign, _vAlign];
 	optionSpacing = [_xSpacing, _ySpacing];
 	optionFont = _font;

@@ -44,6 +44,8 @@ function load_settings(){
 	global.settings[Settings.MenuLeft] =			ini_read_real(_controls, "menu_left",			vk_left);
 	global.settings[Settings.MenuUp] =				ini_read_real(_controls, "menu_up",				vk_up);
 	global.settings[Settings.MenuDown] =			ini_read_real(_controls, "menu_down",			vk_down);
+	global.settings[Settings.MenuAuxRight] =		ini_read_real(_controls, "menu_aux_right",		ord("V"));
+	global.settings[Settings.MenuAuxLeft] =			ini_read_real(_controls, "menu_aux_left",		ord("C"));
 	global.settings[Settings.Select] =				ini_read_real(_controls, "select_option",		ord("Z"));
 	global.settings[Settings.Return] =				ini_read_real(_controls, "close_menu",			ord("X"));
 	global.settings[Settings.FileDelete] =			ini_read_real(_controls, "delete_file",			ord("D"));
@@ -64,14 +66,16 @@ function load_settings(){
 	global.settings[Settings.ItemsGP] =				ini_read_real(_controlsGP, "items_gp",			gp_shoulderl);
 	global.settings[Settings.MapsGP] =				ini_read_real(_controlsGP, "maps_gp",			gp_select);
 	global.settings[Settings.NotesGP] =				ini_read_real(_controlsGP, "notes_gp",			gp_shoulderr);
-	global.settings[Settings.PauseGP] =				ini_read_real(_controlsGP, "pause_menu_GP",		gp_start);
-	global.settings[Settings.MenuRightGP] =			ini_read_real(_controlsGP, "menu_right_GP",		gp_padr);		// Menu Controls
-	global.settings[Settings.MenuLeftGP] =			ini_read_real(_controlsGP, "menu_left_GP",		gp_padl);
-	global.settings[Settings.MenuUpGP] =			ini_read_real(_controlsGP, "menu_up_GP",		gp_padu);
-	global.settings[Settings.MenuDownGP] =			ini_read_real(_controlsGP, "menu_down_GP",		gp_padd);
-	global.settings[Settings.SelectGP] =			ini_read_real(_controlsGP, "select_option_GP",	gp_face1);
-	global.settings[Settings.ReturnGP] =			ini_read_real(_controlsGP, "close_menu_GP",		gp_face2);
-	global.settings[Settings.FileDeleteGP] =		ini_read_real(_controlsGP, "delete_file_GP",	gp_face4);
+	global.settings[Settings.PauseGP] =				ini_read_real(_controlsGP, "pause_menu_gp",		gp_start);
+	global.settings[Settings.MenuRightGP] =			ini_read_real(_controlsGP, "menu_right_gp",		gp_padr);		// Menu Controls
+	global.settings[Settings.MenuLeftGP] =			ini_read_real(_controlsGP, "menu_left_gp",		gp_padl);
+	global.settings[Settings.MenuUpGP] =			ini_read_real(_controlsGP, "menu_up_gp",		gp_padu);
+	global.settings[Settings.MenuDownGP] =			ini_read_real(_controlsGP, "menu_down_gp",		gp_padd);
+	global.settings[Settings.MenuAuxRightGP] =		ini_read_real(_controlsGP, "menu_aux_right_gp",	gp_shoulderrb);
+	global.settings[Settings.MenuAuxLeftGP] =		ini_read_real(_controlsGP, "menu_aux_left_gp",	gp_shoulderlb);
+	global.settings[Settings.SelectGP] =			ini_read_real(_controlsGP, "select_option_gp",	gp_face1);
+	global.settings[Settings.ReturnGP] =			ini_read_real(_controlsGP, "close_menu_gp",		gp_face2);
+	global.settings[Settings.FileDeleteGP] =		ini_read_real(_controlsGP, "delete_file_gp",	gp_face4);
 	
 	// Accessibility Settings //
 	var _access = "ACCESSIBILITY";
@@ -92,82 +96,86 @@ function save_settings(){
 	
 	// Video Settings //
 	var _video = "VIDEO";
-	ini_write_real(_video, "resolution_scale",		global.settings[Settings.ResolutionScale]);
-	ini_write_real(_video, "fullscreen_mode",		global.settings[Settings.FullScreen]);
-	ini_write_real(_video, "brightness",			global.settings[Settings.Brightness]);
-	ini_write_real(_video, "contrast",				global.settings[Settings.Contrast]);
-	ini_write_real(_video, "saturation",			global.settings[Settings.Saturation]);
-	ini_write_real(_video, "gamma",					global.settings[Settings.Gamma]);
-	ini_write_real(_video, "bloom_effect",			global.settings[Settings.Bloom]);
-	ini_write_real(_video, "chromatic_aberration",	global.settings[Settings.Aberration]);
-	ini_write_real(_video, "scanlines",				global.settings[Settings.Scanlines]);
-	ini_write_real(_video, "film_grain",			global.settings[Settings.FilmGrain]);
-	
-	// Audio Settings //
-	var _audio = "AUDIO";
-	ini_write_real(_audio, "master",				global.settings[Settings.Master]);
-	ini_write_real(_audio, "sound_effects",			global.settings[Settings.Sounds]);
-	ini_write_real(_audio, "music",					global.settings[Settings.Music]);
-	ini_write_real(_audio, "enable_music",			global.settings[Settings.EnableMusic]);
-	
-	// Control Settings (Keyboard) //
-	var _controls = "CONTROLS (KEYBOARD)";
-	ini_write_real(_controls, "game_right",			global.settings[Settings.GameRight]);		// In-Game Controls
-	ini_write_real(_controls, "game_left",			global.settings[Settings.GameLeft]);
-	ini_write_real(_controls, "game_up",			global.settings[Settings.GameUp]);
-	ini_write_real(_controls, "game_down",			global.settings[Settings.GameDown]);
-	ini_write_real(_controls, "run",				global.settings[Settings.Run]);
-	ini_write_real(_controls, "ready_weapon",		global.settings[Settings.ReadyWeapon]);
-	ini_write_real(_controls, "use_weapon",			global.settings[Settings.UseWeapon]);
-	ini_write_real(_controls, "reload",				global.settings[Settings.Reload]);
-	ini_write_real(_controls, "ammo_swap",			global.settings[Settings.AmmoSwap]);
-	ini_write_real(_controls, "flashlight",			global.settings[Settings.Flashlight]);
-	ini_write_real(_controls, "interact",			global.settings[Settings.Interact]);
-	ini_write_real(_controls, "items",				global.settings[Settings.Items]);
-	ini_write_real(_controls, "maps",				global.settings[Settings.Maps]);
-	ini_write_real(_controls, "notes",				global.settings[Settings.Notes]);
-	ini_write_real(_controls, "pause_menu",			global.settings[Settings.Pause]);
-	ini_write_real(_controls, "menu_right",			global.settings[Settings.MenuRight]);		// Menu Controls
-	ini_write_real(_controls, "menu_left",			global.settings[Settings.MenuLeft]);
-	ini_write_real(_controls, "menu_up",			global.settings[Settings.MenuUp]);
-	ini_write_real(_controls, "menu_down",			global.settings[Settings.MenuDown]);
-	ini_write_real(_controls, "select_option",		global.settings[Settings.Select]);
-	ini_write_real(_controls, "close_menu",			global.settings[Settings.Return]);
-	ini_write_real(_controls, "delete_file",		global.settings[Settings.FileDelete]);
-	
-	// Control Settings (Gamepad) //
-	var _controlsGP = "CONTROLS (GAMEPAD)";
-	ini_write_real(_controlsGP, "game_right_gp",	global.settings[Settings.GameRightGP]);		// In-Game Controls
-	ini_write_real(_controlsGP, "game_left_gp",		global.settings[Settings.GameLeftGP]);
-	ini_write_real(_controlsGP, "game_up_gp",		global.settings[Settings.GameUpGP]);
-	ini_write_real(_controlsGP, "game_down_gp",		global.settings[Settings.GameDownGP]);
-	ini_write_real(_controlsGP, "run_gp",			global.settings[Settings.RunGP]);
-	ini_write_real(_controlsGP, "ready_weapon_gp",	global.settings[Settings.ReadyWeaponGP]);
-	ini_write_real(_controlsGP, "use_weapon_gp",	global.settings[Settings.UseWeaponGP]);
-	ini_write_real(_controlsGP, "reload_gp",		global.settings[Settings.ReloadGP]);
-	ini_write_real(_controlsGP, "ammo_swap_gp",		global.settings[Settings.AmmoSwapGP]);
-	ini_write_real(_controlsGP, "flashlight_gp",	global.settings[Settings.FlashlightGP]);
-	ini_write_real(_controlsGP, "interact_gp",		global.settings[Settings.InteractGP]);
-	ini_write_real(_controlsGP, "items_gp",			global.settings[Settings.ItemsGP]);
-	ini_write_real(_controlsGP, "maps_gp",			global.settings[Settings.MapsGP]);
-	ini_write_real(_controlsGP, "notes_gp",			global.settings[Settings.NotesGP]);
-	ini_write_real(_controlsGP, "pause_menu_gp",	global.settings[Settings.PauseGP]);
-	ini_write_real(_controlsGP, "menu_right_gp",	global.settings[Settings.MenuRightGP]);		// Menu Controls
-	ini_write_real(_controlsGP, "menu_left_gp",		global.settings[Settings.MenuLeftGP]);
-	ini_write_real(_controlsGP, "menu_up_gp",		global.settings[Settings.MenuUpGP]);
-	ini_write_real(_controlsGP, "menu_down_gp",		global.settings[Settings.MenuDownGP]);
-	ini_write_real(_controlsGP, "select_option_gp",	global.settings[Settings.SelectGP]);
-	ini_write_real(_controlsGP, "close_menu_gp",	global.settings[Settings.ReturnGP]);
-	ini_write_real(_controlsGP, "delete_file_gp",	global.settings[Settings.FileDeleteGP]);
-	
-	// Accessibility Settings //
-	var _access = "ACCESSIBILITY";
-	ini_write_real(_access, "text_speed",			global.settings[Settings.TextSpeed]);
-	ini_write_real(_access, "objective_hints",		global.settings[Settings.ObjectiveHints]);
-	ini_write_real(_access, "item_highlighting",	global.settings[Settings.ItemHighlighting]);
-	ini_write_real(_access, "interaction_prompt",	global.settings[Settings.InteractionPrompt]);
-	ini_write_real(_access, "door_indicator_range", global.settings[Settings.DoorIndicatorRange]);
-	ini_write_real(_access, "aim_assist",			global.settings[Settings.AimAssist]);
+	ini_write_real(_video, "resolution_scale",			global.settings[Settings.ResolutionScale]);
+	ini_write_real(_video, "fullscreen_mode",			global.settings[Settings.FullScreen]);
+	ini_write_real(_video, "brightness",				global.settings[Settings.Brightness]);
+	ini_write_real(_video, "contrast",					global.settings[Settings.Contrast]);
+	ini_write_real(_video, "saturation",				global.settings[Settings.Saturation]);
+	ini_write_real(_video, "gamma",						global.settings[Settings.Gamma]);
+	ini_write_real(_video, "bloom_effect",				global.settings[Settings.Bloom]);
+	ini_write_real(_video, "chromatic_aberration",		global.settings[Settings.Aberration]);
+	ini_write_real(_video, "scanlines",					global.settings[Settings.Scanlines]);
+	ini_write_real(_video, "film_grain",				global.settings[Settings.FilmGrain]);
+														
+	// Audio Settings //								
+	var _audio = "AUDIO";								
+	ini_write_real(_audio, "master",					global.settings[Settings.Master]);
+	ini_write_real(_audio, "sound_effects",				global.settings[Settings.Sounds]);
+	ini_write_real(_audio, "music",						global.settings[Settings.Music]);
+	ini_write_real(_audio, "enable_music",				global.settings[Settings.EnableMusic]);
+														
+	// Control Settings (Keyboard) //					
+	var _controls = "CONTROLS (KEYBOARD)";				
+	ini_write_real(_controls, "game_right",				global.settings[Settings.GameRight]);		// In-Game Controls
+	ini_write_real(_controls, "game_left",				global.settings[Settings.GameLeft]);
+	ini_write_real(_controls, "game_up",				global.settings[Settings.GameUp]);
+	ini_write_real(_controls, "game_down",				global.settings[Settings.GameDown]);
+	ini_write_real(_controls, "run",					global.settings[Settings.Run]);
+	ini_write_real(_controls, "ready_weapon",			global.settings[Settings.ReadyWeapon]);
+	ini_write_real(_controls, "use_weapon",				global.settings[Settings.UseWeapon]);
+	ini_write_real(_controls, "reload",					global.settings[Settings.Reload]);
+	ini_write_real(_controls, "ammo_swap",				global.settings[Settings.AmmoSwap]);
+	ini_write_real(_controls, "flashlight",				global.settings[Settings.Flashlight]);
+	ini_write_real(_controls, "interact",				global.settings[Settings.Interact]);
+	ini_write_real(_controls, "items",					global.settings[Settings.Items]);
+	ini_write_real(_controls, "maps",					global.settings[Settings.Maps]);
+	ini_write_real(_controls, "notes",					global.settings[Settings.Notes]);
+	ini_write_real(_controls, "pause_menu",				global.settings[Settings.Pause]);
+	ini_write_real(_controls, "menu_right",				global.settings[Settings.MenuRight]);		// Menu Controls
+	ini_write_real(_controls, "menu_left",				global.settings[Settings.MenuLeft]);
+	ini_write_real(_controls, "menu_up",				global.settings[Settings.MenuUp]);
+	ini_write_real(_controls, "menu_down",				global.settings[Settings.MenuDown]);
+	ini_write_real(_controls, "menu_aux_right",			global.settings[Settings.MenuAuxRight]);
+	ini_write_real(_controls, "menu_aux_left",			global.settings[Settings.MenuAuxLeft]);
+	ini_write_real(_controls, "select_option",			global.settings[Settings.Select]);
+	ini_write_real(_controls, "close_menu",				global.settings[Settings.Return]);
+	ini_write_real(_controls, "delete_file",			global.settings[Settings.FileDelete]);
+														
+	// Control Settings (Gamepad) //					
+	var _controlsGP = "CONTROLS (GAMEPAD)";				
+	ini_write_real(_controlsGP, "game_right_gp",		global.settings[Settings.GameRightGP]);		// In-Game Controls
+	ini_write_real(_controlsGP, "game_left_gp",			global.settings[Settings.GameLeftGP]);
+	ini_write_real(_controlsGP, "game_up_gp",			global.settings[Settings.GameUpGP]);
+	ini_write_real(_controlsGP, "game_down_gp",			global.settings[Settings.GameDownGP]);
+	ini_write_real(_controlsGP, "run_gp",				global.settings[Settings.RunGP]);
+	ini_write_real(_controlsGP, "ready_weapon_gp",		global.settings[Settings.ReadyWeaponGP]);
+	ini_write_real(_controlsGP, "use_weapon_gp",		global.settings[Settings.UseWeaponGP]);
+	ini_write_real(_controlsGP, "reload_gp",			global.settings[Settings.ReloadGP]);
+	ini_write_real(_controlsGP, "ammo_swap_gp",			global.settings[Settings.AmmoSwapGP]);
+	ini_write_real(_controlsGP, "flashlight_gp",		global.settings[Settings.FlashlightGP]);
+	ini_write_real(_controlsGP, "interact_gp",			global.settings[Settings.InteractGP]);
+	ini_write_real(_controlsGP, "items_gp",				global.settings[Settings.ItemsGP]);
+	ini_write_real(_controlsGP, "maps_gp",				global.settings[Settings.MapsGP]);
+	ini_write_real(_controlsGP, "notes_gp",				global.settings[Settings.NotesGP]);
+	ini_write_real(_controlsGP, "pause_menu_gp",		global.settings[Settings.PauseGP]);
+	ini_write_real(_controlsGP, "menu_right_gp",		global.settings[Settings.MenuRightGP]);		// Menu Controls
+	ini_write_real(_controlsGP, "menu_left_gp",			global.settings[Settings.MenuLeftGP]);
+	ini_write_real(_controlsGP, "menu_up_gp",			global.settings[Settings.MenuUpGP]);
+	ini_write_real(_controlsGP, "menu_down_gp",			global.settings[Settings.MenuDownGP]);
+	ini_write_real(_controlsGP, "menu_aux_right_gp",	global.settings[Settings.MenuAuxRightGP]);
+	ini_write_real(_controlsGP, "menu_aux_left_gp",		global.settings[Settings.MenuAuxLeftGP]);
+	ini_write_real(_controlsGP, "select_option_gp",		global.settings[Settings.SelectGP]);
+	ini_write_real(_controlsGP, "close_menu_gp",		global.settings[Settings.ReturnGP]);
+	ini_write_real(_controlsGP, "delete_file_gp",		global.settings[Settings.FileDeleteGP]);
+														
+	// Accessibility Settings //						
+	var _access = "ACCESSIBILITY";						
+	ini_write_real(_access, "text_speed",				global.settings[Settings.TextSpeed]);
+	ini_write_real(_access, "objective_hints",			global.settings[Settings.ObjectiveHints]);
+	ini_write_real(_access, "item_highlighting",		global.settings[Settings.ItemHighlighting]);
+	ini_write_real(_access, "interaction_prompt",		global.settings[Settings.InteractionPrompt]);
+	ini_write_real(_access, "door_indicator_range",		global.settings[Settings.DoorIndicatorRange]);
+	ini_write_real(_access, "aim_assist",				global.settings[Settings.AimAssist]);
 	
 	ini_close();
 }

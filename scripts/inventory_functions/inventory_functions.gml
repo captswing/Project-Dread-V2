@@ -199,10 +199,3 @@ function inventory_item_options(_slot){
 function inventory_item_options_function(_slot, _option){
 	
 }
-
-/// @description Consumes the selected item and applies its effect(s) to the player. There are seven possible
-/// effects that can be applied, but not all need to be applied by each item. However, each time an item is
-/// consumed it will check for all seven effects and if it needs to apply them or not.
-/// @param slot
-function inventory_item_use_consumable(_slot){
-}

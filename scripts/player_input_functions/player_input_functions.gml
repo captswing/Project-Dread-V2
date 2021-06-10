@@ -41,10 +41,10 @@ function player_get_input_gamepad(){
 	_stickV = gamepad_axis_value(global.gamepadID, gp_axislv);
 	
 	// Checking movement inputs (Left Joystick always handles movement; cannot be remapped)
-	keyRight =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameRightGP]) ||	_stickH >= _deadzone;
-	keyLeft =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameLeftGP]) ||		_stickH <= -_deadzone;
-	keyUp =				gamepad_button_check(global.gamepadID, global.settings[Settings.GameUpGP]) ||		_stickV <= -_deadzone;
-	keyDown =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameDownGP]) ||		_stickV >= _deadzone;
+	keyRight =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameRightGP])	||	_stickH >= _deadzone;
+	keyLeft =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameLeftGP])	||	_stickH <= -_deadzone;
+	keyUp =				gamepad_button_check(global.gamepadID, global.settings[Settings.GameUpGP])		||	_stickV <= -_deadzone;
+	keyDown =			gamepad_button_check(global.gamepadID, global.settings[Settings.GameDownGP])	||	_stickV >= _deadzone;
 	keyRun =			gamepad_button_check(global.gamepadID, global.settings[Settings.RunGP]);
 	
 	// Checking equipment inputs

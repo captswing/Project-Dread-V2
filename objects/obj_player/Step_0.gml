@@ -51,8 +51,8 @@ if (global.gameState == GameState.InGame){
 	
 	// Opening the player's item section of the inventory
 	if (keyItems){
-		var _controller = global.singletonID[? CONTROLLER];
-		with(_controller) {showItems = !showItems;}
+		var _inventory = instance_create_depth(0, 0, ENTITY_DEPTH, obj_inventory);
+		with(_inventory){inventory_initialize_section(ITEM_SECTION);}
 	}
 }
 

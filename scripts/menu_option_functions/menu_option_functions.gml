@@ -49,6 +49,17 @@ function menu_option_delete(_index){
 	numOptions--; // Decrement the variable storing the total number of options to reflect the deletion.
 }
 
+/// @description A simple function that just clears out the current option data from the list. Useful for
+/// "switching" menus when multiple sections of said menu are handled by the same object. (Ex. Inventory)
+function menu_option_clear(){
+	// Loop and delete the 0th option from the list until it is empty
+	while(numOptions > 0){
+		delete option[| 0];
+		ds_list_delete(option, 0);
+		numOptions--;
+	}
+}
+
 /// @description Simply sets the active flag for the option at the provided index to either true or false.
 /// The flag being flase will prevent the player from selecting the option and thus prevent it from running
 /// any of the code it will do upon selection.
@@ -96,10 +107,10 @@ function menu_option_reset_target_position(_index){
 /// @description 
 /// @param curOption
 function menu_option_set_cur_option(_curOption){
-	curOption = clamp(_curOption, 0, numOptions - 1);
+	curOption = max(_curOption, 0);
 	// Optionally, after setting the menu cursor, reset all the typewriter effect variables to compensate 
 	// for the newly highlighted option's information text.
-	if (scrollingInfoText){
+	if (curOption < numOptions && scrollingInfoText){
 		visibleText = "";
 		nextCharacter = 0;
 		// If the option is active it will use its own info text, otherwise the default inactive text is used.

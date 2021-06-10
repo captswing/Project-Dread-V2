@@ -6,7 +6,7 @@
 /// @param sPixelHeight
 /// @param currentFont
 function outline_set_font(_font, _textureID, _sPixelWidth, _sPixelHeight, _currentFont){
-	if (_currentFont == -1 || _currentFont != draw_get_font()){
+	if (_font != _currentFont || _currentFont == -1 || _currentFont != draw_get_font()){
 		draw_set_font(_font);
 		shader_set_uniform_f(_sPixelWidth, texture_get_texel_width(_textureID));
 		shader_set_uniform_f(_sPixelHeight, texture_get_texel_height(_textureID));
