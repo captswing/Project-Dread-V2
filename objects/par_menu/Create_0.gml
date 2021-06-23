@@ -38,6 +38,9 @@ nextMenu = noone;
 // menu and let that one handle whatever it needs to do.
 primaryMenu = false;
 
+// 
+blurEnabled = false;
+
 // Variables relating to the options that the user has currently highlighted, selected, and a previous 
 // auxillary option that they have selected -- one that is needed for certain tasks. (Ex. Combining Items, 
 // Swapping Items Between Slots, etc.)
@@ -72,6 +75,13 @@ sPixelWidth = shader_get_uniform(outlineShader, "pixelWidth");
 sPixelHeight = shader_get_uniform(outlineShader, "pixelHeight");
 sOutlineColor = shader_get_uniform(outlineShader, "outlineColor");
 sDrawOutline = shader_get_uniform(outlineShader, "drawOutline");
+
+// Holds the index for the shader used for fading objects out relative to screen coordinates
+fadeawayShader = shd_fadeaway;
+// Getting the uniforms for the shader; storing them in local variables
+sScreenSize = shader_get_uniform(fadeawayShader, "screenSize");
+sThreshold = shader_get_uniform(fadeawayShader, "threshold");
+sFadeCutoff = shader_get_uniform(fadeawayShader, "fadeCutoff");
 
 // Stores the currently used font for this object and the last outline color used, which prevents unnecessary
 // batch breaks whenever the outline shader is being utilized.
@@ -191,13 +201,33 @@ entityStates = ds_map_create();
 if (global.gameState == GameState.InGame){
 	set_game_state(GameState.InMenu, true);
 	
+	with(global.singletonID[? CONTROL_INFO]){
+		if (ds_list_size(controlData) > 0) {control_info_clear_all();}
+		// Icons that are anchored to the left side of the screen
+		control_info_add_control_data(ICON_MENU_LEFT, LEFT_ANCHOR, "", false);
+		control_info_add_control_data(ICON_MENU_UP, LEFT_ANCHOR, "", false);
+		control_info_add_control_data(ICON_MENU_RIGHT, LEFT_ANCHOR, "", false);
+		control_info_add_control_data(ICON_MENU_DOWN, LEFT_ANCHOR, "Move", false);
+		control_info_add_control_data(ICON_AUX_MENU_LEFT, LEFT_ANCHOR, "", false);
+		control_info_add_control_data(ICON_AUX_MENU_RIGHT, LEFT_ANCHOR, "Change Section", true);
+		// Icons that are anchored to the right side of the screen
+		control_info_add_control_data(ICON_SELECT, RIGHT_ANCHOR, "Select", false);
+		control_info_add_control_data(ICON_RETURN, RIGHT_ANCHOR, "Return", true);
+		
+		alpha = 1; // TODO -- Make fade-in animation for the control information
+	}
+	
 	// Store all the entity's previous and current states in a map; changing the states to NO_STATE after.
 	var _entityStates = entityStates;
 	with(par_dynamic_entity){
 		ds_map_add(_entityStates, id, [curState, lastState]);
+		if (object_index == obj_player) {entity_set_sprite(standSprite, 4);}
 		set_cur_state(NO_STATE);
 	}
 }
+
+// Finally, blur the background image to improve readability
+with(global.singletonID[? EFFECT_HANDLER]) {blurEnabled = true;}
 
 #endregion
 

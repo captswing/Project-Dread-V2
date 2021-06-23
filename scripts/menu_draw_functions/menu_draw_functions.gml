@@ -2,7 +2,7 @@
 /// position that was set in the title's initialization function.
 function menu_draw_title(){
 	// First, the font and colors for the title needs to be set.
-	currentFont = outline_set_font(infoFont, global.fontTextures[? infoFont], sPixelWidth, sPixelHeight, currentFont);
+	currentFont = outline_set_font(titleFont, global.fontTextures[? titleFont], sPixelWidth, sPixelHeight, currentFont);
 	currentOutlineColor = outline_set_color(titleColor, titleOutlineColor, sOutlineColor, currentOutlineColor);
 
 	// Before drawing the title text, set the text alignment to reflect the title's alignment.

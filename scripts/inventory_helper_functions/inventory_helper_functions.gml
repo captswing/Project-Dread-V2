@@ -15,3 +15,17 @@ function inventory_section_swap_input(){
 	// The section wasn't changed, return false so the state that called this function can full execute
 	return false;
 }
+
+/// @description 
+function inventory_exit_input(){
+	if (keyReturn){
+		// TODO -- Put closing animation stuff here
+		set_cur_state(NO_STATE);
+		// THE NEXT TWO LINES OF CODE BELOW THIS COMMENT ARE JUST FOR TESTING
+		with(global.singletonID[? CONTROL_INFO]) {alpha = 0;}
+		instance_destroy(self);
+		return true; // Returns true to let the state that called this know the menu is closed; prevening input
+	}
+	// The menu hasn't been set to close, so the state that is currently executing is left unaffected
+	return false;
+}

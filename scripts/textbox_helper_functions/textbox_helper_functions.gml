@@ -34,6 +34,7 @@ function open_next_textbox(){
 			textboxIndex = clamp(_index, 0, ds_list_size(textboxData) - 1);
 		}
 	}
+	
 	// If the next index is at the end of the list of data; set the textbox to close and delete itself.
 	if (textboxIndex >= ds_list_size(textboxData)){
 		textboxIndex = ds_list_size(textboxData) - 1;
@@ -41,6 +42,7 @@ function open_next_textbox(){
 		isClosing = true;
 		return; // Exit the script early
 	}
+	
 	// Check if a code exists for the next textbox. If so, the final character will be set the character
 	// right before that character index. Otherwise, it sets it to the last string in the text.
 	var _index = string_last_pos("~", textboxData[| textboxIndex][0]);

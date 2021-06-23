@@ -202,7 +202,7 @@ function initialize_difficulty(_combatDifficulty, _puzzleDifficulty){
 			}
 			// Set the inventory's starting size as well as its maximum possible size
 			global.invSize = 12;
-			global.maxInvSize = 24;
+			global.maxInvSize = 20;
 			break;
 		case Difficulty.Standard:		// Standard Difficulty AKA "Normal" Mode
 			with(global.gameplay){

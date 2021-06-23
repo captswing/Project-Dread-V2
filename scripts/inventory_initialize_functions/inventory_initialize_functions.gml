@@ -15,7 +15,7 @@ function inventory_initialize_section(_sectionIndex){
 			// The title and options have all been initialized, so only certain portions of the variables 
 			// for each needs to be altered for a given section.
 			title = "Items";
-			optionPos = [5, 20];
+			optionPos = [5, 18];
 			optionSpacing = [20, 20];
 			// Load in all the player's inventory data as options within the menu; their descriptions can
 			// be found within the item's data that exists in a file outside of the game itself.

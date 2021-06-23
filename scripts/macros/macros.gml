@@ -87,6 +87,8 @@
 #macro	ICON_MENU_LEFT				"Menu Left"
 #macro	ICON_MENU_UP				"Menu Up"
 #macro	ICON_MENU_DOWN				"Menu Down"
+#macro	ICON_AUX_MENU_RIGHT			"Aux Menu Right"
+#macro	ICON_AUX_MENU_LEFT			"Aux Menu Left"
 #macro	ICON_SELECT					"Select"
 #macro	ICON_RETURN					"Return"
 #macro	ICON_FILE_DELETE			"File Delete"

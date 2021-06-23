@@ -1,9 +1,6 @@
 /// @description Provides input functionality for the menu's cursor. Enables selecting of menu options,
 /// moving between them, backing out of selecting an item, or exiting the menu.
 function menu_cursor_movement(){
-	// Set the previous option to whatever the curOption value is before any input is considered
-	prevOption = curOption;
-	
 	// Pressing the select key will ignore any directional menu input and instantly exit; much like the
 	// return key check below. The differences being that the currently highlighted option will be selected,
 	// which prevents directional input for the current menu.
@@ -29,7 +26,6 @@ function menu_cursor_movement(){
 	// closing/exiting a section of the menu or the menu itself. 
 	if (keyReturn){
 		// TODO -- Play return sound here
-		auxSelectedOption = curOption; // FOR TESTING
 		return;
 	}
 	
@@ -52,6 +48,9 @@ function menu_cursor_movement(){
 			} else{ // Reduce time  needed to move cursor for auto-scrolling
 				holdTimer = timeToHold * autoScrollSpeed;
 			}
+			
+			// Set the previous option to whatever the curOption value is before any input is considered
+			prevOption = curOption;
 			
 			// Moving up/down to different rows in the menu
 			if (_movementVertical){

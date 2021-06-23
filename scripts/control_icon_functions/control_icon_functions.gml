@@ -5,54 +5,58 @@
 function initialize_control_icons(_gamepadActive){
 	if (_gamepadActive){ // The gamepad is active; reflect that in the control icons
 		// In-game control icons //
-		ds_map_set(global.controlIcons, ICON_GAME_RIGHT,	gamepad_get_sprite(global.settings[Settings.GameRightGP]));
-		ds_map_set(global.controlIcons, ICON_GAME_LEFT,		gamepad_get_sprite(global.settings[Settings.GameLeftGP]));
-		ds_map_set(global.controlIcons, ICON_GAME_UP,		gamepad_get_sprite(global.settings[Settings.GameUpGP]));
-		ds_map_set(global.controlIcons, ICON_GAME_DOWN,		gamepad_get_sprite(global.settings[Settings.GameDownGP]));
-		ds_map_set(global.controlIcons, ICON_RUN,			gamepad_get_sprite(global.settings[Settings.RunGP]));
-		ds_map_set(global.controlIcons, ICON_FLASHLIGHT,	gamepad_get_sprite(global.settings[Settings.FlashlightGP]));
-		ds_map_set(global.controlIcons, ICON_INTERACT,		gamepad_get_sprite(global.settings[Settings.InteractGP]));
-		ds_map_set(global.controlIcons, ICON_AMMO_SWAP,		gamepad_get_sprite(global.settings[Settings.AmmoSwapGP]));
-		ds_map_set(global.controlIcons, ICON_RELOAD,		gamepad_get_sprite(global.settings[Settings.ReloadGP]));
-		ds_map_set(global.controlIcons, ICON_READY_WEAPON,	gamepad_get_sprite(global.settings[Settings.ReadyWeaponGP]));
-		ds_map_set(global.controlIcons, ICON_USE_WEAPON,	gamepad_get_sprite(global.settings[Settings.UseWeaponGP]));
-		ds_map_set(global.controlIcons, ICON_PAUSE,			gamepad_get_sprite(global.settings[Settings.PauseGP]));
-		ds_map_set(global.controlIcons, ICON_NOTES,			gamepad_get_sprite(global.settings[Settings.NotesGP]));
-		ds_map_set(global.controlIcons, ICON_MAPS,			gamepad_get_sprite(global.settings[Settings.MapsGP]));
-		ds_map_set(global.controlIcons, ICON_NOTES,			gamepad_get_sprite(global.settings[Settings.ItemsGP]));
-		// Menu control icons //
-		ds_map_set(global.controlIcons, ICON_MENU_RIGHT,	gamepad_get_sprite(global.settings[Settings.MenuRightGP]));
-		ds_map_set(global.controlIcons, ICON_MENU_LEFT,		gamepad_get_sprite(global.settings[Settings.MenuLeftGP]));
-		ds_map_set(global.controlIcons, ICON_MENU_UP,		gamepad_get_sprite(global.settings[Settings.MenuUpGP]));
-		ds_map_set(global.controlIcons, ICON_MENU_DOWN,		gamepad_get_sprite(global.settings[Settings.MenuDownGP]));
-		ds_map_set(global.controlIcons, ICON_SELECT,		gamepad_get_sprite(global.settings[Settings.SelectGP]));
-		ds_map_set(global.controlIcons, ICON_RETURN,		gamepad_get_sprite(global.settings[Settings.ReturnGP]));
-		ds_map_set(global.controlIcons, ICON_FILE_DELETE,	gamepad_get_sprite(global.settings[Settings.FileDeleteGP]));
+		ds_map_set(global.controlIcons, ICON_GAME_RIGHT,		gamepad_get_sprite(global.settings[Settings.GameRightGP]));
+		ds_map_set(global.controlIcons, ICON_GAME_LEFT,			gamepad_get_sprite(global.settings[Settings.GameLeftGP]));
+		ds_map_set(global.controlIcons, ICON_GAME_UP,			gamepad_get_sprite(global.settings[Settings.GameUpGP]));
+		ds_map_set(global.controlIcons, ICON_GAME_DOWN,			gamepad_get_sprite(global.settings[Settings.GameDownGP]));
+		ds_map_set(global.controlIcons, ICON_RUN,				gamepad_get_sprite(global.settings[Settings.RunGP]));
+		ds_map_set(global.controlIcons, ICON_FLASHLIGHT,		gamepad_get_sprite(global.settings[Settings.FlashlightGP]));
+		ds_map_set(global.controlIcons, ICON_INTERACT,			gamepad_get_sprite(global.settings[Settings.InteractGP]));
+		ds_map_set(global.controlIcons, ICON_AMMO_SWAP,			gamepad_get_sprite(global.settings[Settings.AmmoSwapGP]));
+		ds_map_set(global.controlIcons, ICON_RELOAD,			gamepad_get_sprite(global.settings[Settings.ReloadGP]));
+		ds_map_set(global.controlIcons, ICON_READY_WEAPON,		gamepad_get_sprite(global.settings[Settings.ReadyWeaponGP]));
+		ds_map_set(global.controlIcons, ICON_USE_WEAPON,		gamepad_get_sprite(global.settings[Settings.UseWeaponGP]));
+		ds_map_set(global.controlIcons, ICON_PAUSE,				gamepad_get_sprite(global.settings[Settings.PauseGP]));
+		ds_map_set(global.controlIcons, ICON_NOTES,				gamepad_get_sprite(global.settings[Settings.NotesGP]));
+		ds_map_set(global.controlIcons, ICON_MAPS,				gamepad_get_sprite(global.settings[Settings.MapsGP]));
+		ds_map_set(global.controlIcons, ICON_NOTES,				gamepad_get_sprite(global.settings[Settings.ItemsGP]));
+		// Menu control icons //								
+		ds_map_set(global.controlIcons, ICON_MENU_RIGHT,		gamepad_get_sprite(global.settings[Settings.MenuRightGP]));
+		ds_map_set(global.controlIcons, ICON_MENU_LEFT,			gamepad_get_sprite(global.settings[Settings.MenuLeftGP]));
+		ds_map_set(global.controlIcons, ICON_MENU_UP,			gamepad_get_sprite(global.settings[Settings.MenuUpGP]));
+		ds_map_set(global.controlIcons, ICON_MENU_DOWN,			gamepad_get_sprite(global.settings[Settings.MenuDownGP]));
+		ds_map_set(global.controlIcons, ICON_AUX_MENU_RIGHT,	gamepad_get_sprite(global.settings[Settings.MenuAuxRightGP]));
+		ds_map_set(global.controlIcons, ICON_AUX_MENU_LEFT,		gamepad_get_sprite(global.settings[Settings.MenuAuxLeftGP]));
+		ds_map_set(global.controlIcons, ICON_SELECT,			gamepad_get_sprite(global.settings[Settings.SelectGP]));
+		ds_map_set(global.controlIcons, ICON_RETURN,			gamepad_get_sprite(global.settings[Settings.ReturnGP]));
+		ds_map_set(global.controlIcons, ICON_FILE_DELETE,		gamepad_get_sprite(global.settings[Settings.FileDeleteGP]));
 	} else{ // The gamepad isn't active; normal keyboard keys will be used
 		// In-game control icons //
-		ds_map_set(global.controlIcons, ICON_GAME_RIGHT,	keyboard_get_sprite(global.settings[Settings.GameRight]));
-		ds_map_set(global.controlIcons, ICON_GAME_LEFT,		keyboard_get_sprite(global.settings[Settings.GameLeft]));
-		ds_map_set(global.controlIcons, ICON_GAME_UP,		keyboard_get_sprite(global.settings[Settings.GameUp]));
-		ds_map_set(global.controlIcons, ICON_GAME_DOWN,		keyboard_get_sprite(global.settings[Settings.GameDown]));
-		ds_map_set(global.controlIcons, ICON_RUN,			keyboard_get_sprite(global.settings[Settings.Run]));
-		ds_map_set(global.controlIcons, ICON_FLASHLIGHT,	keyboard_get_sprite(global.settings[Settings.Flashlight]));
-		ds_map_set(global.controlIcons, ICON_INTERACT,		keyboard_get_sprite(global.settings[Settings.Interact]));
-		ds_map_set(global.controlIcons, ICON_AMMO_SWAP,		keyboard_get_sprite(global.settings[Settings.AmmoSwap]));
-		ds_map_set(global.controlIcons, ICON_RELOAD,		keyboard_get_sprite(global.settings[Settings.Reload]));
-		ds_map_set(global.controlIcons, ICON_READY_WEAPON,	keyboard_get_sprite(global.settings[Settings.ReadyWeapon]));
-		ds_map_set(global.controlIcons, ICON_USE_WEAPON,	keyboard_get_sprite(global.settings[Settings.UseWeapon]));
-		ds_map_set(global.controlIcons, ICON_PAUSE,			keyboard_get_sprite(global.settings[Settings.Pause]));
-		ds_map_set(global.controlIcons, ICON_NOTES,			keyboard_get_sprite(global.settings[Settings.Notes]));
-		ds_map_set(global.controlIcons, ICON_MAPS,			keyboard_get_sprite(global.settings[Settings.Maps]));
-		ds_map_set(global.controlIcons, ICON_NOTES,			keyboard_get_sprite(global.settings[Settings.Items]));
-		// Menu control icons //
-		ds_map_set(global.controlIcons, ICON_MENU_RIGHT,	keyboard_get_sprite(global.settings[Settings.MenuRight]));
-		ds_map_set(global.controlIcons, ICON_MENU_LEFT,		keyboard_get_sprite(global.settings[Settings.MenuLeft]));
-		ds_map_set(global.controlIcons, ICON_MENU_UP,		keyboard_get_sprite(global.settings[Settings.MenuUp]));
-		ds_map_set(global.controlIcons, ICON_MENU_DOWN,		keyboard_get_sprite(global.settings[Settings.MenuDown]));
-		ds_map_set(global.controlIcons, ICON_SELECT,		keyboard_get_sprite(global.settings[Settings.Select]));
-		ds_map_set(global.controlIcons, ICON_RETURN,		keyboard_get_sprite(global.settings[Settings.Return]));
-		ds_map_set(global.controlIcons, ICON_FILE_DELETE,	keyboard_get_sprite(global.settings[Settings.FileDelete]));
+		ds_map_set(global.controlIcons, ICON_GAME_RIGHT,		keyboard_get_sprite(global.settings[Settings.GameRight]));
+		ds_map_set(global.controlIcons, ICON_GAME_LEFT,			keyboard_get_sprite(global.settings[Settings.GameLeft]));
+		ds_map_set(global.controlIcons, ICON_GAME_UP,			keyboard_get_sprite(global.settings[Settings.GameUp]));
+		ds_map_set(global.controlIcons, ICON_GAME_DOWN,			keyboard_get_sprite(global.settings[Settings.GameDown]));
+		ds_map_set(global.controlIcons, ICON_RUN,				keyboard_get_sprite(global.settings[Settings.Run]));
+		ds_map_set(global.controlIcons, ICON_FLASHLIGHT,		keyboard_get_sprite(global.settings[Settings.Flashlight]));
+		ds_map_set(global.controlIcons, ICON_INTERACT,			keyboard_get_sprite(global.settings[Settings.Interact]));
+		ds_map_set(global.controlIcons, ICON_AMMO_SWAP,			keyboard_get_sprite(global.settings[Settings.AmmoSwap]));
+		ds_map_set(global.controlIcons, ICON_RELOAD,			keyboard_get_sprite(global.settings[Settings.Reload]));
+		ds_map_set(global.controlIcons, ICON_READY_WEAPON,		keyboard_get_sprite(global.settings[Settings.ReadyWeapon]));
+		ds_map_set(global.controlIcons, ICON_USE_WEAPON,		keyboard_get_sprite(global.settings[Settings.UseWeapon]));
+		ds_map_set(global.controlIcons, ICON_PAUSE,				keyboard_get_sprite(global.settings[Settings.Pause]));
+		ds_map_set(global.controlIcons, ICON_NOTES,				keyboard_get_sprite(global.settings[Settings.Notes]));
+		ds_map_set(global.controlIcons, ICON_MAPS,				keyboard_get_sprite(global.settings[Settings.Maps]));
+		ds_map_set(global.controlIcons, ICON_NOTES,				keyboard_get_sprite(global.settings[Settings.Items]));
+		// Menu control icons //								
+		ds_map_set(global.controlIcons, ICON_MENU_RIGHT,		keyboard_get_sprite(global.settings[Settings.MenuRight]));
+		ds_map_set(global.controlIcons, ICON_MENU_LEFT,			keyboard_get_sprite(global.settings[Settings.MenuLeft]));
+		ds_map_set(global.controlIcons, ICON_MENU_UP,			keyboard_get_sprite(global.settings[Settings.MenuUp]));
+		ds_map_set(global.controlIcons, ICON_MENU_DOWN,			keyboard_get_sprite(global.settings[Settings.MenuDown]));
+		ds_map_set(global.controlIcons, ICON_AUX_MENU_RIGHT,	keyboard_get_sprite(global.settings[Settings.MenuAuxRight]));
+		ds_map_set(global.controlIcons, ICON_AUX_MENU_LEFT,		keyboard_get_sprite(global.settings[Settings.MenuAuxLeft]));
+		ds_map_set(global.controlIcons, ICON_SELECT,			keyboard_get_sprite(global.settings[Settings.Select]));
+		ds_map_set(global.controlIcons, ICON_RETURN,			keyboard_get_sprite(global.settings[Settings.Return]));
+		ds_map_set(global.controlIcons, ICON_FILE_DELETE,		keyboard_get_sprite(global.settings[Settings.FileDelete]));
 	}
 }
 

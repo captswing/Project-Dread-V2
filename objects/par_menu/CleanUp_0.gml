@@ -24,3 +24,6 @@ with(par_dynamic_entity){
 	}
 }
 ds_map_destroy(entityStates);
+
+// Finally, unblur the background image since a primary menu was closed
+with(global.singletonID[? EFFECT_HANDLER]) {blurEnabled = false;}

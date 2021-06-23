@@ -8,7 +8,7 @@ if (_length == 0 || alpha <= 0) {return;} // Don't waste time drawing if no cont
 // Draws the background that the controller information will be placed on top of, which allows for slightly
 // easier readability for the text and control icons.
 draw_sprite_ext(spr_rectangle, 0, 0, WINDOW_HEIGHT - 14, WINDOW_WIDTH, 1, 0, c_black, alpha);
-draw_sprite_general(spr_rectangle, 0, 0, 0, 1, 1, 0, WINDOW_HEIGHT - 13, WINDOW_WIDTH, 13, 0, c_dkgray, c_dkgray, c_black, c_black, alpha * 0.75);
+draw_sprite_general(spr_rectangle, 0, 0, 0, 1, 1, 0, WINDOW_HEIGHT - 13, WINDOW_WIDTH, 13, 0, backgroundColor, backgroundColor, c_black, c_black, alpha * 0.75);
 
 
 // Set the text and icon to the correct alpha value and then also initialize the shader that draws outlines

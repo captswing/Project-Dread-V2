@@ -39,7 +39,7 @@ if (!isClosing){ // Fades the textbox into visiblity
 
 #endregion
 
-#region HANDLING INPUT/UPDATING TEXTBOX
+#region HANDLING INPUT/UPDATING TEXTBOX/UPDATING COLORS
 
 // Advancing the text/skipping the typewriter effect
 if (keyAdvance){
@@ -70,5 +70,18 @@ if (nextCharacter <= finalCharacter){
 		textboxSoundTimer += textboxSoundSpeed;
 	}
 }
+
+//
+/*if (currentTextbox != textboxIndex){
+	var _actorData, _backgroundColor;
+	_actorData = actorData[? textboxData[| textboxIndex][1]];
+	_backgroundColor = _actorData.textboxColor;
+	with(global.singletonID[? CONTROL_INFO]){
+		backgroundColorRGB[3] = color_get_red(_backgroundColor);
+		backgroundColorRGB[4] = color_get_green(_backgroundColor);
+		backgroundColorRGB[5] = color_get_blue(_backgroundColor);
+	}
+	currentTextbox = textboxIndex;
+}*/
 
 #endregion

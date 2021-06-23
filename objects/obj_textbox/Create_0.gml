@@ -14,6 +14,9 @@ visible = false;
 
 #region UNIQUE VARIABLE INITIALIZATION
 
+//
+currentTextbox = -1;
+
 // Keyboard input variables
 keyAdvance = false;
 

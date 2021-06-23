@@ -108,7 +108,7 @@ global.playtimeString = "00:00:00";
 // throughout available throughout the game. The final total space is different for almost all difficulty levels.
 //
 //		MAX INVENTORY SIZES:		STARTING SIZE:		MAXIMUM SIZE:
-//				Forgiving		--		12 slots			24 slots	(6 Upgrades)
+//				Forgiving		--		12 slots			20 slots	(4 Upgrades)
 //				Standard		--		8  slots			20 slots	(6 Upgrades)
 //				Punishing		--		8  slots			16 slots	(4 Upgrades)
 //				Nightmare		--		6  slots			12 slots	(3 Upgrades)

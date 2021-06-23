@@ -40,4 +40,8 @@ controlData = ds_list_create();
 // menus are animated since they don't have to take the control prompt stuff into account.
 alpha = 0;
 
+// 
+backgroundColorRGB = [0, 0, 0, 64, 64, 64];
+backgroundColor = c_black;
+
 #endregion

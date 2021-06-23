@@ -5,10 +5,27 @@ function inventory_draw_item_section(){
 	if (image_alpha <= 0) {return;}
 	draw_set_alpha(image_alpha);
 
+	draw_sprite_ext(spr_rectangle, 0, 5, 136, 120, 1, 0, c_black, image_alpha);
+	
+	shader_set(fadeawayShader);
+	shader_set_uniform_f_array(sScreenSize, [WINDOW_WIDTH, WINDOW_HEIGHT]);
+
+	shader_set_uniform_f_array(sThreshold, [160, WINDOW_HEIGHT]);
+	shader_set_uniform_f_array(sFadeCutoff, [240, WINDOW_HEIGHT]);
+	draw_sprite_ext(spr_rectangle, 0, 0, 121, 240, 45, 0, backgroundColor, image_alpha * 0.75);
+	draw_sprite_ext(spr_rectangle, 0, 0, 120, 240, 1, 0, c_black, image_alpha);
+	
+	shader_set_uniform_f_array(sThreshold, [88, WINDOW_HEIGHT]);
+	shader_set_uniform_f_array(sFadeCutoff, [110, WINDOW_HEIGHT]);
+	draw_sprite_ext(spr_rectangle, 0, 0, 14, 110, 106, 0, backgroundColor, image_alpha * 0.75);
+
+	shader_reset();
+
 	// Drawing the rectangles for the inventory slots, and the item's images that go inside said rectangles.
 	// The item's image will be slightly highlighted white when highlighted, and green/red when selected or
 	// an auxillary selection.
-	var _rectColor, _outlineColor, _curOption;
+	var _rectAlpha, _rectColor, _outlineColor, _curOption;
+	_rectAlpha = 1;
 	_rectColor = c_dkgray;
 	_outlineColor = c_black;
 	for (var yy = 0; yy < menuDimensions[Y]; yy++){
@@ -19,6 +36,7 @@ function inventory_draw_item_section(){
 			if (_curOption >= numOptions) {break;}
 			
 			// Select the correct combo of colors for the item icon's rectangle outline
+			_rectAlpha = 1;
 			if (_curOption == selectedOption){ // The item has been selected by the player
 				_rectColor = optionSelectedColor;
 				_outlineColor = optionRectSelectedOutlineColor;
@@ -29,12 +47,13 @@ function inventory_draw_item_section(){
 				_rectColor = optionHighlightColor;
 				_outlineColor = optionRectHighlightOutlineColor;
 			} else{ // The option isn't highlighted or selected; it's just visible
+				_rectAlpha = 0.5;
 				_rectColor = c_dkgray;
 				_outlineColor = c_black;
 			}
 			
 			// Finally, draw the outline with the color corresponding to the menu's cursor and selections
-			draw_rect_outline(optionPos[X] + (xx * optionSpacing[X]), optionPos[Y] + (yy * optionSpacing[Y]), 18, 18, _rectColor, _outlineColor, image_alpha, image_alpha);
+			draw_rect_outline(optionPos[X] + (xx * optionSpacing[X]), optionPos[Y] + (yy * optionSpacing[Y]), 18, 18, _rectColor, _outlineColor, _rectAlpha * image_alpha, image_alpha);
 			// TODO -- Draw the item's sprite at the same position as the outline rectangle
 		}
 	}
@@ -53,7 +72,7 @@ function inventory_draw_item_section(){
 	var _name, _optionWidth, _isWeapon;
 	_name = option[| curOption].option;
 	_optionWidth = string_width(_name);
-	draw_text(infoPos[X], infoPos[Y] - 16, _name);
+	draw_text(infoPos[X] + 5, infoPos[Y] - 18, _name);
 	
 	// Only draw the quantity and the item's description if an item actually exists within the highlighted slot
 	if (_name != NO_ITEM){
@@ -62,7 +81,7 @@ function inventory_draw_item_section(){
 		// The item quantity won't show up for weapon and items that cannot be stacked
 		if (global.itemData[? ITEM_LIST][? _name][? MAX_STACK] > 1){
 			_isWeapon = (string_count(WEAPON, global.itemData[? ITEM_LIST][? _name][? ITEM_TYPE]) == 1);
-			if (!_isWeapon) {draw_text(infoPos[X] + _optionWidth + 5, infoPos[Y] - 12, "x" + string(global.invItem[curOption][1]));}	
+			if (!_isWeapon) {draw_text(infoPos[X] + _optionWidth + 10, infoPos[Y] - 14, "x" + string(global.invItem[curOption][1]));}	
 		}
 	}
 	

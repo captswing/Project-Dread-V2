@@ -41,7 +41,7 @@ if (global.settings[Settings.Bloom]){ // Activate the bloom effect if currently 
 }
 
 if (blurEnabled){ // Activate blur effect if currently enabled
-	blur_effect(3, 0.25);
+	blur_effect(3, 0.15);
 }
 
 if (global.settings[Settings.Aberration]){ // Activate the aberration effect if currently enabled
